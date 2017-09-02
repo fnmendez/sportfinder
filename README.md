@@ -2,7 +2,7 @@
 
 ## Integrantes
 
-| Nombre | Apellido | Mail UC |
+| Nombre | Nº alumno | Mail UC |
 | :-: | :-: | :-: |
-| Franco | Méndez | fnmendez@uc.cl |
-| Andrés | Mardones | agmardones@uc.cl |
+| Franco Méndez| 14636077 | fnmendez@uc.cl |
+| Andrés Mardones | 14632497 | agmardones@uc.cl |
