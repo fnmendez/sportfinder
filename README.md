@@ -1,3 +1,11 @@
+# Integrantes
+
+| Nombre | Nº alumno | Mail UC |
+| :-: | :-: | :-: |
+| Franco Méndez| 14636077 | fnmendez@uc.cl |
+| Andrés Mardones | 14632497 | agmardones@uc.cl |
+
+
 # Template
 
 Template built with [koa](http://koajs.com/) for IIC2513 - Tecnologías y Aplicaciones Web, Pontificia Universidad Católica de Chile.
