@@ -1,11 +1,11 @@
 const KoaRouter = require('koa-router');
 
 const hello = require('./routes/hello');
-const index = require('./routes/index');
+const welcome = require('./routes/welcome');
 
 const router = new KoaRouter();
 
-router.use('/', index.routes());
+router.use('/', welcome.routes());
 router.use('/hello', hello.routes());
 
 module.exports = router;
