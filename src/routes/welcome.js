@@ -12,9 +12,8 @@ router.get('welcome.home', '/', async (ctx) => {
 
 router.get('welcome.signup', 'signup', async (ctx) => {
   //const user = ctx.orm.user.build();
-  console.log(ctx.router.url('welcome.home'));
   await ctx.render('welcome/signup', {
-    welcomeUrl: () => ctx.router.url('welcome.home'),
+    homeUrl: '/',
   });
 });
 
