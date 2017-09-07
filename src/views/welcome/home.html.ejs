@@ -3,7 +3,7 @@
 <h3>¿ Buscas un compañero o un equipo rival para un deporte ?</h3>
 
 <p>
-  <form action="/login" enctype="multipart/form-data" method="post">
+  <form action="/login" enctype="multipart/form-data" method="get">
     <input type="text" name="username" placeholder="Usuario">
     <input type="password" name="password" placeholder="Contraseña">
     <input type="checkbox" name="remember" checked="checked"/>Recordarme<br><br>
@@ -13,7 +13,7 @@
 
 <p>
   ¿ No tienes cuenta ?
-  <form action="/signup" method="get">
+  <form action="<%= signupUrl %>">
     <input type="submit" value="Registrarme"/>
   </form>
 </p>

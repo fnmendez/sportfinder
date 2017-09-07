@@ -1,0 +1,20 @@
+<h1>Sportfinder - Registro</h1>
+
+<p>
+  <form action="/signup" enctype="multipart/form-data" method="post">
+    Datos de usuario<br>
+    <input type="text" name="username" placeholder="Usuario">
+    <input type="password" name="password" placeholder="Contraseña">
+    <input type="text" name="mail" placeholder="Email"><br><br>
+    Datos personales<br>
+    <input type="text" name="name" placeholder="Nombre">
+    <input type="text" name="surname" placeholder="Apellido">
+    <input type="text" name="pid" placeholder="RUT"><br><br>
+    Foto del carné de identidad<br>
+    <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
+    <input type="submit" value="Registrarme">
+  </form>
+  <form action="/" method="get">
+    <input type="submit" value="Volver"/>
+  </form>
+</p>
