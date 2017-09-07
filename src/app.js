@@ -53,6 +53,7 @@ app.use((ctx, next) => {
 // Configure EJS views
 render(app, {
   root: path.join(__dirname, 'views'),
+  layout: 'layout',
   viewExt: 'html.ejs',
   cache: !developmentMode,
 });
