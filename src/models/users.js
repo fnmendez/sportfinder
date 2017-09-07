@@ -2,9 +2,6 @@ module.exports = function defineusers(sequelize, DataTypes) {
   const users = sequelize.define('users', {
     pid: {
       type: DataTypes.STRING,
-      validate: {
-        is: ["^\d+(\.\d+)*$", 'i'],
-      },
     },
     name: {
       type: DataTypes.STRING,
@@ -26,7 +23,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isMail: true,
+        isEmail: true,
         notEmpty: true,
       },
     },
