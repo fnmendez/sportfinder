@@ -9,16 +9,16 @@ module.exports = function defineusers(sequelize, DataTypes) {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate {
+      validate: {
         unique: true,
         isAlphanumeric: true,
       }
-    }
+    },
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
       default: 1,
-    }
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
