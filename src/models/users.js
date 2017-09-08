@@ -12,7 +12,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       unique: true,
       validate: {
         isAlphanumeric: true,
-      }
+      },
     },
     role: {
       type: DataTypes.INTEGER,
@@ -25,7 +25,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       validate: {
         isAlpha: true,
         notEmpty: true,
-      }
+      },
     },
     surname: {
       type: DataTypes.STRING,
@@ -33,7 +33,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       validate: {
         isAlpha: true,
         notEmpty: true,
-      }
+      },
     },
     mail: {
       type: DataTypes.STRING,
