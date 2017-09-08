@@ -3,6 +3,13 @@ module.exports = function defineusers(sequelize, DataTypes) {
     pid: {
       type: DataTypes.STRING,
     },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate {
+        unique: true,
+      }
+    }
     name: {
       type: DataTypes.STRING,
       allowNull: false,
