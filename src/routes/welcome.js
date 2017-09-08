@@ -10,9 +10,9 @@ router.get('welcome.home', '/', async (ctx) => {
   });
 });
 
-router.post('login', '/', (ctx) => {
+router.post('login', 'login', (ctx) => {
   console.log(ctx.request.body);
-  ctx.redirect(router.url('/'));
+  ctx.redirect('/');
 });
 
 router.get('welcome.signup', 'signup', async (ctx) => {
