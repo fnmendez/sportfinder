@@ -23,7 +23,9 @@ router.post('createUser', 'signup', async (ctx) => {
   console.log(Object.keys(ctx.request.body));
   try {
     const user = await ctx.orm.users.create(ctx.request.body);
-    ctx.redirect(ctx.router.url('/'), { signupUrl: ctx.router.url('welcome.signup')});
+    ctx.session.user = user;
+    ctx.session.user.password = null;
+    ctx.redirect('/');
   } catch (validationError) {
     await ctx.render('welcome/signup', {
       homeUrl: '/',
@@ -31,7 +33,7 @@ router.post('createUser', 'signup', async (ctx) => {
       errors: validationError.errors,
       createUserPath: ctx.router.url('createUser'),
     });
-  };
+  }
 });
 
 router.get('login', '/', (ctx) => {
