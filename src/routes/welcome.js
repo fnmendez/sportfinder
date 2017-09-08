@@ -10,6 +10,11 @@ router.get('welcome.home', '/', async (ctx) => {
   });
 });
 
+router.post('login', '/', (ctx) => {
+  console.log(ctx.request.body);
+  ctx.redirect(router.url('/'));
+});
+
 router.get('welcome.signup', 'signup', async (ctx) => {
   const user = ctx.orm.users.build();
   await ctx.render('welcome/signup', {
@@ -34,12 +39,6 @@ router.post('createUser', 'signup', async (ctx) => {
       createUserPath: ctx.router.url('createUser'),
     });
   }
-});
-
-router.get('login', '/', (ctx) => {
-  console.log(ctx.request.body);
-  ctx.flashMessage.notice = 'Form successfully processed';
-  ctx.redirect(router.url('/'));
 });
 
 module.exports = router;
