@@ -2,13 +2,22 @@ module.exports = function defineusers(sequelize, DataTypes) {
   const users = sequelize.define('users', {
     pid: {
       type: DataTypes.STRING,
+      validate: {
+        is: ["^\d{1,2}(\.\d{3}){2}\-([\dkK])$", "i"],
+      }
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
       validate {
         unique: true,
+        isAlphanumeric: true,
       }
+    }
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 1,
     }
     name: {
       type: DataTypes.STRING,
