@@ -50,6 +50,11 @@ app.use((ctx, next) => {
   return next();
 });
 
+app.use((ctx, next) => {
+  console.log(ctx.session);
+  return next();
+});
+
 // Configure EJS views
 render(app, {
   root: path.join(__dirname, 'views'),
