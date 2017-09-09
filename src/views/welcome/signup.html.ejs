@@ -1,0 +1,39 @@
+<h1>Sportfinder - Registro</h1>
+<div>
+  <% if (locals.errors) { %>
+    <div class="errors">
+      Necesitas arreglar los siguiente errores:
+      <ul>
+        <% errors.forEach(error => { %>
+          <li><%= error.message %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+    <form action="/signup" method="post">
+      <div>
+        <label>Datos de usuario</label><br>
+        <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
+        <input type="password" name="password" placeholder="Contraseña">
+        <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
+      </div>
+      <div>
+        <br><label>Datos personales</label><br>
+        <input type="text" name="name" value="<%= user.name %>" placeholder="Nombre">
+        <input type="text" name="surname" value="<%= user.surname %>" placeholder="Apellido">
+        <input type="text" name="pid" value="<%= user.pid %>" placeholder="RUT"><br><br>
+      </div>
+      <div>
+        <label>Foto del carné de identidad</label><br>
+        <input type="file" name="photoId" value="<%= user.photoId %>" accept=".jpg, .jpeg, .png"><br><br>
+      </div>
+      <div>
+        <input type="submit" name="create" value="Registrarme">
+      </div>
+    </form>
+    <form action="<%= homeUrl %>" method="get">
+      <div>
+        <input type="submit" value="Volver"/>
+      </div>
+    </form>
+</div>

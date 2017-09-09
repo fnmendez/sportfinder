@@ -5,6 +5,7 @@ const koaLogger = require('koa-logger');
 const koaFlashMessage = require('koa-flash-message').default;
 const render = require('koa-ejs');
 const session = require('koa-session');
+const override = require('koa-override-method');
 const routes = require('./routes');
 const orm = require('./models');
 
@@ -44,9 +45,21 @@ app.use(koaBody({
   keepExtensions: true,
 }));
 
+app.use((ctx, next) => {
+  ctx.request.method = override.call(ctx, ctx.request.body);
+  return next();
+});
+
+app.use((ctx, next) => {
+  console.log("koa-session");
+  console.log(ctx.session);
+  return next();
+});
+
 // Configure EJS views
 render(app, {
   root: path.join(__dirname, 'views'),
+  layout: 'layout',
   viewExt: 'html.ejs',
   cache: !developmentMode,
 });
