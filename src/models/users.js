@@ -38,6 +38,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
     mail: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         isEmail: true,
         notEmpty: true,
