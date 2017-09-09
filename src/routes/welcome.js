@@ -41,4 +41,15 @@ router.post('createUser', 'signup', async (ctx) => {
   }
 });
 
+router.get('profileUrl', '/:username', async (ctx) => {
+  const user = ctx.orm.users.findAll({ where: {
+    username: ctx.params.username
+  }})
+  if (ctx.session.user.username = user.username) {
+    ctx.render('welcome/profile', {
+      user,
+    });
+  }
+});
+
 module.exports = router;
