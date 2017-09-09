@@ -1,6 +1,6 @@
 <h1>Sportfinder - Hola <%= user.username %></h1>
 <div>
-  <!-- <% if (locals.errors) { %>
+  <% if (locals.errors) { %>
     <div class="errors">
       Necesitas arreglar los siguiente errores:
       <ul>
@@ -9,9 +9,9 @@
         <% }); %>
       </ul>
     </div>
-  <% } %> -->
+  <% } %>
   <h3>Modificar tu cuenta</h3>
-  <!-- <form action="/update" enctype="multipart/form-data" method="post">
+  <form action="<%= updateUrl %>" enctype="multipart/form-data" method="post">
     <input type="hidden" name="_method" value="patch" />
     <div>
       <label>Datos de usuario</label><br>
@@ -28,17 +28,17 @@
     </div>
     <div>
       <label>Foto del carné de identidad</label><br>
-      <input type="file" name="photoId" value="<%= user.photoId %>" accept=".jpg, .jpeg, .png"><br><br>
+      <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
     </div>
-    <div>
+    <!-- <div>
       <input type="submit" name="update" value="Actualizar">
-    </div>
+    </div> -->
   </form>
-  <form action="<%= logoutUrl %>" method="get">
+  <form action="<%= logoutUrl %>" method="post">
     <div>
       <input type="submit" value="Desconectarse"/>
     </div>
-  </form> -->
+  </form>
   <!-- <form action="<%= startUrl %>" method="get">
     <div>
       <input type="submit" value="Ir al Inicio"/>

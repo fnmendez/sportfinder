@@ -3,19 +3,32 @@ const pkg = require('../../package.json');
 
 const router = new KoaRouter();
 
-router.get('welcome.home', '/', async (ctx) => {
+router.get('home', '/', async (ctx) => {
+  if (ctx.session.user) { ctx.redirect('profile') }
   await ctx.render('welcome/home', {
+    user: ctx.session.user,
     appVersion: pkg.version,
-    signupUrl: ctx.router.url('welcome.signup'),
+    signupUrl: ctx.router.url('signup'),
   });
 });
 
-router.post('login', 'login', (ctx) => {
-  console.log(ctx.request.body);
-  ctx.redirect('/');
+router.post('login', 'login', async (ctx) => {
+  const username = ctx.request.body.fields.username;
+  const password = ctx.request.body.fields.password;
+  const user = await ctx.orm.users.findOne({ where: {
+    username, password
+  }});
+  if (user) {
+    ctx.session.user = user;
+    ctx.redirect('profile');
+  }
+  else {
+    ctx.redirect('/');
+  }
 });
 
-router.get('welcome.signup', 'signup', async (ctx) => {
+router.get('signup', 'signup', async (ctx) => {
+  if (ctx.session.user) { ctx.redirect('profile') }
   const user = ctx.orm.users.build();
   await ctx.render('welcome/signup', {
     homeUrl: '/',
@@ -25,12 +38,10 @@ router.get('welcome.signup', 'signup', async (ctx) => {
 });
 
 router.post('createUser', 'signup', async (ctx) => {
-  console.log(Object.keys(ctx.request.body));
   try {
     const user = await ctx.orm.users.create(ctx.request.body);
     ctx.session.user = user;
-    ctx.session.user.password = null;
-    ctx.redirect('/');
+    ctx.redirect('profile');
   } catch (validationError) {
     await ctx.render('welcome/signup', {
       homeUrl: '/',
@@ -41,15 +52,24 @@ router.post('createUser', 'signup', async (ctx) => {
   }
 });
 
-router.get('profileUrl', '/:username', async (ctx) => {
-  const user = ctx.orm.users.findAll({ where: {
-    username: ctx.params.username
-  }})
-  if (ctx.session.user.username = user.username) {
-    ctx.render('welcome/profile', {
+router.get('profile', 'profile', async (ctx) => {
+  const user = ctx.session.user;
+  if (user) {
+    await ctx.render('welcome/profile', {
       user,
+      updateUrl: "/",
+      logoutUrl: ctx.router.url('logout'),
+      startUrl: "/",
     });
   }
+  else {
+    ctx.redirect('/');
+  }
+});
+
+router.post('logout', 'logout', async (ctx) => {
+  ctx.session = null;
+  ctx.redirect('/');
 });
 
 module.exports = router;
