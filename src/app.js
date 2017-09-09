@@ -51,6 +51,7 @@ app.use((ctx, next) => {
 });
 
 app.use((ctx, next) => {
+  console.log("koa-session");
   console.log(ctx.session);
   return next();
 });
