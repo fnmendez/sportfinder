@@ -4,9 +4,8 @@ module.exports = {
   up(queryInterface, Sequelize) {
     const sportsData = [];
     const sportsNames = ['Futbol', 'Basquetbol', 'Tenis',
-                          'Natacion', 'Polo'];
-    for (let i = 0; i < 5; i += 1)
-    {
+      'Natacion', 'Polo'];
+    for (let i = 0; i < 5; i += 1) {
       sportsData.push({
         name: sportsNames[i],
         createdAt: new Date(),

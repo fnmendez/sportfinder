@@ -3,8 +3,7 @@ const faker = require('faker');
 module.exports = {
   up(queryInterface, Sequelize) {
     const clubsData = [];
-    for (let i = 0; i < 2; i += 1)
-    {
+    for (let i = 0; i < 2; i += 1) {
       clubsData.push({
         name: faker.company.companyName(),
         address: faker.address.streetAddress(),

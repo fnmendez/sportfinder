@@ -6,7 +6,7 @@ router.get('clubs', '/', async (ctx) => {
   const clubs = await ctx.orm.club.findAll();
   await ctx.render('clubs/index', {
     clubs,
-    clubPath: club => ctx.router.url('club', {id: club.id}),
+    clubPath: club => ctx.router.url('club', { id: club.id }),
     newPath: ctx.router.url('newClub'),
   });
 });
@@ -18,9 +18,9 @@ router.del('deleteClub', '/:id', async (ctx) => {
 
   await ctx.redirect(ctx.router.url('clubs', {
     clubs,
-    clubPath: club => ctx.router.url('club', club.id),
+    clubPath: c => ctx.router.url('club', c.id),
     newPath: ctx.router.url('newClub'),
-    }));
+  }));
 });
 
 router.get('newClub', '/new', async (ctx) => {
@@ -33,15 +33,15 @@ router.get('newClub', '/new', async (ctx) => {
 
 router.post('createClubPath', '/', async (ctx) => {
   try {
-  const club = await ctx.orm.club.create(ctx.request.body);
-  ctx.redirect(ctx.router.url('club', {id: club.id}));
-} catch (validationError){
-  await ctx.render('/clubs/new', {
-    club: ctx.orm.club.build(ctx.request.body),
-    errors: validationError.errors,
-    createClubPath: ctx.router.url('createClubPath'),
-  });
-}
+    const club = await ctx.orm.club.create(ctx.request.body);
+    ctx.redirect(ctx.router.url('club', { id: club.id }));
+  } catch (validationError) {
+    await ctx.render('/clubs/new', {
+      club: ctx.orm.club.build(ctx.request.body),
+      errors: validationError.errors,
+      createClubPath: ctx.router.url('createClubPath'),
+    });
+  }
 });
 
 router.get('clubEdit', '/:id/edit', async (ctx) => {
@@ -56,12 +56,12 @@ router.patch('clubUpdate', '/:id', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id);
   try {
     await club.update(ctx.request.body);
-    ctx.redirect(ctx.router.url('club', {id: club.id}));
+    ctx.redirect(ctx.router.url('club', { id: club.id }));
   } catch (validationError) {
     await ctx.render('clubs/edit', {
       club,
       errors: validationError.errors,
-      updateClubPath: ctx.router.url('clubUpdate', {id: club.id}),
+      updateClubPath: ctx.router.url('clubUpdate', { id: club.id }),
     });
   }
 });
@@ -71,7 +71,7 @@ router.get('club', '/:id', async (ctx) => {
     include: [{
       model: ctx.orm.club_sport,
       include: ctx.orm.sport,
-    }]
+    }],
   });
   const relatedSports = club.club_sports;
   await ctx.render('clubs/show', {

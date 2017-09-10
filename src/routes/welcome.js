@@ -4,7 +4,7 @@ const pkg = require('../../package.json');
 const router = new KoaRouter();
 
 router.get('home', '/', async (ctx) => {
-  if (ctx.session.user) { ctx.redirect('profile') }
+  if (ctx.session.user) { ctx.redirect('profile'); }
   await ctx.render('welcome/home', {
     user: ctx.session.user,
     appVersion: pkg.version,
@@ -16,19 +16,18 @@ router.post('login', 'login', async (ctx) => {
   const username = ctx.request.body.fields.username;
   const password = ctx.request.body.fields.password;
   const user = await ctx.orm.users.findOne({ where: {
-    username, password
-  }});
+    username, password,
+  } });
   if (user) {
     ctx.session.user = user;
     ctx.redirect('profile');
-  }
-  else {
+  } else {
     ctx.redirect('/');
   }
 });
 
 router.get('signup', 'signup', async (ctx) => {
-  if (ctx.session.user) { ctx.redirect('profile') }
+  if (ctx.session.user) { ctx.redirect('profile'); }
   const user = ctx.orm.users.build();
   await ctx.render('welcome/signup', {
     homeUrl: '/',
@@ -57,12 +56,11 @@ router.get('profile', 'profile', async (ctx) => {
   if (user) {
     await ctx.render('welcome/profile', {
       user,
-      updateUrl: "/",
+      updateUrl: '/',
       logoutUrl: ctx.router.url('logout'),
-      startUrl: "/",
+      startUrl: '/',
     });
-  }
-  else {
+  } else {
     ctx.redirect('/');
   }
 });
