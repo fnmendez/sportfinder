@@ -11,6 +11,18 @@ router.get('clubs', '/', async (ctx) => {
   });
 });
 
+router.del('deleteClub', '/:id', async (ctx) => {
+  const club = await ctx.orm.club.findById(ctx.params.id);
+  const clubs = await ctx.orm.club.findAll();
+  await club.destroy();
+
+  await ctx.redirect(ctx.router.url('clubs', {
+    clubs,
+    clubPath: club => ctx.router.url('club', club.id),
+    newPath: ctx.router.url('newClub'),
+    }));
+});
+
 router.get('newClub', '/new', async (ctx) => {
   const club = ctx.orm.club.build();
   await ctx.render('/clubs/new', {
@@ -27,7 +39,7 @@ router.post('createClubPath', '/', async (ctx) => {
   await ctx.render('/clubs/new', {
     club: ctx.orm.club.build(ctx.request.body),
     errors: validationError.errors,
-    createClubPath: ctx.router.url('createClubpath'),
+    createClubPath: ctx.router.url('createClubPath'),
   });
 }
 });
@@ -65,6 +77,7 @@ router.get('club', '/:id', async (ctx) => {
   await ctx.render('clubs/show', {
     club,
     relatedSports,
+    deleteClubPath: ctx.router.url('deleteClub', club.id),
   });
 });
 
