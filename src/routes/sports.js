@@ -7,7 +7,30 @@ router.get('sports', '/', async (ctx) => {
   await ctx.render('sports/index', {
     sports,
     sportPath: sport => ctx.router.url('sport', {id: sport.id}),
+    newPath: ctx.router.url('newSport'),
   });
+});
+
+router.get('newSport', '/new', async (ctx) => {
+  const sport = ctx.orm.sport.build();
+  await ctx.render('/sports/new', {
+    sport,
+    createSportPath: ctx.router.url('createSportPath'),
+  });
+});
+
+router.post('createSportPath', '/', async (ctx) => {
+  try {
+  const sport = await ctx.orm.sport.create(ctx.request.body);
+  ctx.redirect(ctx.router.url('sport', {id: sport.id}));
+} catch (validationError){
+  console.log("Hola");
+  await ctx.render('/sports/new', {
+    sport: ctx.orm.sport.build(ctx.request.body),
+    errors: validationError.errors,
+    createSportPath: ctx.router.url('createSportPath'),
+  });
+}
 });
 
 router.get('sport', '/:id', async (ctx) => {
