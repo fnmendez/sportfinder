@@ -7,6 +7,7 @@ router.get('clubs', '/', async (ctx) => {
   await ctx.render('clubs/index', {
     clubs,
     clubPath: club => ctx.router.url('club', {id: club.id}),
+
   });
 });
 
@@ -14,7 +15,7 @@ router.get('newClub', '/new', async (ctx) => {
   const club = ctx.orm.club.build();
   await ctx.render('/clubs/new', {
     club,
-    createPurposalPath: ctx.router.url('createClubPath'),
+    createClubPath: ctx.router.url('createClubPath'),
   });
 });
 
@@ -26,7 +27,7 @@ router.post('createClubPath', '/', async (ctx) => {
   await ctx.render('/clubs/new', {
     club: ctx.orm.club.build(ctx.request.body),
     errors: validationError.errors,
-    createPurposalPath: ctx.router.url('createClubpath'),
+    createClubPath: ctx.router.url('createClubpath'),
   });
 }
 });
