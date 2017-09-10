@@ -1,7 +1,20 @@
 module.exports = function defineclub(sequelize, DataTypes) {
   const club = sequelize.define('club', {
-    name: DataTypes.STRING,
-    address: DataTypes.STRING,
+    name:
+    {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
   club.associate = function associate(models) {
     club.hasMany(models.club_sport);
