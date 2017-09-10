@@ -1,6 +1,6 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('sports', {
+    return queryInterface.createTable('clubs', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -8,6 +8,9 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       name: {
+        type: Sequelize.STRING,
+      },
+      address: {
         type: Sequelize.STRING,
       },
       createdAt: {
@@ -21,6 +24,6 @@ module.exports = {
     });
   },
   down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('sports');
+    return queryInterface.dropTable('clubs');
   },
 };

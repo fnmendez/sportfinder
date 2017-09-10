@@ -1,9 +1,16 @@
 module.exports = function definesports(sequelize, DataTypes) {
   const sports = sequelize.define('sport', {
-    name: DataTypes.STRING,
+    name:
+    {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
   sports.associate = function associate(models) {
-    // associations can be defined here
+    sports.hasMany(models.club_sport);
   };
   return sports;
 };

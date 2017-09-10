@@ -1,0 +1,8 @@
+<h1>Clubs de Sportfinder</h1>
+
+<ul>
+  <% clubs.forEach((c) => { %>
+    <li><a href="<%= clubPath(c) %>"> <%= c.name %> </a></li>
+  <% }) %>
+</ul>
+<a href="<%= newPath %>"> Crear un nuevo club </a>
