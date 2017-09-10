@@ -1,4 +1,4 @@
-<h1>Editing sport: <%= sport.name %></h1>
+<h1>Editing club: <%= club.name %></h1>
 
 <% if (locals.errors) { %>
     <div class="errors">
@@ -10,11 +10,15 @@
       </ul>
     </div>
   <% } %>
-  <form action="<%= updateSportPath %>" method="post">
+  <form action="<%= updateClubPath %>" method="post">
     <input type="hidden" name="_method" value="patch" />
     <div>
       <label for="name">Nombre</label>
-      <input type="text" name="name" value="<%= sport.name %>" />
+      <input type="text" name="name" value="<%= club.name %>" />
+    </div>
+    <div>
+      <label for="address">Dirección</label>
+      <input type="text" name="address" value="<%= club.address %>" />
     </div>
     <div>
       <input type="submit" name="create" value="Guardar" />

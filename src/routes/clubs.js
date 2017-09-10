@@ -32,6 +32,27 @@ router.post('createClubPath', '/', async (ctx) => {
 }
 });
 
+router.get('clubEdit', '/:id/edit', async (ctx) => {
+  const club = await ctx.orm.club.findById(ctx.params.id);
+  await ctx.render('clubs/edit', {
+    club,
+    updateClubPath: ctx.router.url('clubUpdate', club.id),
+  });
+});
+
+router.patch('clubUpdate', '/:id', async (ctx) => {
+  const club = await ctx.orm.club.findById(ctx.params.id);
+  try {
+    await club.update(ctx.request.body);
+    ctx.redirect(ctx.router.url('club', {id: club.id}));
+  } catch (validationError) {
+    await ctx.render('clubs/edit', {
+      club,
+      errors: validationError.errors,
+      updateClubPath: ctx.router.url('clubUpdate', {id: club.id}),
+    });
+  }
+});
 
 router.get('club', '/:id', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id, {
