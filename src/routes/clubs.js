@@ -7,7 +7,7 @@ router.get('clubs', '/', async (ctx) => {
   await ctx.render('clubs/index', {
     clubs,
     clubPath: club => ctx.router.url('club', {id: club.id}),
-
+    newPath: ctx.router.url('newClub'),
   });
 });
 
