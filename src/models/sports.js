@@ -3,7 +3,7 @@ module.exports = function definesports(sequelize, DataTypes) {
     name: DataTypes.STRING,
   });
   sports.associate = function associate(models) {
-    // associations can be defined here
+    sports.hasMany(models.club_sport);
   };
   return sports;
 };

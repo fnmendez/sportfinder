@@ -4,7 +4,7 @@ module.exports = function defineclub(sequelize, DataTypes) {
     address: DataTypes.STRING,
   });
   club.associate = function associate(models) {
-    // associations can be defined here
+    club.hasMany(models.club_sport);
   };
   return club;
 };
