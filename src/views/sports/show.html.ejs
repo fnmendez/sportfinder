@@ -1,2 +1,6 @@
 <h1>Bienvenido a la página de <%= sport.name %> </h1>
 <a href="<%= editSportPath(sport) %> ">Editar</a>
+<form action="<%= deleteSportPath %>" method="post">
+<input type="hidden" name="_method" value="delete" />
+<input type="submit" name="delete" value="Borrar" />
+</form>

@@ -11,6 +11,18 @@ router.get('sports', '/', async (ctx) => {
   });
 });
 
+router.del('deleteSport', '/:id', async (ctx) => {
+  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  const sports = await ctx.orm.sport.findAll();
+  await sport.destroy();
+
+  await ctx.redirect(ctx.router.url('sports', {
+    sports,
+    sportPath: sport => ctx.router.url('sport', sport.id),
+    newPath: ctx.router.url('newSport'),
+    }));
+});
+
 router.get('newSport', '/new', async (ctx) => {
   const sport = ctx.orm.sport.build();
   await ctx.render('/sports/new', {
@@ -60,6 +72,7 @@ router.get('sport', '/:id', async (ctx) => {
   await ctx.render('sports/show', {
     sport,
     editSportPath: s => ctx.router.url('sportEdit', {id: s.id}),
+    deleteSportPath: ctx.router.url('deleteSport', sport.id),
   });
 });
 
