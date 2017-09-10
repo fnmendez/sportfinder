@@ -24,7 +24,6 @@ router.post('createSportPath', '/', async (ctx) => {
   const sport = await ctx.orm.sport.create(ctx.request.body);
   ctx.redirect(ctx.router.url('sport', {id: sport.id}));
 } catch (validationError){
-  console.log("Hola");
   await ctx.render('/sports/new', {
     sport: ctx.orm.sport.build(ctx.request.body),
     errors: validationError.errors,
@@ -33,10 +32,34 @@ router.post('createSportPath', '/', async (ctx) => {
 }
 });
 
+router.get('sportEdit', '/:id/edit', async (ctx) => {
+  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  await ctx.render('sports/edit', {
+    sport,
+    updateSportPath: ctx.router.url('sportUpdate', sport.id),
+  });
+});
+
+router.patch('sportUpdate', '/:id', async (ctx) => {
+  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  try {
+    await sport.update(ctx.request.body);
+    ctx.redirect(ctx.router.url('sport', {id: sport.id}));
+  } catch (validationError) {
+    await ctx.render('sports/edit', {
+      sport,
+      errors: validationError.errors,
+      updateSportPath: ctx.router.url('sportUpdate', {id: sport.id}),
+    });
+  }
+});
+
+
 router.get('sport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   await ctx.render('sports/show', {
     sport,
+    editSportPath: s => ctx.router.url('sportEdit', {id: s.id}),
   });
 });
 
