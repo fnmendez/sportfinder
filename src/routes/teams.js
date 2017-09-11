@@ -11,6 +11,18 @@ router.get('teams', '/', async (ctx) => {
   });
 });
 
+router.del('deleteTeam', '/:id', async (ctx) => {
+  const team = await ctx.orm.team.findById(ctx.params.id);
+  const teams = await ctx.orm.team.findAll();
+  await team.destroy();
+
+  await ctx.redirect(ctx.router.url('teams', {
+    teams,
+    teamPath: team => ctx.router.url('team', team.id),
+    newPath: ctx.router.url('newTeam'),
+  }));
+});
+
 router.get('newTeam', '/new', async (ctx) => {
   const team = ctx.orm.team.build();
   await ctx.render('/teams/new', {
@@ -66,6 +78,8 @@ router.get('team', '/:id', async (ctx) => {
   await ctx.render('teams/show', {
     team,
     members,
+    editTeamPath: t => ctx.router.url('teamEdit', { id: t.id }),
+    deleteTeamPath: ctx.router.url('deleteTeam', team.id),
   });
 });
 
