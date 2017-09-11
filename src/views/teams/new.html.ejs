@@ -1,0 +1,23 @@
+<h1> Creating a new team: </h1>
+
+<h2>New Team:</h2>
+<div>
+  <% if (locals.errors) { %>
+    <div class="errors">
+      Necesitas arreglar los siguiente errores:
+      <ul>
+        <% errors.forEach(error => { %>
+          <li><%= error.message %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+  <form action="<%= createTeamPath %>" method="post">
+    <div>
+      <label for="name">Nombre</label>
+      <input type="text" name="name" value="<%= team.name %>" />
+    </div>
+      <input type="submit" name="create" value="Create team" />
+    </div>
+  </form>
+</div>

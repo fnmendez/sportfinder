@@ -1,0 +1,13 @@
+<h1> Equipo:  <%= team.name %> </h1>
+
+<ul>
+  <% members.forEach((m) => { %>
+    <li> <%= m.user.name %> </li>
+  <% }) %>
+</ul>
+
+<a href="<%= editTeamPath(team) %> ">Editar</a>
+<form action="<%= deleteTeamPath %>" method="post">
+<input type="hidden" name="_method" value="delete" />
+<input type="submit" name="delete" value="Borrar" />
+</form>
