@@ -40,6 +40,20 @@ router.get('teamEdit', '/:id/edit', async (ctx) => {
   });
 });
 
+router.patch('teamUpdate', '/:id', async (ctx) => {
+  const team = await ctx.orm.team.findById(ctx.params.id);
+  try {
+    await team.update(ctx.request.body);
+    ctx.redirect(ctx.router.url('team', { id: team.id }));
+  } catch (validationError) {
+    await ctx.render('teams/edit', {
+      team,
+      errors: validationError.errors,
+      updateTeamPath: ctx.router.url('teamUpdate', { id: team.id }),
+    });
+  }
+});
+
 router.get('team', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
