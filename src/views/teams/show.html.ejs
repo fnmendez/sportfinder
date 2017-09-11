@@ -1,0 +1,7 @@
+<h1> Equipo:  <%= team.name %> </h1>
+
+<ul>
+  <% members.forEach((m) => { %>
+    <li> <%= m.user.name %> </li>
+  <% }) %>
+</ul>

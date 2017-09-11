@@ -20,10 +20,10 @@ module.exports = {
       updatedAt: new Date(),
     });
 
-    return queryInterface.bulkInsert('user_teams', joinData);
+    return queryInterface.bulkInsert('userTeams', joinData);
   },
 
   down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('user_teams', null, {});
+    return queryInterface.bulkDelete('userTeams', null, {});
   },
 };
