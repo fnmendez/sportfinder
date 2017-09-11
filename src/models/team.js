@@ -3,7 +3,7 @@ module.exports = function defineteam(sequelize, DataTypes) {
     name: DataTypes.STRING,
   });
   team.associate = function associate(models) {
-    // associations can be defined here
+    team.hasMany(models.userTeam);
   };
   return team;
 };
