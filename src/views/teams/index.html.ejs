@@ -1,8 +1,7 @@
-<h1> Teams </h1>
-
+<h1> Equipos </h1>
 <ul>
   <% teams.forEach((t) => { %>
     <li><a href="<%= teamPath(t) %> "> <%= t.name %> </a></li>
   <% }) %>
 </ul>
-<a href="<%= newPath %>"> New Team </a>
+<a href="<%= newPath %>"> Agregar equipo </a>

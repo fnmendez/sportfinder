@@ -1,9 +1,7 @@
 <h1>Sports</h1>
-
 <ul>
   <% sports.forEach((s) => { %>
     <li><a href="<%= sportPath(s) %>"><%= s.name %></a></li>
   <% }) %>
 </ul>
-
-<a href="<%= newPath %>"> Add sport </a>
+<a href="<%= newPath %>"> Agregar deporte </a>

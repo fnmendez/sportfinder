@@ -4,7 +4,13 @@
     <li> <%= s.sport.name %> </li>
   <% }) %>
 </ul>
+<a href="<%= editClubUrl %> ">Editar</a>
 <form action="<%= deleteClubPath %>" method="post">
-<input type="hidden" name="_method" value="delete" />
-<input type="submit" name="delete" value="Borrar" />
+  <input type="hidden" name="_method" value="delete" />
+  <input type="submit" name="delete" value="Borrar" />
+</form>
+<form action="<%= indexUrl %>" method="get">
+  <div>
+    <input type="submit" value="Volver" />
+  </div>
 </form>

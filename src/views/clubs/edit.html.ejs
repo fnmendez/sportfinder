@@ -1,4 +1,4 @@
-<h1>Editing club: <%= club.name %></h1>
+<h1>Editar club: <%= club.name %></h1>
 
 <% if (locals.errors) { %>
     <div class="errors">
@@ -22,6 +22,11 @@
     </div>
     <div>
       <input type="submit" name="create" value="Guardar" />
+    </div>
+  </form>
+  <form action="<%= showUrl %>" method="get">
+    <div>
+      <input type="submit" value="Volver" />
     </div>
   </form>
 </div>

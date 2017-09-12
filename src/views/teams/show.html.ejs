@@ -6,8 +6,12 @@
   <% }) %>
 </ul>
 
-<a href="<%= editTeamPath(team) %> ">Editar</a>
+<a href="<%= editTeamPath %> ">Editar</a>
+
 <form action="<%= deleteTeamPath %>" method="post">
-<input type="hidden" name="_method" value="delete" />
-<input type="submit" name="delete" value="Borrar" />
+  <input type="hidden" name="_method" value="delete" />
+  <input type="submit" name="delete" value="Borrar" />
+</form>
+<form action="<%= indexUrl %>" method="get">
+  <input type="submit" value="Volver" />
 </form>

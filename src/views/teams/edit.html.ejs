@@ -1,23 +1,25 @@
-<h1>Editing Team: <%= team.name %></h1>
+<h1>Editar equipo: <%= team.name %></h1>
 
 <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
-  <form action="<%= updateTeamPath %>" method="post">
-    <input type="hidden" name="_method" value="patch" />
-    <div>
-      <label for="name">Nombre</label>
-      <input type="text" name="name" value="<%= team.name %>" />
-    </div>
-    <div>
-      <input type="submit" name="create" value="Guardar" />
-    </div>
-  </form>
-</div>
+  <div class="errors">
+    Necesitas arreglar los siguiente errores:
+    <ul>
+      <% errors.forEach(error => { %>
+        <li><%= error.message %></li>
+      <% }); %>
+    </ul>
+  </div>
+<% } %>
+<form action="<%= updateTeamPath %>" method="post">
+  <input type="hidden" name="_method" value="patch" />
+  <div>
+    <label for="name">Nombre</label>
+    <input type="text" name="name" value="<%= team.name %>" />
+  </div>
+  <div>
+    <input type="submit" name="create" value="Guardar" />
+  </div>
+</form>
+<form action="<%= showUrl %>" method="get">
+  <input type="submit" value="Volver" />
+</form>
