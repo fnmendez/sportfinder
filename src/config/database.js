@@ -15,6 +15,7 @@ const config = {
     database: 'iic2513template_test',
   },
   production: {
+    dialect: 'postgres',
     database: process.env.DATABASE_URL,
   },
 };
