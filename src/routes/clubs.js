@@ -28,6 +28,7 @@ router.get('newClub', '/new', async (ctx) => {
   await ctx.render('/clubs/new', {
     club,
     createClubPath: ctx.router.url('createClubPath'),
+    indexUrl: ctx.router.url('clubs'),
   });
 });
 
@@ -49,6 +50,7 @@ router.get('clubEdit', '/:id/edit', async (ctx) => {
   await ctx.render('clubs/edit', {
     club,
     updateClubPath: ctx.router.url('clubUpdate', club.id),
+    showUrl: ctx.router.url('club', club.id),
   });
 });
 
@@ -78,6 +80,8 @@ router.get('club', '/:id', async (ctx) => {
     club,
     relatedSports,
     deleteClubPath: ctx.router.url('deleteClub', club.id),
+    indexUrl: ctx.router.url('clubs'),
+    editClubUrl: ctx.router.url('clubEdit', club.id)
   });
 });
 

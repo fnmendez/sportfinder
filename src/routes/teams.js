@@ -49,6 +49,7 @@ router.get('teamEdit', '/:id/edit', async (ctx) => {
   await ctx.render('teams/edit', {
     team,
     updateTeamPath: ctx.router.url('teamUpdate', team.id),
+    showUrl: ctx.router.url('team', team.id),
   });
 });
 
@@ -78,8 +79,9 @@ router.get('team', '/:id', async (ctx) => {
   await ctx.render('teams/show', {
     team,
     members,
-    editTeamPath: t => ctx.router.url('teamEdit', { id: t.id }),
+    editTeamPath: ctx.router.url('teamEdit', team.id),
     deleteTeamPath: ctx.router.url('deleteTeam', team.id),
+    indexUrl: ctx.router.url('teams'),
   });
 });
 

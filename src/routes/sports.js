@@ -49,6 +49,7 @@ router.get('sportEdit', '/:id/edit', async (ctx) => {
   await ctx.render('sports/edit', {
     sport,
     updateSportPath: ctx.router.url('sportUpdate', sport.id),
+    showUrl: ctx.router.url('sport', sport.id),
   });
 });
 
@@ -71,8 +72,9 @@ router.get('sport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   await ctx.render('sports/show', {
     sport,
-    editSportPath: s => ctx.router.url('sportEdit', { id: s.id }),
+    editSportPath: ctx.router.url('sportEdit', sport.id),
     deleteSportPath: ctx.router.url('deleteSport', sport.id),
+    indexUrl: ctx.router.url('sports'),
   });
 });
 
