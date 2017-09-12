@@ -5,8 +5,6 @@ const db = require('./src/models');
 
 const PORT = process.env.PORT || 3000;
 
-console.log(process.env);
-
 db.sequelize
   .authenticate()
   .then(() => {
