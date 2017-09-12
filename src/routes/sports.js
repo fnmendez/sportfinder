@@ -15,7 +15,6 @@ router.del('deleteSport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   const sports = await ctx.orm.sport.findAll();
   await sport.destroy();
-
   await ctx.redirect(ctx.router.url('sports', {
     sports,
     sportPath: sport => ctx.router.url('sport', sport.id),

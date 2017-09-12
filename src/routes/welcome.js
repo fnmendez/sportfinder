@@ -6,7 +6,6 @@ const router = new KoaRouter();
 router.get('home', '/', async (ctx) => {
   if (ctx.session.user) { ctx.redirect('profile'); }
   await ctx.render('welcome/home', {
-    user: ctx.session.user,
     appVersion: pkg.version,
     signupUrl: ctx.router.url('signup'),
   });
@@ -19,7 +18,7 @@ router.post('login', 'login', async (ctx) => {
     username, password,
   } });
   if (user) {
-    ctx.session.user = user;
+    ctx.session.user = { id: user.id };
     ctx.redirect('profile');
   } else {
     ctx.redirect('/');
@@ -39,7 +38,7 @@ router.get('signup', 'signup', async (ctx) => {
 router.post('createUser', 'signup', async (ctx) => {
   try {
     const user = await ctx.orm.users.create(ctx.request.body);
-    ctx.session.user = user;
+    ctx.session.user = { id: user.id };
     ctx.redirect('profile');
   } catch (validationError) {
     await ctx.render('welcome/signup', {
@@ -51,14 +50,41 @@ router.post('createUser', 'signup', async (ctx) => {
   }
 });
 
-router.get('profile', 'profile', async (ctx) => {
-  const user = ctx.session.user;
+router.del('deleteUser', 'profile', async (ctx) => {
+  if (ctx.session.user) {
+    const user = await ctx.orm.users.findById(ctx.session.user.id);
+    await user.destroy();
+    ctx.session = null;
+  }
+  await ctx.redirect('/');
+});
+
+router.patch('updateUser', 'profile', async (ctx) => {
+  const user = await ctx.orm.users.findById(ctx.session.user.id);
+  try {
+    await user.update(ctx.request.body);
+    ctx.redirect('profile');
+  } catch (validationError) {
+    await ctx.render('welcome/profile', {
+      user,
+      errors: validationError.errors,
+      updateUrl: ctx.router.url('updateUser'),
+      logoutUrl: ctx.router.url('logout'),
+      startUrl: '/',
+      deleteUrl: ctx.router.url('deleteUser'),
+    });
+  }
+});
+
+router.get('showUser', 'profile', async (ctx) => {
+  const user = await ctx.orm.users.findById(ctx.session.user.id);
   if (user) {
     await ctx.render('welcome/profile', {
       user,
-      updateUrl: '/',
+      updateUrl: ctx.router.url('updateUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/',
+      deleteUrl: ctx.router.url('deleteUser'),
     });
   } else {
     ctx.redirect('/');

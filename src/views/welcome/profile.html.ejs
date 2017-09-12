@@ -11,13 +11,13 @@
     </div>
   <% } %>
   <h3>Modificar tu cuenta</h3>
-  <form action="<%= updateUrl %>" enctype="multipart/form-data" method="post">
+  <form action="<%= updateUrl %>" method="post">
     <input type="hidden" name="_method" value="patch" />
     <div>
       <label>Datos de usuario</label><br>
       <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
-      <input type="password" name="password" placeholder="Contraseña actual">
-      <input type="password" name="newPassword" placeholder="Contraseña nueva">
+      <!-- <input type="password" name="oldPassword" placeholder="Contraseña actual"> -->
+      <input type="password" name="password" value="<%= user.password %>" placeholder="Contraseña nueva">
       <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
     </div>
     <div>
@@ -30,14 +30,18 @@
       <label>Foto del carné de identidad</label><br>
       <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
     </div>
-    <!-- <div>
+    <div>
       <input type="submit" name="update" value="Actualizar">
-    </div> -->
+    </div>
   </form>
   <form action="<%= logoutUrl %>" method="post">
     <div>
       <input type="submit" value="Desconectarse"/>
     </div>
+  </form>
+  <form action="<%= deleteUrl %>" method="post">
+    <input type="hidden" name="_method" value="delete" />
+    <input type="submit" value="Eliminar cuenta" />
   </form>
   <!-- <form action="<%= startUrl %>" method="get">
     <div>
