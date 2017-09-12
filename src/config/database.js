@@ -16,7 +16,6 @@ const config = {
   },
   production: {
     extend: 'default',
-    database: 'dal12j2323icap',
   },
 };
 
