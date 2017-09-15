@@ -3,6 +3,7 @@ module.exports = function defineuserMatch(sequelize, DataTypes) {
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    }
   });
   userMatch.associate = function associate(models) {
     userMatch.belongsTo(models.users);
