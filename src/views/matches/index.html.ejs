@@ -9,8 +9,8 @@
   <% matches.forEach((match) => { %>
     <tr>
       <td><a href="<%= matchUrl(match) %>"><%= match.date %></a></td>
-      <td><%= match.sportId %></td>
-      <td><%= match.clubId %></td>
+      <td><%= match.sport.name %></td>
+      <td><%= match.club.name %></td>
     </tr>
   <% }) %>
 </table>
