@@ -1,4 +1,6 @@
 const KoaRouter = require('koa-router');
+// const matchesRouter = require('./matches')
+
 const pkg = require('../../package.json');
 
 const router = new KoaRouter();
@@ -68,7 +70,7 @@ router.patch('updateUser', 'profile', async (ctx) => {
       errors: validationError.errors,
       updateUrl: ctx.router.url('updateUser'),
       logoutUrl: ctx.router.url('logout'),
-      startUrl: '/',
+      startUrl: '/play',
       deleteUrl: ctx.router.url('deleteUser'),
     });
   }
@@ -81,7 +83,7 @@ router.get('showUser', 'profile', async (ctx) => {
       user,
       updateUrl: ctx.router.url('updateUser'),
       logoutUrl: ctx.router.url('logout'),
-      startUrl: '/',
+      startUrl: '/play',
       deleteUrl: ctx.router.url('deleteUser'),
     });
   } else {
