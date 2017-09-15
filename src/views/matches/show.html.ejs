@@ -7,6 +7,12 @@
   <input type="hidden" name="_method" value="delete" />
   <input type="submit" value="Borrar" />
 </form>
+<h2>Inscritos:</h2>
+<ul>
+  <% players.forEach(player => { %>
+    <li><%= player.user.username %></li>
+  <% }) %>
+</ul>
 <form action="<%= indexUrl %>" method="get">
   <div>
     <input type="submit" value="Volver" />
