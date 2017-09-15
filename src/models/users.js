@@ -52,6 +52,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
   });
   users.associate = function associate(models) {
     users.hasMany(models.userTeam);
+    users.hasMany(models.userMatch);
   };
   return users;
 };

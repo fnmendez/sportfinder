@@ -1,0 +1,40 @@
+<h1>Nueva Partida</h1>
+<div>
+  <% if (locals.errors) { %>
+    <div class="errors">
+      Necesitas arreglar los siguiente errores:
+      <ul>
+        <% errors.forEach(error => { %>
+          <li><%= error.message %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+  <form action="<%= createMatchUrl %>" method="post">
+    <div>
+      <input name="date" type="datetime-local" value="<%= match.date %>" />
+    </div>
+    <div>
+      <select name="sportId">
+        <% sports.forEach(sport => { %>
+          <option value="<%= sport.id %>"><%= sport.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <select name="clubId">
+        <% clubs.forEach(club => { %>
+          <option value="<%= club.id %>"><%= club.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div>
+      <input type="submit" value="Crear Partida" />
+    </div>
+  </form>
+  <form action="<%= indexUrl %>" method="get">
+    <div>
+      <input type="submit" value="Volver" />
+    </div>
+  </form>
+</div>

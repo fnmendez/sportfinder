@@ -1,0 +1,23 @@
+<h1>Matches</h1>
+
+<table>
+  <tr>
+    <th>Fecha</th>
+    <th>Deporte</th>
+    <th>Club</th>
+  </tr>
+  <% matches.forEach((match) => { %>
+    <tr>
+      <td><a href="<%= matchUrl(match) %>"><%= match.date %></a></td>
+      <td><%= match.sport.name %></td>
+      <td><%= match.club.name %></td>
+    </tr>
+  <% }) %>
+</table>
+
+<div>
+  <a href="<%= newMatchUrl %>"> Crear Partida </a>
+</div>
+<div>
+  <a href="<%= profileUrl %>"> Mi perfil </a>
+</div>
