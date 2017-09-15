@@ -3,7 +3,9 @@ const KoaRouter = require('koa-router');
 const router = new KoaRouter();
 
 router.get('matches', '/', async (ctx) => {
-  const matches = await ctx.orm.match.findAll();
+  const matches = await ctx.orm.match.findAll({
+    include: [ ctx.orm.sport, ctx.orm.club ],
+  });
   await ctx.render('matches/index', {
     matches,
     matchUrl: match => ctx.router.url('match', { id: match.id }),
@@ -29,7 +31,7 @@ router.get('newMatch', '/new', async (ctx) => {
     createMatchUrl: ctx.router.url('createMatch'),
     indexUrl: ctx.router.url('matches'),
   })
-})
+});
 
 router.post('createMatch', '/', async (ctx) => {
   try {
@@ -49,10 +51,52 @@ router.post('createMatch', '/', async (ctx) => {
   }
 });
 
-router.get('match', '/:id', async (ctx) => {
+router.get('editMatch', '/:id/edit', async (ctx) => {
+  const match = await ctx.orm.match.findById(ctx.params.id, {
+    include: [ ctx.orm.sport, ctx.orm.club ],
+  });
+  const sports = await ctx.orm.sport.findAll();
+  const clubs = await ctx.orm.club.findAll();
+  await ctx.render('matches/edit', {
+    match,
+    sports,
+    clubs,
+    updateMatchUrl: ctx.router.url('updateMatch', match.id),
+    showMatchUrl: ctx.router.url('match', match.id),
+  });
+});
+
+router.patch('updateMatch', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id);
+  try {
+    await match.update(ctx.request.body);
+    ctx.redirect(ctx.router.url('match', { id: match.id }));
+  } catch (validationError) {
+    const match = await ctx.orm.match.findById(ctx.params.id, {
+      include: [ ctx.orm.sport, ctx.orm.club ],
+    });
+    const sports = await ctx.orm.sport.findAll();
+    const clubs = await ctx.orm.club.findAll();
+    await ctx.render('matches/edit', {
+      match,
+      sports,
+      clubs,
+      errors: validationError.errors,
+      updateMatchUrl: ctx.router.url('updateClub', { id: club.id }),
+      showMatchUrl: ctx.router.url('club', club.id),
+    });
+  }
+});
+
+router.get('match', '/:id', async (ctx) => {
+  const match = await ctx.orm.match.findById(ctx.params.id, {
+    include: [ ctx.orm.sport, ctx.orm.club ],
+  });
+  console.log("match");
+  console.log(match);
   await ctx.render('matches/show', {
     match,
+    editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),
   });
