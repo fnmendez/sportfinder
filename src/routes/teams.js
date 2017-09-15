@@ -46,7 +46,7 @@ router.post('createTeam', '/', async (ctx) => {
   }
 });
 
-router.get('teamEdit', '/:id/edit', async (ctx) => {
+router.get('editTeam', '/:id/edit', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   await ctx.render('teams/edit', {
     team,
@@ -65,6 +65,7 @@ router.patch('updateTeam', '/:id', async (ctx) => {
       team,
       errors: validationError.errors,
       updateTeamUrl: ctx.router.url('updateTeam', { id: team.id }),
+      showTeamUrl: ctx.router.url('team', team.id),
     });
   }
 });
@@ -81,8 +82,8 @@ router.get('team', '/:id', async (ctx) => {
   await ctx.render('teams/show', {
     team,
     members,
-    editTeamPath: ctx.router.url('teamEdit', team.id),
-    deleteTeamPath: ctx.router.url('deleteTeam', team.id),
+    editTeamUrl: ctx.router.url('editTeam', team.id),
+    deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
   });
 });
