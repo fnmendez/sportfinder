@@ -4,7 +4,7 @@ module.exports = function definesports(sequelize, DataTypes) {
     {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: 'compositeIndex',
+      unique: 'memberConstraint',
       validate: {
         notEmpty: true,
       },
@@ -13,7 +13,7 @@ module.exports = function definesports(sequelize, DataTypes) {
     {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: 'compositeIndex',
+      unique: 'memberConstraint',
       validate: {
         notEmpty: true,
       },
