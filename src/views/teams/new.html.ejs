@@ -11,7 +11,18 @@
       </ul>
     </div>
   <% } %>
+<select>
+  <% sports.forEach((sport) => { %>
+    <option value="sportname"><%= sport.name %></option>
+  <% }) %>
+</select>
+
   <form action="<%= createTeamUrl %>" method="post">
+  Age: <select name='sportname'>
+        <% sports.forEach((sport) => { %>
+          <option value="<%= sport.name %>"><%= sport.name %></option>
+        <% }) %>
+       </select>
     <div>
       <label for="name">Nombre</label>
       <input type="text" name="name" value="<%= team.name %>" />

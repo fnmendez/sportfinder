@@ -25,19 +25,24 @@ router.del('deleteTeam', '/:id', async (ctx) => {
 
 router.get('newTeam', '/new', async (ctx) => {
   const team = ctx.orm.team.build();
+  const sports = await ctx.orm.sport.findAll();
   await ctx.render('/teams/new', {
     team,
+    sports,
     createTeamUrl: ctx.router.url('createTeam'),
     indexUrl: ctx.router.url('teams'),
   });
 });
 
 router.post('createTeam', '/', async (ctx) => {
+  const sports = await ctx.orm.sport.findAll();
   try {
     const team = await ctx.orm.team.create(ctx.request.body);
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
+    console.log(ctx.request.body);
     await ctx.render('/teams/new', {
+      sports,
       team: ctx.orm.team.build(ctx.request.body),
       errors: validationError.errors,
       createTeamUrl: ctx.router.url('createTeam'),
