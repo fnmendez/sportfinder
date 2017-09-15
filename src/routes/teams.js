@@ -11,6 +11,46 @@ router.get('teams', '/', async (ctx) => {
   });
 });
 
+router.del('removeMember', '/:id/memberDelete', async (ctx) => {
+  // TODO: Arreglar la URL.
+
+  const user = await ctx.orm.users.findOne({
+    where: {username: ctx.request.body.name}});
+  const team = await ctx.orm.team.findById(ctx.params.id, {
+    include: [{
+      model: ctx.orm.userTeam,
+      include: ctx.orm.users,
+    }],
+  });
+  const sport = await ctx.orm.sport.findById(team.sportId);
+  const members = team.userTeams;
+  // Si se ingresa un usuario existente
+  if (user){
+    try{
+    // Se busca la tupla en la tabla del join
+    const joinTuple = await ctx.orm.userTeam.findOne({where: {userId: user.id, teamId: team.id}});
+    await joinTuple.destroy();
+    ctx.redirect(ctx.router.url('team', { id: team.id }));
+    } catch (typeError){
+      // Se entrará si es que la tupla no existe, también podría ser con un if.
+      await ctx.render('teams/show', {
+        errors: typeError.errors,
+        team,
+        sport,
+        members,
+        editTeamUrl: ctx.router.url('editTeam', team.id),
+        deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
+        indexUrl: ctx.router.url('teams'),
+        addMemberUrl: ctx.router.url('addMember', team.id),
+        removeMemberUrl: ctx.router.url('removeMember', team.id),
+      });
+    }
+  }
+  else{
+    ctx.redirect(ctx.router.url('team', { id: team.id }));
+  }
+});
+
 router.del('deleteTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   const teams = await ctx.orm.team.findAll();
@@ -81,6 +121,7 @@ router.post('addMember', '/:id', async (ctx) => {
         deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
         indexUrl: ctx.router.url('teams'),
         addMemberUrl: ctx.router.url('addMember', team.id),
+        removeMemberUrl: ctx.router.url('removeMember', team.id),
       });
     }
   }
@@ -131,6 +172,7 @@ router.get('team', '/:id', async (ctx) => {
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
+    removeMemberUrl: ctx.router.url('removeMember', team.id),
   });
 });
 
