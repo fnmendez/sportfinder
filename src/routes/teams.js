@@ -59,7 +59,7 @@ router.del('deleteTeam', '/:id', async (ctx) => {
 
   await ctx.redirect(ctx.router.url('teams', {
     teams,
-    teamPath: team => ctx.router.url('team', team.id),
+    teamPath: t => ctx.router.url('team', t.id),
     newPath: ctx.router.url('newTeam'),
   }));
 });
