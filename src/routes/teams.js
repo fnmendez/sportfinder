@@ -44,7 +44,6 @@ router.post('createTeam', '/', async (ctx) => {
     });
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
-    // console.log(ctx.request.body.sportname);
     await ctx.render('/teams/new', {
       sports,
       team: ctx.orm.team.build(ctx.request.body),
@@ -63,6 +62,7 @@ router.post('addMember', '/:id', async (ctx) => {
       include: ctx.orm.users,
     }],
   });
+  const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
   if (user){
     // Si es que existe el usuario
@@ -75,6 +75,7 @@ router.post('addMember', '/:id', async (ctx) => {
       await ctx.render('teams/show', {
         errors: validationError.errors,
         team,
+        sport,
         members,
         editTeamUrl: ctx.router.url('editTeam', team.id),
         deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
@@ -120,9 +121,11 @@ router.get('team', '/:id', async (ctx) => {
       include: ctx.orm.users,
     }],
   });
+  const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
   await ctx.render('teams/show', {
     team,
+    sport,
     members,
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
