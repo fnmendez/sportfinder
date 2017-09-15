@@ -10,16 +10,16 @@
     </ul>
   </div>
 <% } %>
-<form action="<%= updateTeamPath %>" method="post">
+<form action="<%= updateTeamUrl %>" method="post">
   <input type="hidden" name="_method" value="patch" />
   <div>
     <label for="name">Nombre</label>
     <input type="text" name="name" value="<%= team.name %>" />
   </div>
   <div>
-    <input type="submit" name="create" value="Guardar" />
+    <input type="submit" value="Guardar" />
   </div>
 </form>
-<form action="<%= showUrl %>" method="get">
+<form action="<%= showTeamUrl %>" method="get">
   <input type="submit" value="Volver" />
 </form>

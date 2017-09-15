@@ -11,12 +11,15 @@
       </ul>
     </div>
   <% } %>
-  <form action="<%= createSportPath %>" method="post">
+  <form action="<%= createSportUrl %>" method="post">
     <div>
       <label for="name">Nombre</label>
       <input type="text" name="name" value="<%= sport.name %>" />
     </div>
       <input type="submit" name="create" value="Crear deporte" />
     </div>
+  </form>
+  <form action="<%= indexUrl %>" method="get">
+    <input type="submit" value="Volver" />
   </form>
 </div>

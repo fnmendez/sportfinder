@@ -1,8 +1,8 @@
 <h1>Clubes</h1>
 
 <ul>
-  <% clubs.forEach((c) => { %>
-    <li><a href="<%= clubPath(c) %>"> <%= c.name %> </a></li>
+  <% clubs.forEach((club) => { %>
+    <li><a href="<%= clubUrl(club) %>"> <%= club.name %> </a></li>
   <% }) %>
 </ul>
-<a href="<%= newPath %>"> Agregar club </a>
+<a href="<%= newClubUrl %>"> Agregar club </a>

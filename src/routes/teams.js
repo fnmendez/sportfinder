@@ -6,8 +6,8 @@ router.get('teams', '/', async (ctx) => {
   const teams = await ctx.orm.team.findAll();
   await ctx.render('teams/index', {
     teams,
-    teamPath: team => ctx.router.url('team', { id: team.id }),
-    newPath: ctx.router.url('newTeam'),
+    teamUrl: team => ctx.router.url('team', { id: team.id }),
+    newTeamUrl: ctx.router.url('newTeam'),
   });
 });
 
@@ -27,11 +27,12 @@ router.get('newTeam', '/new', async (ctx) => {
   const team = ctx.orm.team.build();
   await ctx.render('/teams/new', {
     team,
-    createTeamPath: ctx.router.url('createTeamPath'),
+    createTeamUrl: ctx.router.url('createTeam'),
+    indexUrl: ctx.router.url('teams'),
   });
 });
 
-router.post('createTeamPath', '/', async (ctx) => {
+router.post('createTeam', '/', async (ctx) => {
   try {
     const team = await ctx.orm.team.create(ctx.request.body);
     ctx.redirect(ctx.router.url('team', { id: team.id }));
@@ -39,7 +40,8 @@ router.post('createTeamPath', '/', async (ctx) => {
     await ctx.render('/teams/new', {
       team: ctx.orm.team.build(ctx.request.body),
       errors: validationError.errors,
-      createTeamPath: ctx.router.url('createTeamPath'),
+      createTeamUrl: ctx.router.url('createTeam'),
+      indexUrl: ctx.router.url('teams'),
     });
   }
 });
@@ -48,12 +50,12 @@ router.get('teamEdit', '/:id/edit', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   await ctx.render('teams/edit', {
     team,
-    updateTeamPath: ctx.router.url('teamUpdate', team.id),
-    showUrl: ctx.router.url('team', team.id),
+    updateTeamUrl: ctx.router.url('updateTeam', team.id),
+    showTeamUrl: ctx.router.url('team', team.id),
   });
 });
 
-router.patch('teamUpdate', '/:id', async (ctx) => {
+router.patch('updateTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   try {
     await team.update(ctx.request.body);
@@ -62,7 +64,7 @@ router.patch('teamUpdate', '/:id', async (ctx) => {
     await ctx.render('teams/edit', {
       team,
       errors: validationError.errors,
-      updateTeamPath: ctx.router.url('teamUpdate', { id: team.id }),
+      updateTeamUrl: ctx.router.url('updateTeam', { id: team.id }),
     });
   }
 });

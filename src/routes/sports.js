@@ -6,8 +6,8 @@ router.get('sports', '/', async (ctx) => {
   const sports = await ctx.orm.sport.findAll();
   await ctx.render('sports/index', {
     sports,
-    sportPath: sport => ctx.router.url('sport', { id: sport.id }),
-    newPath: ctx.router.url('newSport'),
+    sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
+    newSportUrl: ctx.router.url('newSport'),
   });
 });
 
@@ -15,22 +15,19 @@ router.del('deleteSport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   const sports = await ctx.orm.sport.findAll();
   await sport.destroy();
-  await ctx.redirect(ctx.router.url('sports', {
-    sports,
-    sportPath: sport => ctx.router.url('sport', sport.id),
-    newPath: ctx.router.url('newSport'),
-  }));
+  await ctx.redirect(ctx.router.url('sports'));
 });
 
 router.get('newSport', '/new', async (ctx) => {
   const sport = ctx.orm.sport.build();
   await ctx.render('/sports/new', {
     sport,
-    createSportPath: ctx.router.url('createSportPath'),
+    createSportUrl: ctx.router.url('createSport'),
+    indexUrl: ctx.router.url('sports'),
   });
 });
 
-router.post('createSportPath', '/', async (ctx) => {
+router.post('createSport', '/', async (ctx) => {
   try {
     const sport = await ctx.orm.sport.create(ctx.request.body);
     ctx.redirect(ctx.router.url('sport', { id: sport.id }));
@@ -38,21 +35,22 @@ router.post('createSportPath', '/', async (ctx) => {
     await ctx.render('/sports/new', {
       sport: ctx.orm.sport.build(ctx.request.body),
       errors: validationError.errors,
-      createSportPath: ctx.router.url('createSportPath'),
+      createSportUrl: ctx.router.url('createSport'),
+      indexUrl: ctx.router.url('sports'),
     });
   }
 });
 
-router.get('sportEdit', '/:id/edit', async (ctx) => {
+router.get('editSport', '/:id/edit', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   await ctx.render('sports/edit', {
     sport,
-    updateSportPath: ctx.router.url('sportUpdate', sport.id),
+    updateSportUrl: ctx.router.url('updateSport', sport.id),
     showUrl: ctx.router.url('sport', sport.id),
   });
 });
 
-router.patch('sportUpdate', '/:id', async (ctx) => {
+router.patch('updateSport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   try {
     await sport.update(ctx.request.body);
@@ -61,7 +59,7 @@ router.patch('sportUpdate', '/:id', async (ctx) => {
     await ctx.render('sports/edit', {
       sport,
       errors: validationError.errors,
-      updateSportPath: ctx.router.url('sportUpdate', { id: sport.id }),
+      updateSportUrl: ctx.router.url('updateSport', { id: sport.id }),
     });
   }
 });
@@ -71,8 +69,8 @@ router.get('sport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   await ctx.render('sports/show', {
     sport,
-    editSportPath: ctx.router.url('sportEdit', sport.id),
-    deleteSportPath: ctx.router.url('deleteSport', sport.id),
+    editSportUrl: ctx.router.url('editSport', sport.id),
+    deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
   });
 });
