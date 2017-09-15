@@ -71,11 +71,11 @@ router.patch('updateClub', '/:id', async (ctx) => {
 router.get('club', '/:id', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id, {
     include: [{
-      model: ctx.orm.club_sport,
+      model: ctx.orm.clubSport,
       include: ctx.orm.sport,
     }],
   });
-  const clubSports = club.club_sports;
+  const clubSports = club.clubSports;
   await ctx.render('clubs/show', {
     club,
     clubSports,
