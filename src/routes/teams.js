@@ -25,19 +25,27 @@ router.del('deleteTeam', '/:id', async (ctx) => {
 
 router.get('newTeam', '/new', async (ctx) => {
   const team = ctx.orm.team.build();
+  const sports = await ctx.orm.sport.findAll();
   await ctx.render('/teams/new', {
     team,
+    sports,
     createTeamUrl: ctx.router.url('createTeam'),
     indexUrl: ctx.router.url('teams'),
   });
 });
 
 router.post('createTeam', '/', async (ctx) => {
+  const sports = await ctx.orm.sport.findAll();
   try {
-    const team = await ctx.orm.team.create(ctx.request.body);
+    const sport = await ctx.orm.sport.findOne({where: {name: ctx.request.body.sportname}})
+    const team = await ctx.orm.team.create({
+      name: ctx.request.body.name,
+      sportId: sport.id,
+    });
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
     await ctx.render('/teams/new', {
+      sports,
       team: ctx.orm.team.build(ctx.request.body),
       errors: validationError.errors,
       createTeamUrl: ctx.router.url('createTeam'),
@@ -54,6 +62,7 @@ router.post('addMember', '/:id', async (ctx) => {
       include: ctx.orm.users,
     }],
   });
+  const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
   if (user){
     // Si es que existe el usuario
@@ -66,6 +75,7 @@ router.post('addMember', '/:id', async (ctx) => {
       await ctx.render('teams/show', {
         errors: validationError.errors,
         team,
+        sport,
         members,
         editTeamUrl: ctx.router.url('editTeam', team.id),
         deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
@@ -111,9 +121,11 @@ router.get('team', '/:id', async (ctx) => {
       include: ctx.orm.users,
     }],
   });
+  const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
   await ctx.render('teams/show', {
     team,
+    sport,
     members,
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
