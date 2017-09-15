@@ -6,11 +6,18 @@ router.get('matches', '/', async (ctx) => {
   const matches = await ctx.orm.match.findAll({
     include: [ ctx.orm.sport, ctx.orm.club ],
   });
+  const userMatches = await ctx.orm.userMatch.findAll({
+    include: [ ctx.orm.users, ctx.orm.match ],
+  });
+  const user = { id: ctx.session.user.id };
   await ctx.render('matches/index', {
     matches,
+    userMatches,
+    user,
     matchUrl: match => ctx.router.url('match', { id: match.id }),
     newMatchUrl: ctx.router.url('newMatch'),
     profileUrl: '/profile',
+    joinMatchUrl: match => ctx.router.url('joinMatch', match.id),
   });
 });
 
@@ -82,20 +89,34 @@ router.patch('updateMatch', '/:id', async (ctx) => {
       sports,
       clubs,
       errors: validationError.errors,
-      updateMatchUrl: ctx.router.url('updateClub', { id: club.id }),
-      showMatchUrl: ctx.router.url('club', club.id),
+      updateMatchUrl: ctx.router.url('updateMatch', { id: match.id }),
+      showMatchUrl: ctx.router.url('match', match.id),
     });
   }
+});
+
+router.post('joinMatch', '/:id/join', async (ctx) => {
+  const match = await ctx.orm.match.findById(ctx.params.id);
+  const matches = await ctx.orm.match.findAll({
+    include: [ ctx.orm.sport, ctx.orm.club ],
+  });
+  await ctx.orm.userMatch.create({ matchId: match.id, userId: ctx.session.user.id });
+  ctx.redirect(ctx.router.url('match', { id: match.id }));
 });
 
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [ ctx.orm.sport, ctx.orm.club ],
   });
-  console.log("match");
-  console.log(match);
+  const players = await ctx.orm.userMatch.findAll({
+    where: { matchId: match.id },
+    include: [ ctx.orm.users ],
+  });
+  console.log("players");
+  console.log(players);
   await ctx.render('matches/show', {
     match,
+    players,
     editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),
