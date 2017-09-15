@@ -11,6 +11,10 @@ router.get('teams', '/', async (ctx) => {
   });
 });
 
+router.del('removeMember', '/:id/member', async (ctx) => {
+  console.log("Delete request for user");
+});
+
 router.del('deleteTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   const teams = await ctx.orm.team.findAll();
@@ -81,6 +85,7 @@ router.post('addMember', '/:id', async (ctx) => {
         deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
         indexUrl: ctx.router.url('teams'),
         addMemberUrl: ctx.router.url('addMember', team.id),
+        removeMemberUrl: ctx.router.url('removeMember', team.id),
       });
     }
   }
@@ -131,6 +136,7 @@ router.get('team', '/:id', async (ctx) => {
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
+    removeMemberUrl: ctx.router.url('removeMember', team.id),
   });
 });
 

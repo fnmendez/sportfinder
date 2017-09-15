@@ -35,3 +35,12 @@ Agregar un nuevo miembro:
   </div>
     <input type="submit" name="add" value="Agregar miembro" />
 </form>
+Eliminar un miembro:
+<form action="<%= removeMemberUrl %>" method="post">
+  <input type="hidden" name="_method" value="delete" />
+  <div>
+    <label for="name">Nombre de usuario</label>
+    <input type="text" name="name" value="" />
+  </div>
+    <input type="submit" name="add" value="Eliminar miembro" />
+</form>
