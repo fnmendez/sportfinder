@@ -1,20 +1,30 @@
-<h1>Match: <%= match.id %> </h1>
-<h2>Fecha: <%= match.date %></h2>
-<h2>Deporte: <%= match.sport.name %></h2>
-<h2>Club: <%= match.club.name %>, <%= match.club.adress %></h2>
-<a href="<%= editMatchUrl %> ">Editar</a>
-<form action="<%= deleteMatchUrl %>" method="post">
-  <input type="hidden" name="_method" value="delete" />
-  <input type="submit" value="Borrar" />
-</form>
-<h2>Inscritos:</h2>
-<ul>
-  <% players.forEach(player => { %>
-    <li><%= player.user.username %></li>
-  <% }) %>
-</ul>
-<form action="<%= indexUrl %>" method="get">
+<div>
   <div>
-    <input type="submit" value="Volver" />
+    <h1>Match: <%= match.id %> </h1>
+    <h2>Fecha: <%= match.date %></h2>
+    <h2>Deporte: <%= match.sport.name %></h2>
+    <h2>Club: <%= match.club.name %>, <%= match.club.adress %></h2>
   </div>
-</form>
+  <div>
+    <h2>Inscritos:</h2>
+    <ul>
+      <% players.forEach(player => { %>
+        <li><%= player.user.username %></li>
+      <% }) %>
+    </ul>
+  </div>
+  <div>
+    <form action="<%= indexUrl %>" method="get">
+      <div>
+        <input type="submit" value="Volver" />
+      </div>
+    </form>
+  </div>
+  <div>
+    <a href="<%= editMatchUrl %> ">Editar</a>
+    <form action="<%= deleteMatchUrl %>" method="post">
+      <input type="hidden" name="_method" value="delete" />
+      <input type="submit" value="Borrar" />
+    </form>
+  </div>
+</div>

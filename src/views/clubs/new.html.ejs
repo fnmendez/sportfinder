@@ -1,29 +1,35 @@
-<h1>Nuevo club</h1>
-<% if (locals.errors) { %>
-  <div class="errors">
-    Necesitas arreglar los siguiente errores:
-    <ul>
-      <% errors.forEach(error => { %>
-        <li><%= error.message %></li>
-      <% }); %>
-    </ul>
-  </div>
-<% } %>
-<form action="<%= createClubUrl %>" method="post">
+<div>
   <div>
-    <label for="name">Nombre</label>
-    <input type="text" name="name" value="<%= club.name %>" />
+    <h1>Nuevo club</h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
   </div>
   <div>
-    <label for="address">Dirección</label>
-    <textarea type="text" name="address"><%= club.address %></textarea>
+    <form action="<%= createClubUrl %>" method="post">
+      <div>
+        <label for="name">Nombre</label>
+        <input type="text" name="name" value="<%= club.name %>" />
+      </div>
+      <div>
+        <label for="address">Dirección</label>
+        <textarea type="text" name="address"><%= club.address %></textarea>
+      </div>
+      <div>
+        <input type="submit" name="create" value="Crear club" />
+      </div>
+    </form>
+    <form action="<%= indexUrl %>" method="get">
+      <div>
+        <input type="submit" value="Volver" />
+      </div>
+    </form>
   </div>
-  <div>
-    <input type="submit" name="create" value="Crear club" />
-  </div>
-</form>
-<form action="<%= indexUrl %>" method="get">
-  <div>
-    <input type="submit" value="Volver" />
-  </div>
-</form>
+</div>
