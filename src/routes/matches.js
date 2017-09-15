@@ -3,85 +3,58 @@ const KoaRouter = require('koa-router');
 const router = new KoaRouter();
 
 router.get('matches', '/', async (ctx) => {
-  const clubs = await ctx.orm.club.findAll();
-  await ctx.render('clubs/index', {
-    clubs,
-    clubUrl: club => ctx.router.url('club', { id: club.id }),
-    newClubUrl: ctx.router.url('newClub'),
+  const matches = await ctx.orm.match.findAll();
+  await ctx.render('matches/index', {
+    matches,
+    matchUrl: match => ctx.router.url('match', { id: match.id }),
+    newMatchUrl: ctx.router.url('newMatch'),
+    profileUrl: '/profile',
   });
 });
 
-router.del('deleteClub', '/:id', async (ctx) => {
-  const club = await ctx.orm.club.findById(ctx.params.id);
+router.del('deleteMatch', '/:id', async (ctx) => {
+  const match = await ctx.orm.match.findById(ctx.params.id);
+  await match.destroy();
+  await ctx.redirect(ctx.router.url('matches'));
+});
+
+router.get('newMatch', '/new', async (ctx) => {
+  const match = ctx.orm.match.build();
+  const sports = await ctx.orm.sport.findAll();
   const clubs = await ctx.orm.club.findAll();
-  await club.destroy();
-  await ctx.redirect(ctx.router.url('clubs', {
+  await ctx.render('/matches/new', {
+    match,
+    sports,
     clubs,
-    clubUrl: c => ctx.router.url('club', c.id),
-    newClubUrl: ctx.router.url('newClub'),
-  }));
-});
+    createMatchUrl: ctx.router.url('createMatch'),
+    indexUrl: ctx.router.url('matches'),
+  })
+})
 
-router.get('newClub', '/new', async (ctx) => {
-  const club = ctx.orm.club.build();
-  await ctx.render('/clubs/new', {
-    club,
-    createClubUrl: ctx.router.url('createClub'),
-    indexUrl: ctx.router.url('clubs'),
-  });
-});
-
-router.post('createClub', '/', async (ctx) => {
+router.post('createMatch', '/', async (ctx) => {
   try {
-    const club = await ctx.orm.club.create(ctx.request.body);
-    ctx.redirect(ctx.router.url('club', { id: club.id }));
+    const match = await ctx.orm.match.create(ctx.request.body);
+    ctx.redirect(ctx.router.url('matches'));
   } catch (validationError) {
-    await ctx.render('/clubs/new', {
-      club: ctx.orm.club.build(ctx.request.body),
+    const match = ctx.orm.match.build(ctx.request.body);
+    const sports = await ctx.orm.sport.findAll();
+    const clubs = await ctx.orm.club.findAll();
+    await ctx.redirect('newMatch', {
+      match,
+      sports,
+      clubs,
       errors: validationError.errors,
-      createClubUrl: ctx.router.url('createClub'),
+      createMatchUrl: ctx.router.url('createMatch'),
     });
   }
 });
 
-router.get('editClub', '/:id/edit', async (ctx) => {
-  const club = await ctx.orm.club.findById(ctx.params.id);
-  await ctx.render('clubs/edit', {
-    club,
-    updateClubUrl: ctx.router.url('updateClub', club.id),
-    showClubUrl: ctx.router.url('club', club.id),
-  });
-});
-
-router.patch('updateClub', '/:id', async (ctx) => {
-  const club = await ctx.orm.club.findById(ctx.params.id);
-  try {
-    await club.update(ctx.request.body);
-    ctx.redirect(ctx.router.url('club', { id: club.id }));
-  } catch (validationError) {
-    await ctx.render('clubs/edit', {
-      club,
-      errors: validationError.errors,
-      updateClubUrl: ctx.router.url('updateClub', { id: club.id }),
-      showClubUrl: ctx.router.url('club', club.id),
-    });
-  }
-});
-
-router.get('club', '/:id', async (ctx) => {
-  const club = await ctx.orm.club.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.club_sport,
-      include: ctx.orm.sport,
-    }],
-  });
-  const clubSports = club.club_sports;
-  await ctx.render('clubs/show', {
-    club,
-    clubSports,
-    deleteClubUrl: ctx.router.url('deleteClub', club.id),
-    indexUrl: ctx.router.url('clubs'),
-    editClubUrl: ctx.router.url('editClub', club.id)
+router.get('match', '/:id', async (ctx) => {
+  const match = await ctx.orm.match.findById(ctx.params.id);
+  await ctx.render('matches/show', {
+    match,
+    deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
+    indexUrl: ctx.router.url('matches'),
   });
 });
 
