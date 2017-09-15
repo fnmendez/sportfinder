@@ -37,10 +37,14 @@ router.get('newTeam', '/new', async (ctx) => {
 router.post('createTeam', '/', async (ctx) => {
   const sports = await ctx.orm.sport.findAll();
   try {
-    const team = await ctx.orm.team.create(ctx.request.body);
+    const sport = await ctx.orm.sport.findOne({where: {name: ctx.request.body.sportname}})
+    const team = await ctx.orm.team.create({
+      name: ctx.request.body.name,
+      sportId: sport.id,
+    });
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
-    console.log(ctx.request.body);
+    // console.log(ctx.request.body.sportname);
     await ctx.render('/teams/new', {
       sports,
       team: ctx.orm.team.build(ctx.request.body),
