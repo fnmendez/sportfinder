@@ -1,6 +1,8 @@
 module.exports = function defineuserMatch(sequelize, DataTypes) {
   const userMatch = sequelize.define('userMatch', {
-    admin: DataTypes.INTEGER,
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
   });
   userMatch.associate = function associate(models) {
     userMatch.belongsTo(models.users);
