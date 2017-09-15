@@ -14,6 +14,6 @@ router.use('/hello', hello.routes());
 router.use('/sports', sports.routes());
 router.use('/clubs', clubs.routes());
 router.use('/teams', teams.routes());
-router.use('/play', matches.routes)
+router.use('/play', matches.routes());
 
 module.exports = router;
