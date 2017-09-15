@@ -10,7 +10,7 @@ module.exports = function definesports(sequelize, DataTypes) {
     },
   });
   sports.associate = function associate(models) {
-    sports.hasMany(models.club_sport);
+    sports.hasMany(models.clubSport);
     sports.hasMany(models.match);
     sports.hasMany(models.team);
   };

@@ -17,7 +17,7 @@ module.exports = function defineclub(sequelize, DataTypes) {
     },
   });
   club.associate = function associate(models) {
-    club.hasMany(models.club_sport);
+    club.hasMany(models.clubSport);
     club.hasMany(models.match);
   };
   return club;
