@@ -11,7 +11,7 @@
       </ul>
     </div>
   <% } %>
-  <form action="<%= createTeamPath %>" method="post">
+  <form action="<%= createTeamUrl %>" method="post">
     <div>
       <label for="name">Nombre</label>
       <input type="text" name="name" value="<%= team.name %>" />
@@ -19,4 +19,7 @@
       <input type="submit" name="create" value="Crear equipo" />
     </div>
   </form>
+  <form action="<%= indexUrl %>" method="get">
+    <input type="submit" value="Volver" />
+  </form/>
 </div>

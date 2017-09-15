@@ -10,7 +10,7 @@
       </ul>
     </div>
   <% } %>
-  <form action="<%= updateClubPath %>" method="post">
+  <form action="<%= updateClubUrl %>" method="post">
     <input type="hidden" name="_method" value="patch" />
     <div>
       <label for="name">Nombre</label>
@@ -24,7 +24,7 @@
       <input type="submit" name="create" value="Guardar" />
     </div>
   </form>
-  <form action="<%= showUrl %>" method="get">
+  <form action="<%= showClubUrl %>" method="get">
     <div>
       <input type="submit" value="Volver" />
     </div>

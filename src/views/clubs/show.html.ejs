@@ -1,11 +1,11 @@
-<h1>Mostrando el club <%= club.name %> </h1>
+<h1>Club: <%= club.name %> </h1>
 <ul>
-  <% relatedSports.forEach((s) => { %>
-    <li> <%= s.sport.name %> </li>
+  <% clubSports.forEach((clubSport) => { %>
+    <li> <%= clubSport.sport.name %> </li>
   <% }) %>
 </ul>
 <a href="<%= editClubUrl %> ">Editar</a>
-<form action="<%= deleteClubPath %>" method="post">
+<form action="<%= deleteClubUrl %>" method="post">
   <input type="hidden" name="_method" value="delete" />
   <input type="submit" name="delete" value="Borrar" />
 </form>
