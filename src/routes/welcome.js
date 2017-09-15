@@ -31,7 +31,6 @@ router.get('signup', 'signup', async (ctx) => {
   await ctx.render('welcome/signup', {
     homeUrl: '/',
     user,
-    createUserPath: ctx.router.url('createUser'),
   });
 });
 
@@ -45,7 +44,6 @@ router.post('createUser', 'signup', async (ctx) => {
       homeUrl: '/',
       user: ctx.orm.users.build(ctx.request.body),
       errors: validationError.errors,
-      createUserPath: ctx.router.url('createUser'),
     });
   }
 });
