@@ -1,16 +1,36 @@
 <h1>Matches</h1>
-
+<% if (locals.errors) { %>
+    <div class="errors">
+      Necesitas arreglar los siguiente errores:
+      <ul>
+        <% errors.forEach(error => { %>
+          <li><%= error.message %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
 <table>
   <tr>
     <th>Fecha</th>
     <th>Deporte</th>
     <th>Club</th>
   </tr>
-  <% matches.forEach((match) => { %>
+  <% matches.forEach(match => { %>
+    <% alreadyIn = false %>
+    <% userMatches.forEach(userMatch => { %>
+      <% if (userMatch.match.id == match.id && userMatch.user.id == user.id) { %>
+        <% alreadyIn = true %>
+      <% } %>
+    <% }) %>
     <tr>
       <td><a href="<%= matchUrl(match) %>"><%= match.date %></a></td>
       <td><%= match.sport.name %></td>
       <td><%= match.club.name %></td>
+      <td>
+        <form action="<%= joinMatchUrl(match) %>" method="post">
+          <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
+        </form>
+      </td>
     </tr>
   <% }) %>
 </table>
