@@ -25,24 +25,68 @@ router.del('deleteTeam', '/:id', async (ctx) => {
 
 router.get('newTeam', '/new', async (ctx) => {
   const team = ctx.orm.team.build();
+  const sports = await ctx.orm.sport.findAll();
   await ctx.render('/teams/new', {
     team,
+    sports,
     createTeamUrl: ctx.router.url('createTeam'),
     indexUrl: ctx.router.url('teams'),
   });
 });
 
 router.post('createTeam', '/', async (ctx) => {
+  const sports = await ctx.orm.sport.findAll();
   try {
-    const team = await ctx.orm.team.create(ctx.request.body);
+    const sport = await ctx.orm.sport.findOne({where: {name: ctx.request.body.sportname}})
+    const team = await ctx.orm.team.create({
+      name: ctx.request.body.name,
+      sportId: sport.id,
+    });
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
     await ctx.render('/teams/new', {
+      sports,
       team: ctx.orm.team.build(ctx.request.body),
       errors: validationError.errors,
       createTeamUrl: ctx.router.url('createTeam'),
       indexUrl: ctx.router.url('teams'),
     });
+  }
+});
+
+router.post('addMember', '/:id', async (ctx) => {
+  const user = await ctx.orm.users.findOne({where: {username: ctx.request.body.name}});
+  const team = await ctx.orm.team.findById(ctx.params.id, {
+    include: [{
+      model: ctx.orm.userTeam,
+      include: ctx.orm.users,
+    }],
+  });
+  const sport = await ctx.orm.sport.findById(team.sportId);
+  const members = team.userTeams;
+  if (user){
+    // Si es que existe el usuario
+    try {
+      // Intentamos crear la tupla en la tabla de userTeam
+      await ctx.orm.userTeam.create({teamId: team.id, userId: user.id});
+      ctx.redirect(ctx.router.url('team', { id: team.id }));
+    } catch (validationError) {
+      // En caso de que el par usuario-equipo ya exista (se intentó agregar nuevamente un miembro)
+      await ctx.render('teams/show', {
+        errors: validationError.errors,
+        team,
+        sport,
+        members,
+        editTeamUrl: ctx.router.url('editTeam', team.id),
+        deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
+        indexUrl: ctx.router.url('teams'),
+        addMemberUrl: ctx.router.url('addMember', team.id),
+      });
+    }
+  }
+  else{
+    // En caso de que no exista el usuario ingresado
+    ctx.redirect(ctx.router.url('team', { id: team.id }));
   }
 });
 
@@ -77,14 +121,16 @@ router.get('team', '/:id', async (ctx) => {
       include: ctx.orm.users,
     }],
   });
+  const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
-  console.log(members[0]);
   await ctx.render('teams/show', {
     team,
+    sport,
     members,
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
+    addMemberUrl: ctx.router.url('addMember', team.id),
   });
 });
 
