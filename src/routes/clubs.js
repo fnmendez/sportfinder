@@ -81,7 +81,7 @@ router.get('club', '/:id', async (ctx) => {
     clubSports,
     deleteClubUrl: ctx.router.url('deleteClub', club.id),
     indexUrl: ctx.router.url('clubs'),
-    editClubUrl: ctx.router.url('editClub', club.id)
+    editClubUrl: ctx.router.url('editClub', club.id),
   });
 });
 

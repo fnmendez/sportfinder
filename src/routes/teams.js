@@ -15,7 +15,7 @@ router.del('removeMember', '/:id/memberDelete', async (ctx) => {
   // TODO: Arreglar la URL.
 
   const user = await ctx.orm.users.findOne({
-    where: {username: ctx.request.body.name}});
+    where: { username: ctx.request.body.name } });
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
@@ -25,13 +25,15 @@ router.del('removeMember', '/:id/memberDelete', async (ctx) => {
   const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
   // Si se ingresa un usuario existente
-  if (user){
-    try{
+  if (user) {
+    try {
     // Se busca la tupla en la tabla del join
-    const joinTuple = await ctx.orm.userTeam.findOne({where: {userId: user.id, teamId: team.id}});
-    await joinTuple.destroy();
-    ctx.redirect(ctx.router.url('team', { id: team.id }));
-    } catch (typeError){
+      const joinTuple = await ctx.orm.userTeam.findOne({
+        where: { userId: user.id, teamId: team.id },
+      });
+      await joinTuple.destroy();
+      ctx.redirect(ctx.router.url('team', { id: team.id }));
+    } catch (typeError) {
       // Se entrará si es que la tupla no existe, también podría ser con un if.
       await ctx.render('teams/show', {
         errors: typeError.errors,
@@ -45,8 +47,7 @@ router.del('removeMember', '/:id/memberDelete', async (ctx) => {
         removeMemberUrl: ctx.router.url('removeMember', team.id),
       });
     }
-  }
-  else{
+  } else {
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   }
 });
@@ -77,7 +78,7 @@ router.get('newTeam', '/new', async (ctx) => {
 router.post('createTeam', '/', async (ctx) => {
   const sports = await ctx.orm.sport.findAll();
   try {
-    const sport = await ctx.orm.sport.findOne({where: {name: ctx.request.body.sportname}})
+    const sport = await ctx.orm.sport.findOne({ where: { name: ctx.request.body.sportname } });
     const team = await ctx.orm.team.create({
       name: ctx.request.body.name,
       sportId: sport.id,
@@ -95,7 +96,7 @@ router.post('createTeam', '/', async (ctx) => {
 });
 
 router.post('addMember', '/:id', async (ctx) => {
-  const user = await ctx.orm.users.findOne({where: {username: ctx.request.body.name}});
+  const user = await ctx.orm.users.findOne({ where: { username: ctx.request.body.name } });
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
@@ -104,11 +105,11 @@ router.post('addMember', '/:id', async (ctx) => {
   });
   const sport = await ctx.orm.sport.findById(team.sportId);
   const members = team.userTeams;
-  if (user){
+  if (user) {
     // Si es que existe el usuario
     try {
       // Intentamos crear la tupla en la tabla de userTeam
-      await ctx.orm.userTeam.create({teamId: team.id, userId: user.id});
+      await ctx.orm.userTeam.create({ teamId: team.id, userId: user.id });
       ctx.redirect(ctx.router.url('team', { id: team.id }));
     } catch (validationError) {
       // En caso de que el par usuario-equipo ya exista (se intentó agregar nuevamente un miembro)
@@ -124,8 +125,7 @@ router.post('addMember', '/:id', async (ctx) => {
         removeMemberUrl: ctx.router.url('removeMember', team.id),
       });
     }
-  }
-  else{
+  } else {
     // En caso de que no exista el usuario ingresado
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   }

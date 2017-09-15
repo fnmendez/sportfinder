@@ -4,10 +4,10 @@ const router = new KoaRouter();
 
 router.get('matches', '/', async (ctx) => {
   const matches = await ctx.orm.match.findAll({
-    include: [ ctx.orm.sport, ctx.orm.club ],
+    include: [ctx.orm.sport, ctx.orm.club],
   });
   const userMatches = await ctx.orm.userMatch.findAll({
-    include: [ ctx.orm.users, ctx.orm.match ],
+    include: [ctx.orm.users, ctx.orm.match],
   });
   const user = { id: ctx.session.user.id };
   await ctx.render('matches/index', {
@@ -37,13 +37,13 @@ router.get('newMatch', '/new', async (ctx) => {
     clubs,
     createMatchUrl: ctx.router.url('createMatch'),
     indexUrl: ctx.router.url('matches'),
-  })
+  });
 });
 
 router.post('createMatch', '/', async (ctx) => {
   try {
     const match = await ctx.orm.match.create(ctx.request.body);
-    ctx.redirect(ctx.router.url('matches'));
+    ctx.redirect(ctx.router.url('match', match.id));
   } catch (validationError) {
     const match = ctx.orm.match.build(ctx.request.body);
     const sports = await ctx.orm.sport.findAll();
@@ -60,7 +60,7 @@ router.post('createMatch', '/', async (ctx) => {
 
 router.get('editMatch', '/:id/edit', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [ ctx.orm.sport, ctx.orm.club ],
+    include: [ctx.orm.sport, ctx.orm.club],
   });
   const sports = await ctx.orm.sport.findAll();
   const clubs = await ctx.orm.club.findAll();
@@ -74,14 +74,14 @@ router.get('editMatch', '/:id/edit', async (ctx) => {
 });
 
 router.patch('updateMatch', '/:id', async (ctx) => {
-  const match = await ctx.orm.match.findById(ctx.params.id);
+  // const match = await ctx.orm.match.findById(ctx.params.id);
+  const match = await ctx.orm.match.findById(ctx.params.id, {
+    include: [ctx.orm.sport, ctx.orm.club],
+  });
   try {
     await match.update(ctx.request.body);
     ctx.redirect(ctx.router.url('match', { id: match.id }));
   } catch (validationError) {
-    const match = await ctx.orm.match.findById(ctx.params.id, {
-      include: [ ctx.orm.sport, ctx.orm.club ],
-    });
     const sports = await ctx.orm.sport.findAll();
     const clubs = await ctx.orm.club.findAll();
     await ctx.render('matches/edit', {
@@ -97,23 +97,21 @@ router.patch('updateMatch', '/:id', async (ctx) => {
 
 router.post('joinMatch', '/:id/join', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id);
-  const matches = await ctx.orm.match.findAll({
-    include: [ ctx.orm.sport, ctx.orm.club ],
-  });
+  // const matches = await ctx.orm.match.findAll({
+  //   include: [ctx.orm.sport, ctx.orm.club],
+  // });
   await ctx.orm.userMatch.create({ matchId: match.id, userId: ctx.session.user.id });
   ctx.redirect(ctx.router.url('match', { id: match.id }));
 });
 
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [ ctx.orm.sport, ctx.orm.club ],
+    include: [ctx.orm.sport, ctx.orm.club],
   });
   const players = await ctx.orm.userMatch.findAll({
     where: { matchId: match.id },
-    include: [ ctx.orm.users ],
+    include: [ctx.orm.users],
   });
-  console.log("players");
-  console.log(players);
   await ctx.render('matches/show', {
     match,
     players,
