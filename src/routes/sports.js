@@ -59,6 +59,7 @@ router.patch('updateSport', '/:id', async (ctx) => {
       sport,
       errors: validationError.errors,
       updateSportUrl: ctx.router.url('updateSport', { id: sport.id }),
+      showUrl: ctx.router.url('sport', sport.id),
     });
   }
 });
