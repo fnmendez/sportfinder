@@ -40,6 +40,7 @@ router.post('createClub', '/', async (ctx) => {
       club: ctx.orm.club.build(ctx.request.body),
       errors: validationError.errors,
       createClubUrl: ctx.router.url('createClub'),
+      indexUrl: ctx.router.url('clubs'),
     });
   }
 });
