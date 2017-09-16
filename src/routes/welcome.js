@@ -87,6 +87,7 @@ router.get('showUser', 'profile', async (ctx) => {
       deleteUrl: ctx.router.url('deleteUser'),
     });
   } else {
+    ctx.session = null;
     ctx.redirect('/');
   }
 });
