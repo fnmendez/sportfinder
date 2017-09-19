@@ -14,6 +14,9 @@
     </ul>
   </div>
   <div>
+    <a href="<%= editMatchUrl %> ">Editar</a>
+  </div>
+  <div>
     <form action="<%= indexUrl %>" method="get">
       <div>
         <input type="submit" value="Volver" />
@@ -21,7 +24,6 @@
     </form>
   </div>
   <div>
-    <a href="<%= editMatchUrl %> ">Editar</a>
     <form action="<%= deleteMatchUrl %>" method="post">
       <input type="hidden" name="_method" value="delete" />
       <input type="submit" value="Borrar" />
