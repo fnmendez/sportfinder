@@ -1,8 +1,15 @@
-<h1>Clubes</h1>
-
-<ul>
-  <% clubs.forEach((club) => { %>
-    <li><a href="<%= clubUrl(club) %>"> <%= club.name %> </a></li>
-  <% }) %>
-</ul>
-<a href="<%= newClubUrl %>"> Agregar club </a>
+<div>
+  <div>
+    <h1>Clubes</h1>
+  </div>
+  <div>
+    <ul>
+      <% clubs.forEach((club) => { %>
+        <li><a href="<%= clubUrl(club) %>"> <%= club.name %> </a></li>
+      <% }) %>
+    </ul>
+  </div>
+  <div>
+    <a href="<%= newClubUrl %>"> Agregar club </a>
+  </div>
+</div>

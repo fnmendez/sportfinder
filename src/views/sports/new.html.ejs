@@ -1,25 +1,29 @@
-<h1>Nuevo deporte</h1>
-
 <div>
-  <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
-  <form action="<%= createSportUrl %>" method="post">
-    <div>
-      <label for="name">Nombre</label>
-      <input type="text" name="name" value="<%= sport.name %>" />
-    </div>
-      <input type="submit" name="create" value="Crear deporte" />
-    </div>
-  </form>
-  <form action="<%= indexUrl %>" method="get">
-    <input type="submit" value="Volver" />
-  </form>
+  <div>
+    <h1>Nuevo deporte</h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  <div>
+    <form action="<%= createSportUrl %>" method="post">
+      <div>
+        <label for="name">Nombre</label>
+        <input type="text" name="name" value="<%= sport.name %>" />
+      </div>
+      <div>
+        <input type="submit" name="create" value="Crear deporte" />
+      </div>
+    </form>
+    <form action="<%= indexUrl %>" method="get">
+      <input type="submit" value="Volver" />
+    </form>
+  </div>
 </div>

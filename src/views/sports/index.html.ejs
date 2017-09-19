@@ -1,7 +1,15 @@
-<h1>Sports</h1>
-<ul>
-  <% sports.forEach((sport) => { %>
-    <li><a href="<%= sportUrl(sport) %>"><%= sport.name %></a></li>
-  <% }) %>
-</ul>
-<a href="<%= newSportUrl %>"> Agregar deporte </a>
+<div>
+  <div>
+    <h1>Sports</h1>
+  </div>
+  <div>
+    <ul>
+      <% sports.forEach((sport) => { %>
+        <li><a href="<%= sportUrl(sport) %>"><%= sport.name %></a></li>
+      <% }) %>
+    </ul>
+  </div>
+  <div>
+    <a href="<%= newSportUrl %>"> Agregar deporte </a>
+  </div>
+</div>
