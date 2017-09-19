@@ -2,7 +2,8 @@
   "name": "sportfinder-app",
   "version": "1.0.0",
   "engines": {
-    "node": "8.4.0"
+    "node": "^8.5.0",
+    "yarn": "^1.0.2"
   },
   "main": "index.js",
   "repository": "https://github.com/IIC2513-2017-2/template.git",
