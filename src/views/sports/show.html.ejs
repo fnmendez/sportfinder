@@ -1,9 +1,17 @@
-<h1>Bienvenido a la página de <%= sport.name %> </h1>
-<a href="<%= editSportUrl %> ">Editar</a>
-<form action="<%= deleteSportUrl %>" method="post">
-  <input type="hidden" name="_method" value="delete" />
-  <input type="submit" name="delete" value="Borrar" />
-</form>
-<form action="<%= indexUrl %>" method="get">
-  <input type="submit" value="Volver" />
-</form>
+<div>
+  <div>
+    <h1>Bienvenido a la página de <%= sport.name %> </h1>
+  </div>
+  <div>
+    <a href="<%= editSportUrl %> ">Editar</a>
+  </div>
+  <div>
+    <form action="<%= deleteSportUrl %>" method="post">
+      <input type="hidden" name="_method" value="delete" />
+      <input type="submit" name="delete" value="Borrar" />
+    </form>
+    <form action="<%= indexUrl %>" method="get">
+      <input type="submit" value="Volver" />
+    </form>
+  </div>
+</div>

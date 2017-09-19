@@ -1,7 +1,13 @@
-<h1> Equipos </h1>
-<ul>
-  <% teams.forEach((team) => { %>
-    <li><a href="<%= teamUrl(team) %> "> <%= team.name %> </a></li>
-  <% }) %>
-</ul>
-<a href="<%= newTeamUrl %>"> Agregar equipo </a>
+<div>
+  <h1>Equipos</h1>
+</div>
+<div>
+  <ul>
+    <% teams.forEach((team) => { %>
+      <li><a href="<%= teamUrl(team) %> "> <%= team.name %> </a></li>
+    <% }) %>
+  </ul>
+</div>
+<div>  
+  <a href="<%= newTeamUrl %>"> Agregar equipo </a>
+</div>

@@ -1,32 +1,36 @@
-<h1>Editar club: <%= club.name %></h1>
-
-<% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
-  <form action="<%= updateClubUrl %>" method="post">
-    <input type="hidden" name="_method" value="patch" />
-    <div>
-      <label for="name">Nombre</label>
-      <input type="text" name="name" value="<%= club.name %>" />
-    </div>
-    <div>
-      <label for="address">Dirección</label>
-      <input type="text" name="address" value="<%= club.address %>" />
-    </div>
-    <div>
-      <input type="submit" name="create" value="Guardar" />
-    </div>
-  </form>
-  <form action="<%= showClubUrl %>" method="get">
-    <div>
-      <input type="submit" value="Volver" />
-    </div>
-  </form>
+<div>
+  <div>
+    <h1>Editar club: <%= club.name %></h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  <div>
+    <form action="<%= updateClubUrl %>" method="post">
+      <input type="hidden" name="_method" value="patch" />
+      <div>
+        <label for="name">Nombre</label>
+        <input type="text" name="name" value="<%= club.name %>" />
+      </div>
+      <div>
+        <label for="address">Dirección</label>
+        <input type="text" name="address" value="<%= club.address %>" />
+      </div>
+      <div>
+        <input type="submit" name="create" value="Guardar" />
+      </div>
+    </form>
+    <form action="<%= showClubUrl %>" method="get">
+      <div>
+        <input type="submit" value="Volver" />
+      </div>
+    </form>
+  </div>
 </div>

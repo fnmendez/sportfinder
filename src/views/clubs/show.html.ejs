@@ -1,16 +1,24 @@
-<h1>Club: <%= club.name %> </h1>
-<ul>
-  <% clubSports.forEach((clubSport) => { %>
-    <li> <%= clubSport.sport.name %> </li>
-  <% }) %>
-</ul>
-<a href="<%= editClubUrl %> ">Editar</a>
-<form action="<%= deleteClubUrl %>" method="post">
-  <input type="hidden" name="_method" value="delete" />
-  <input type="submit" name="delete" value="Borrar" />
-</form>
-<form action="<%= indexUrl %>" method="get">
+<div>
   <div>
-    <input type="submit" value="Volver" />
+    <h1>Club: <%= club.name %> </h1>
   </div>
-</form>
+  <div>
+    <ul>
+      <% clubSports.forEach((clubSport) => { %>
+        <li> <%= clubSport.sport.name %> </li>
+      <% }) %>
+    </ul>
+  </div>
+  <div>
+    <a href="<%= editClubUrl %> ">Editar</a>
+  </div>
+  <form action="<%= deleteClubUrl %>" method="post">
+    <input type="hidden" name="_method" value="delete" />
+    <input type="submit" name="delete" value="Borrar" />
+  </form>
+  <form action="<%= indexUrl %>" method="get">
+    <div>
+      <input type="submit" value="Volver" />
+    </div>
+  </form>
+</div>

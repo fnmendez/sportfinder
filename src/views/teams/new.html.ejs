@@ -1,31 +1,38 @@
-<h1> Nuevo equipo </h1>
-
 <div>
-  <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
-
-  <form action="<%= createTeamUrl %>" method="post">
-  Deporte: <select name='sportname'>
-        <% sports.forEach((sport) => { %>
-          <option value="<%= sport.name %>"><%= sport.name %></option>
-        <% }) %>
-       </select>
+  <div>
+    <h1>Nuevo equipo</h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  <div>
     <div>
-      <label for="name">Nombre</label>
-      <input type="text" name="name" value="<%= team.name %>" />
+      <form action="<%= createTeamUrl %>" method="post">
+      Deporte: <select name='sportname'>
+            <% sports.forEach((sport) => { %>
+              <option value="<%= sport.name %>"><%= sport.name %></option>
+            <% }) %>
+           </select>
+        <div>
+          <label for="name">Nombre</label>
+          <input type="text" name="name" value="<%= team.name %>" />
+        </div>
+        <div>
+          <input type="submit" name="create" value="Crear equipo" />
+        </div>
+      </form>
     </div>
-      <input type="submit" name="create" value="Crear equipo" />
+    <div>
+      <form action="<%= indexUrl %>" method="get">
+        <input type="submit" value="Volver" />
+      </form/>
     </div>
-  </form>
-  <form action="<%= indexUrl %>" method="get">
-    <input type="submit" value="Volver" />
-  </form/>
+  </div>
 </div>
