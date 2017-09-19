@@ -15,9 +15,11 @@
     "lint-fix": "eslint --fix ./src index.js"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "eslint": "^4.3.0",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
+    "koa-webpack": "^1.0.0",
     "nodemon": "^1.11.0"
   },
   "dependencies": {
@@ -25,8 +27,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^0.11.2",
     "faker": "^4.1.0",
+    "file-loader": "^0.11.2",
     "koa": "^2.3.0",
     "koa-body": "^2.3.0",
     "koa-ejs": "^4.1.0",
@@ -37,12 +39,12 @@
     "koa-session": "^5.5.0",
     "koa-static": "^4.0.1",
     "node-sass": "^4.5.3",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.18.2",
-    "webpack": "^3.6.0",
     "pg": "^7.1.2",
     "pg-hstore": "^2.3.2",
+    "sass-loader": "^6.0.6",
     "sequelize": "^4.6.0",
-    "sequelize-cli": "https://github.com/IIC2513-2017-2/sequelize-cli#iic2513-version"
+    "sequelize-cli": "https://github.com/IIC2513-2017-2/sequelize-cli#iic2513-version",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.6.0"
   }
 }
