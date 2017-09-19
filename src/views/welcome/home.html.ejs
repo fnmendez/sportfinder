@@ -1,19 +1,24 @@
-<h1>Bienvenido a Sportfinder <%= appVersion %></h1>
-
-<h3>¿ Buscas un compañero o un equipo rival para un deporte ?</h3>
-
-<p>
-  <form action="/login" enctype="multipart/form-data" method="post">
-    <input type="text" name="username" placeholder="Usuario">
-    <input type="password" name="password" placeholder="Contraseña">
-    <input type="checkbox" name="remember" checked="checked"/>Recordarme<br><br>
-    <input type="submit" value="Ingresar">
-  </form>
-</p>
-
-<p>
-  ¿ No tienes cuenta ?
-  <form action="<%= signupUrl %>">
-    <input type="submit" value="Registrarme"/>
-  </form>
-</p>
+<div>
+  <div>
+    <h1>Bienvenido a Sportfinder <%= appVersion %></h1>
+  </div>
+  <div>
+    <h3>¿ Buscas un compañero o un equipo rival para un deporte ?</h3>
+  </div>
+  <div>
+    <form action="/login" enctype="multipart/form-data" method="post">
+      <input type="text" name="username" placeholder="Usuario">
+      <input type="password" name="password" placeholder="Contraseña">
+      <input type="checkbox" name="remember" checked="checked"/>Recordarme<br><br>
+      <input type="submit" value="Ingresar">
+    </form>
+  </div>
+  <div>
+    ¿ No tienes cuenta ?
+  </div>
+  <div>
+    <form action="<%= signupUrl %>">
+      <input type="submit" value="Registrarme"/>
+    </form>
+  </div>
+</div>

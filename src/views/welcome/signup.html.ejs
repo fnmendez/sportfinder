@@ -1,15 +1,18 @@
-<h1>Sportfinder - Registro</h1>
 <div>
-  <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
+  <div>
+    <h1>Sportfinder - Registro</h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  <div>
     <form action="/signup" method="post">
       <div>
         <label>Datos de usuario</label><br>
@@ -31,9 +34,10 @@
         <input type="submit" name="create" value="Registrarme">
       </div>
     </form>
+  </div>
+  <div>
     <form action="<%= homeUrl %>" method="get">
-      <div>
         <input type="submit" value="Volver"/>
-      </div>
     </form>
+  </div>
 </div>

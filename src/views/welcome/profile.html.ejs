@@ -1,51 +1,59 @@
-<h1>Sportfinder - Hola <%= user.username %></h1>
 <div>
-  <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
-  <h3>Modificar tu cuenta</h3>
-  <form action="<%= updateUrl %>" method="post">
-    <input type="hidden" name="_method" value="patch" />
-    <div>
-      <label>Datos de usuario</label><br>
-      <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
-      <!-- <input type="password" name="oldPassword" placeholder="Contraseña actual"> -->
-      <input type="password" name="password" value="<%= user.password %>" placeholder="Contraseña nueva">
-      <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
-    </div>
-    <div>
-      <br><label>Datos personales</label><br>
-      <input type="text" name="name" value="<%= user.name %>" placeholder="Nombre">
-      <input type="text" name="surname" value="<%= user.surname %>" placeholder="Apellido">
-      <input type="text" name="pid" value="<%= user.pid %>" placeholder="RUT"><br><br>
-    </div>
-    <div>
-      <label>Foto del carné de identidad</label><br>
-      <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
-    </div>
-    <div>
-      <input type="submit" name="update" value="Actualizar">
-    </div>
-  </form>
-  <form action="<%= logoutUrl %>" method="post">
-    <div>
-      <input type="submit" value="Desconectarse"/>
-    </div>
-  </form>
-  <form action="<%= deleteUrl %>" method="post">
-    <input type="hidden" name="_method" value="delete" />
-    <input type="submit" value="Eliminar cuenta" />
-  </form>
-  <form action="<%= startUrl %>" method="get">
-    <div>
-      <input type="submit" value="Ir al Inicio"/>
-    </div>
-  </form>
+  <div>
+    <h1>Sportfinder - Hola <%= user.username %></h1>
+    <% if (locals.errors) { %>
+      <div class="errors">
+        Necesitas arreglar los siguiente errores:
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error.message %></li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+  <div>
+    <h3>Modificar tu cuenta</h3>
+  </div>
+  <div>
+    <form action="<%= updateUrl %>" method="post">
+      <input type="hidden" name="_method" value="patch" />
+      <div>
+        <label>Datos de usuario</label><br>
+        <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
+        <!-- <input type="password" name="oldPassword" placeholder="Contraseña actual"> -->
+        <input type="password" name="password" value="<%= user.password %>" placeholder="Contraseña nueva">
+        <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
+      </div>
+      <div>
+        <br><label>Datos personales</label><br>
+        <input type="text" name="name" value="<%= user.name %>" placeholder="Nombre">
+        <input type="text" name="surname" value="<%= user.surname %>" placeholder="Apellido">
+        <input type="text" name="pid" value="<%= user.pid %>" placeholder="RUT"><br><br>
+      </div>
+      <div>
+        <label>Foto del carné de identidad</label><br>
+        <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
+      </div>
+      <div>
+        <input type="submit" value="Actualizar">
+      </div>
+    </form>
+  </div>
+  <div>
+    <form action="<%= logoutUrl %>" method="post">
+        <input type="submit" value="Desconectarse"/>
+    </form>
+  </div>
+  <div>
+    <form action="<%= deleteUrl %>" method="post">
+      <input type="hidden" name="_method" value="delete" />
+      <input type="submit" value="Eliminar cuenta" />
+    </form>
+  </div>
+  <div>
+    <form action="<%= startUrl %>" method="get">
+        <input type="submit" value="Ir al Inicio"/>
+    </form>
+  </div>
 </div>
