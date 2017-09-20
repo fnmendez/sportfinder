@@ -4,10 +4,17 @@
   <head>
     <meta charset="utf-8">
     <title>Sportfinder</title>
+    <% if (env !== 'development') { %>
+      <link rel="stylesheet" href="/assets/styles.css">
+    <% } %>
   </head>
 
   <body>
-    <%- body %>
+    <%- include _navbar %>
+    <div id="container">
+      <%- body %>
+    </div>
+    <script src="/assets/app.js"></script>
   </body>
 
 </html>

@@ -1,0 +1,15 @@
+$sportfinder-blue: #466BBB;
+
+input[type=text], input[type=password] {
+    padding: 8px 20px;
+    margin: 8px 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type=submit] {
+    background: white;
+    padding: 4px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
