@@ -1,0 +1,23 @@
+<header>
+  <div id="logo">
+    <img src="/assets/logo.png" alt="Logo" />
+  </div>
+  <nav>
+    <a href="/">Inicio</a>
+    <a href="/play">Jugar</a>
+    <a href="/sports">Deportes</a>
+    <a href="/clubs">Clubes</a>
+    <a href="/teams">Equipos</a>
+  </nav>
+  <div id="user-bar">
+    <% if (true) { %>
+      <span class="name">Hola </span>
+      <form action="/profile" method="get">
+        <input type="submit" value="Mi perfil" />
+      </form>
+    <% } else { %>
+      <span class="name">Hola Invitado</span>
+      <a href="/">Inicia Sesión</a>
+    <% } %>
+  </div>
+</header>
