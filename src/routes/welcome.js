@@ -23,8 +23,6 @@ router.post('login', 'login', async (ctx) => {
       ctx.session.user = { id: user.id };
       ctx.flashMessage.notice = '¡Bienvenido nuevamente!';
       ctx.redirect('profile');
-    } else {
-      console.log("Not correct :(");
     }
   }
   ctx.redirect('/');
