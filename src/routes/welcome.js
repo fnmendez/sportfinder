@@ -16,15 +16,18 @@ router.get('home', '/', async (ctx) => {
 router.post('login', 'login', async (ctx) => {
   const username = ctx.request.body.fields.username;
   const password = ctx.request.body.fields.password;
-  const user = await ctx.orm.users.findOne({ where: {
-    username, password,
-  } });
+  const user = await ctx.orm.users.findOne({ where: { username } });
   if (user) {
-    ctx.session.user = { id: user.id };
-    ctx.redirect('profile');
-  } else {
-    ctx.redirect('/');
+    const isPasswordCorrect = await user.checkPassword(password);
+    if (isPasswordCorrect) {
+      ctx.session.user = { id: user.id };
+      ctx.flashMessage.notice = '¡Bienvenido nuevamente!';
+      ctx.redirect('profile');
+    } else {
+      console.log("Not correct :(");
+    }
   }
+  ctx.redirect('/');
 });
 
 router.get('signup', 'signup', async (ctx) => {
@@ -40,6 +43,7 @@ router.post('createUser', 'signup', async (ctx) => {
   try {
     const user = await ctx.orm.users.create(ctx.request.body);
     ctx.session.user = { id: user.id };
+    ctx.flashMessage.notice = '¡Tu cuenta de usuario está lista para comenzar a usarla!';
     ctx.redirect('profile');
   } catch (validationError) {
     await ctx.render('welcome/signup', {
@@ -85,6 +89,7 @@ router.get('showUser', 'profile', async (ctx) => {
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
       deleteUrl: ctx.router.url('deleteUser'),
+      notice: ctx.flashMessage.notice,
     });
   } else {
     ctx.session = null;
