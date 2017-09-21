@@ -12,8 +12,6 @@ router.get('teams', '/', async (ctx) => {
 });
 
 router.del('removeMember', '/:id/memberDelete', async (ctx) => {
-  // TODO: Arreglar la URL.
-
   const user = await ctx.orm.users.findOne({
     where: { username: ctx.request.body.name } });
   const team = await ctx.orm.team.findById(ctx.params.id, {
