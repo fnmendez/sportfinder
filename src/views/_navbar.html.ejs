@@ -10,13 +10,11 @@
     <a href="/teams">Equipos</a>
   </nav>
   <div id="user-bar">
-    <% if (locals.user) { %>
-      <span class="name">Hola <%= locals.user.username %></span>
+    <% if (locals.currentUser) { %>
+      <span class="name">Hola <%= currentUser.username %></span>
       <form action="/profile" method="get">
         <input type="submit" value="Mi perfil" />
       </form>
-    <% } else { %>
-      <span class="name">Inicia sesión</span>
     <% } %>
   </div>
 </header>

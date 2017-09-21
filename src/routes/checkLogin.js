@@ -9,6 +9,9 @@ const checkLogin = async (ctx, next) => {
         homeUrl: '/',
       });
     }
+    Object.assign(ctx.state, {
+      currentUser: { id: user.id, username: user.username },
+    });
   }
   else {
     return ctx.render('welcome/loginError', {
