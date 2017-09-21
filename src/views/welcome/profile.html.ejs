@@ -1,5 +1,8 @@
 <div>
   <div>
+    <% if (locals.notice) { %>
+      <div className="notice"><%= notice %></div>
+    <% } %>
     <h1>Sportfinder - Hola <%= user.username %></h1>
     <% if (locals.errors) { %>
       <div class="errors">
