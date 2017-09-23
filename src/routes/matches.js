@@ -25,7 +25,7 @@ router.get('matches', '/', async (ctx) => {
 router.delete('deleteMatch', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id);
   await match.destroy();
-  ctx.flashMessage.notice = 'El equipo fue eliminado exitosamente.';
+  ctx.flashMessage.notice = 'La partida fue eliminada exitosamente.';
   await ctx.redirect(ctx.router.url('matches'));
 });
 
