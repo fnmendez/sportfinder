@@ -1,15 +1,20 @@
 const KoaRouter = require('koa-router');
-// const matchesRouter = require('./matches')
 
 const pkg = require('../../package.json');
-
 const router = new KoaRouter();
 
 router.get('home', '/', async (ctx) => {
-  if (ctx.session.user) { ctx.redirect('profile'); }
-  await ctx.render('welcome/home', {
+  if (ctx.session.user) {
+    const user = await ctx.orm.users.findById(ctx.session.user.id);
+    if (user) {
+      return ctx.redirect('play');
+    }
+  }
+  ctx.session = null;
+  return ctx.render('welcome/home', {
     appVersion: pkg.version,
     signupUrl: ctx.router.url('signup'),
+    warning: ctx.flashMessage.warning,
   });
 });
 
@@ -21,11 +26,11 @@ router.post('login', 'login', async (ctx) => {
     const isPasswordCorrect = await user.checkPassword(password);
     if (isPasswordCorrect) {
       ctx.session.user = { id: user.id };
-      ctx.flashMessage.notice = '¡Bienvenido nuevamente!';
-      ctx.redirect('profile');
+      return ctx.redirect('play');
     }
   }
-  ctx.redirect('/');
+  ctx.flashMessage.warning = 'Has ingresado datos incorrectos.';
+  return ctx.redirect('/');
 });
 
 router.get('signup', 'signup', async (ctx) => {
@@ -41,7 +46,6 @@ router.post('createUser', 'signup', async (ctx) => {
   try {
     const user = await ctx.orm.users.create(ctx.request.body);
     ctx.session.user = { id: user.id };
-    ctx.flashMessage.notice = '¡Tu cuenta de usuario está lista para comenzar a usarla!';
     ctx.redirect('profile');
   } catch (validationError) {
     await ctx.render('welcome/signup', {
@@ -65,15 +69,15 @@ router.patch('updateUser', 'profile', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id);
   try {
     await user.update(ctx.request.body);
-    ctx.redirect('profile');
+    ctx.flashMessage.notice = 'Tu perfil ha sido actualizado.';
+    return ctx.redirect('profile');
   } catch (validationError) {
-    await ctx.render('welcome/profile', {
+    return ctx.render('welcome/editProfile', {
       user,
       errors: validationError.errors,
       updateUrl: ctx.router.url('updateUser'),
-      logoutUrl: ctx.router.url('logout'),
-      startUrl: '/play',
       deleteUrl: ctx.router.url('deleteUser'),
+      profileUrl: ctx.router.url('showUser'),
     });
   }
 });
@@ -83,11 +87,25 @@ router.get('showUser', 'profile', async (ctx) => {
   if (user) {
     await ctx.render('welcome/profile', {
       user,
-      updateUrl: ctx.router.url('updateUser'),
+      editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
-      deleteUrl: ctx.router.url('deleteUser'),
       notice: ctx.flashMessage.notice,
+    });
+  } else {
+    ctx.session = null;
+    ctx.redirect('/');
+  }
+});
+
+router.get('editUser', 'profile/edit', async (ctx) => {
+  const user = await ctx.orm.users.findById(ctx.session.user.id);
+  if (user) {
+    await ctx.render('welcome/editProfile', {
+      user,
+      updateUrl: ctx.router.url('updateUser'),
+      deleteUrl: ctx.router.url('deleteUser'),
+      profileUrl: ctx.router.url('showUser'),
     });
   } else {
     ctx.session = null;
