@@ -8,12 +8,11 @@ router.get('teams', '/', async (ctx) => {
     teams,
     teamUrl: team => ctx.router.url('team', { id: team.id }),
     newTeamUrl: ctx.router.url('newTeam'),
+    notice: ctx.flashMessage.notice,
   });
 });
 
-router.del('removeMember', '/:id/memberDelete', async (ctx) => {
-  // TODO: Arreglar la URL.
-
+router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
   const user = await ctx.orm.users.findOne({
     where: { username: ctx.request.body.name } });
   const team = await ctx.orm.team.findById(ctx.params.id, {
@@ -32,6 +31,7 @@ router.del('removeMember', '/:id/memberDelete', async (ctx) => {
         where: { userId: user.id, teamId: team.id },
       });
       await joinTuple.destroy();
+      ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.';
       ctx.redirect(ctx.router.url('team', { id: team.id }));
     } catch (typeError) {
       // Se entrará si es que la tupla no existe, también podría ser con un if.
@@ -52,16 +52,11 @@ router.del('removeMember', '/:id/memberDelete', async (ctx) => {
   }
 });
 
-router.del('deleteTeam', '/:id', async (ctx) => {
+router.delete('deleteTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
-  const teams = await ctx.orm.team.findAll();
   await team.destroy();
-
-  await ctx.redirect(ctx.router.url('teams', {
-    teams,
-    teamPath: t => ctx.router.url('team', t.id),
-    newPath: ctx.router.url('newTeam'),
-  }));
+  ctx.flashMessage.notice = 'El equipo fue eliminado exitosamente.';
+  await ctx.redirect(ctx.router.url('teams'));
 });
 
 router.get('newTeam', '/new', async (ctx) => {
@@ -144,6 +139,7 @@ router.patch('updateTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id);
   try {
     await team.update(ctx.request.body);
+    ctx.flashMessage.notice = 'El equipo ha sido actualizado.';
     ctx.redirect(ctx.router.url('team', { id: team.id }));
   } catch (validationError) {
     await ctx.render('teams/edit', {
@@ -173,6 +169,7 @@ router.get('team', '/:id', async (ctx) => {
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
+    notice: ctx.flashMessage.notice,
   });
 });
 

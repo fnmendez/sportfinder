@@ -1,59 +1,53 @@
 <div>
   <div>
-    <h1>Sportfinder - Hola <%= user.username %></h1>
-    <% if (locals.errors) { %>
-      <div class="errors">
-        Necesitas arreglar los siguiente errores:
-        <ul>
-          <% errors.forEach(error => { %>
-            <li><%= error.message %></li>
-          <% }); %>
-        </ul>
-      </div>
-    <% } %>
+    <h3>Hola <%= user.username %></h3>
   </div>
   <div>
-    <h3>Modificar tu cuenta</h3>
-  </div>
-  <div>
-    <form action="<%= updateUrl %>" method="post">
-      <input type="hidden" name="_method" value="patch" />
+    <div>
+      <h4>Datos de usuario</h4>
       <div>
-        <label>Datos de usuario</label><br>
-        <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
-        <!-- <input type="password" name="oldPassword" placeholder="Contraseña actual"> -->
-        <input type="password" name="password" value="<%= user.password %>" placeholder="Contraseña nueva">
-        <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
+        Usuario: <%= user.username %>
       </div>
       <div>
-        <br><label>Datos personales</label><br>
-        <input type="text" name="name" value="<%= user.name %>" placeholder="Nombre">
-        <input type="text" name="surname" value="<%= user.surname %>" placeholder="Apellido">
-        <input type="text" name="pid" value="<%= user.pid %>" placeholder="RUT"><br><br>
+        Mail: <%= user.mail %>
+      </div>
+    </div>
+    <div>
+      <h4>Datos personales</h4>
+      <div>
+        Nombre: <%= user.name %>
       </div>
       <div>
-        <label>Foto del carné de identidad</label><br>
-        <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
+        Apellido: <%= user.surname %>
       </div>
       <div>
-        <input type="submit" value="Actualizar">
+        RUT: <%= user.pid %>
       </div>
-    </form>
+    </div>
+    <% if (user.photoId) { %>
+      <div>
+        Foto carné:
+      </div>
+    <% } else %>
+      <div>
+        Sube tu foto de carné, ¡encontrarás más partidas!
+      </div>
   </div>
   <div>
-    <form action="<%= logoutUrl %>" method="post">
-        <input type="submit" value="Desconectarse"/>
-    </form>
-  </div>
-  <div>
-    <form action="<%= deleteUrl %>" method="post">
-      <input type="hidden" name="_method" value="delete" />
-      <input type="submit" value="Eliminar cuenta" />
-    </form>
-  </div>
-  <div>
-    <form action="<%= startUrl %>" method="get">
-        <input type="submit" value="Ir al Inicio"/>
-    </form>
+    <div>
+      <form action="<%= editUrl %>" method="get">
+          <input type="submit" value="Editar perfil"/>
+      </form>
+    </div>
+    <div>
+      <form action="<%= logoutUrl %>" method="post">
+          <input type="submit" value="Desconectarse"/>
+      </form>
+    </div>
+    <div>
+      <form action="<%= startUrl %>" method="get">
+          <input type="submit" value="Jugar"/>
+      </form>
+    </div>
   </div>
 </div>

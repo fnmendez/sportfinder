@@ -18,12 +18,14 @@ router.get('matches', '/', async (ctx) => {
     newMatchUrl: ctx.router.url('newMatch'),
     profileUrl: '/profile',
     joinMatchUrl: match => ctx.router.url('joinMatch', match.id),
+    notice: ctx.flashMessage.notice,
   });
 });
 
-router.del('deleteMatch', '/:id', async (ctx) => {
+router.delete('deleteMatch', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id);
   await match.destroy();
+  ctx.flashMessage.notice = 'La partida fue eliminada exitosamente.';
   await ctx.redirect(ctx.router.url('matches'));
 });
 
@@ -80,6 +82,7 @@ router.patch('updateMatch', '/:id', async (ctx) => {
   });
   try {
     await match.update(ctx.request.body);
+    ctx.flashMessage.notice = 'La partida ha sido actualizada.';
     ctx.redirect(ctx.router.url('match', { id: match.id }));
   } catch (validationError) {
     const sports = await ctx.orm.sport.findAll();
@@ -118,6 +121,7 @@ router.get('match', '/:id', async (ctx) => {
     editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),
+    notice: ctx.flashMessage.notice,
   });
 });
 

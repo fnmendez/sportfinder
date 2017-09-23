@@ -1,0 +1,19 @@
+<header>
+  <div id="logo">
+    <img src="/assets/logo.png" alt="Logo" />
+  </div>
+  <nav>
+    <a href="/play">Jugar</a>
+    <a href="/sports">Deportes</a>
+    <a href="/clubs">Clubes</a>
+    <a href="/teams">Equipos</a>
+  </nav>
+  <div id="user-bar">
+    <% if (locals.currentUser) { %>
+      <span class="name">Hola <%= currentUser.username %></span>
+      <form action="/profile" method="get">
+        <input type="submit" value="Mi perfil" />
+      </form>
+    <% } %>
+  </div>
+</header>

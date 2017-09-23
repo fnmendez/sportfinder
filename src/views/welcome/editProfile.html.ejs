@@ -1,13 +1,13 @@
 <div>
   <div>
-    <h1>Registro</h1>
+    <h3>Modificar tu cuenta</h3>
   </div>
   <div>
-    <form action="/signup" method="post">
+    <form action="<%= updateUrl %>" method="post">
+      <input type="hidden" name="_method" value="patch" />
       <div>
         <label>Datos de usuario</label><br>
         <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
-        <input type="password" name="password" placeholder="Contraseña">
         <input type="text" name="mail" value="<%= user.mail %>" placeholder="Email">
       </div>
       <div>
@@ -18,15 +18,21 @@
       </div>
       <div>
         <label>Foto del carné de identidad</label><br>
-        <input type="file" name="photoId" value="<%= user.photoId %>" accept=".jpg, .jpeg, .png"><br><br>
+        <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
       </div>
       <div>
-        <input type="submit" name="create" value="Registrarme">
+        <input type="submit" value="Actualizar">
       </div>
     </form>
   </div>
   <div>
-    <form action="<%= homeUrl %>" method="get">
+    <form action="<%= deleteUrl %>" method="post">
+      <input type="hidden" name="_method" value="delete" />
+      <input type="submit" value="Eliminar cuenta" />
+    </form>
+  </div>
+  <div>
+    <form action="<%= profileUrl %>" method="get">
         <input type="submit" value="Volver"/>
     </form>
   </div>
