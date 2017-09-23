@@ -1,6 +1,3 @@
-const KoaRouter = require('koa-router');
-const router = new KoaRouter();
-
 const checkLogin = async (ctx, next) => {
   if (ctx.session.user) {
     const user = await ctx.orm.users.findById(ctx.session.user.id);
