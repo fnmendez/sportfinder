@@ -21,7 +21,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       unique: true,
       validate: {
         isAlphanumeric: true,
-        notEmpty,
+        notEmpty: true,
       },
     },
     role: {
