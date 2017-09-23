@@ -1,16 +1,6 @@
 <div>
   <div>
-    <h1>Sportfinder - Registro</h1>
-    <% if (locals.errors) { %>
-      <div class="errors">
-        Necesitas arreglar los siguiente errores:
-        <ul>
-          <% errors.forEach(error => { %>
-            <li><%= error.message %></li>
-          <% }); %>
-        </ul>
-      </div>
-    <% } %>
+    <h1>Registro</h1>
   </div>
   <div>
     <form action="/signup" method="post">

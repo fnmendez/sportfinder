@@ -1,16 +1,6 @@
 <div>
   <div>
     <h1>Nuevo club</h1>
-    <% if (locals.errors) { %>
-      <div class="errors">
-        Necesitas arreglar los siguiente errores:
-        <ul>
-          <% errors.forEach(error => { %>
-            <li><%= error.message %></li>
-          <% }); %>
-        </ul>
-      </div>
-    <% } %>
   </div>
   <div>
     <form action="<%= createClubUrl %>" method="post">
