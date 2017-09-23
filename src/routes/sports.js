@@ -8,12 +8,14 @@ router.get('sports', '/', async (ctx) => {
     sports,
     sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
     newSportUrl: ctx.router.url('newSport'),
+    notice: ctx.flashMessage.notice,
   });
 });
 
-router.del('deleteSport', '/:id', async (ctx) => {
+router.delete('deleteSport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   await sport.destroy();
+  ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.';
   await ctx.redirect(ctx.router.url('sports'));
 });
 
@@ -53,6 +55,7 @@ router.patch('updateSport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id);
   try {
     await sport.update(ctx.request.body);
+    ctx.flashMessage.notice = 'El deporte ha sido actualizado.';
     ctx.redirect(ctx.router.url('sport', { id: sport.id }));
   } catch (validationError) {
     await ctx.render('sports/edit', {
@@ -72,6 +75,7 @@ router.get('sport', '/:id', async (ctx) => {
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
+    notice: ctx.flashMessage.notice,
   });
 });
 

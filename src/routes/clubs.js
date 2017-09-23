@@ -8,18 +8,15 @@ router.get('clubs', '/', async (ctx) => {
     clubs,
     clubUrl: club => ctx.router.url('club', { id: club.id }),
     newClubUrl: ctx.router.url('newClub'),
+    notice: ctx.flashMessage.notice,
   });
 });
 
-router.del('deleteClub', '/:id', async (ctx) => {
+router.delete('deleteClub', '/:id', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id);
-  const clubs = await ctx.orm.club.findAll();
   await club.destroy();
-  await ctx.redirect(ctx.router.url('clubs', {
-    clubs,
-    clubUrl: c => ctx.router.url('club', c.id),
-    newClubUrl: ctx.router.url('newClub'),
-  }));
+  ctx.flashMessage.notice = 'El club fue eliminado exitosamente.';
+  await ctx.redirect(ctx.router.url('clubs'));
 });
 
 router.get('newClub', '/new', async (ctx) => {
@@ -58,6 +55,7 @@ router.patch('updateClub', '/:id', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id);
   try {
     await club.update(ctx.request.body);
+    ctx.flashMessage.notice = 'El club ha sido actualizado.';
     ctx.redirect(ctx.router.url('club', { id: club.id }));
   } catch (validationError) {
     await ctx.render('clubs/edit', {
@@ -83,6 +81,7 @@ router.get('club', '/:id', async (ctx) => {
     deleteClubUrl: ctx.router.url('deleteClub', club.id),
     indexUrl: ctx.router.url('clubs'),
     editClubUrl: ctx.router.url('editClub', club.id),
+    notice: ctx.flashMessage.notice,
   });
 });
 
