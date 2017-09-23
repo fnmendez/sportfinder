@@ -9,13 +9,12 @@ const checkLogin = async (ctx, next) => {
     Object.assign(ctx.state, {
       currentUser: { id: user.id, username: user.username },
     });
-  }
-  else {
+  } else {
     return ctx.render('welcome/loginError', {
       homeUrl: '/',
     });
   }
   await next();
-}
+};
 
 module.exports = checkLogin;
