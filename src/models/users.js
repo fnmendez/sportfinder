@@ -21,6 +21,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       unique: true,
       validate: {
         isAlphanumeric: true,
+        notEmpty,
       },
     },
     role: {
@@ -60,7 +61,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
       validate: {
         notEmpty: true,
         len: [6, 10],
-      }
+      },
     },
   });
   users.beforeUpdate(buildPasswordHash);
