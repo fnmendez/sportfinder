@@ -3607,6 +3607,14 @@ node-sass@^4.5.3:
     sass-graph "^2.1.1"
     stdout-stream "^1.4.0"
 
+node-where@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/node-where/-/node-where-1.1.0.tgz#755d3dbc41f441da9daa9e7035f096a84c3cd7bd"
+  dependencies:
+    lodash "^4.17.4"
+    request "^2.81.0"
+    validator "^7.0.0"
+
 nodemon@^1.11.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.0.tgz#e538548a777340a19f855c4f087b7e528aa3feda"
@@ -5540,6 +5548,10 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
+
+validator@^7.0.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-7.2.0.tgz#a63dcbaba51d4350bf8df20988e0d5a54d711791"
 
 validator@^8.0.0:
   version "8.2.0"
