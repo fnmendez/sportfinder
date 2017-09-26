@@ -1,5 +1,4 @@
 const KoaRouter = require('koa-router');
-const where = require('node-where');
 
 const router = new KoaRouter();
 
@@ -74,11 +73,6 @@ router.get('club', '/:id', async (ctx) => {
       model: ctx.orm.clubSport,
       include: ctx.orm.sport,
     }],
-  });
-  where.is('garcia de torres 1400, Vitacura', function(err, result) {
-    if (result) {
-      console.log('lat: ' + result.get('lat') + ', lon: ' + result.get('lng'));
-    }
   });
   const clubSports = club.clubSports;
   await ctx.render('clubs/show', {
