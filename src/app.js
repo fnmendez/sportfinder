@@ -73,13 +73,6 @@ app.use((ctx, next) => {
   return next();
 });
 
-// log current session
-app.use((ctx, next) => {
-  console.log('koa-session');
-  console.log(ctx.session);
-  return next();
-});
-
 // Configure EJS views
 render(app, {
   root: path.join(__dirname, 'views'),
