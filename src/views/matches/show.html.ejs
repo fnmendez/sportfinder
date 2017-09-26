@@ -53,7 +53,7 @@
       function displayRoute(origin, directionsService, directionsDisplay) {
         directionsService.route({
           origin: origin,
-          destination: "Flandes 1570, Las Condes, Chile",
+          destination: "<%= match.club.name %>" + " " + "<%= match.club.address %>",
           travelMode: 'DRIVING'
         }, function(response, status) {
           if (status === 'OK') {
