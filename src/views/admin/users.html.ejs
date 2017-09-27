@@ -10,6 +10,7 @@
         <th>Apellido</th>
         <th>Mail</th>
         <th>Admin</th>
+        <th>Acciones</th>
       </tr>
       <% users.forEach(user => { %>
         <tr>
@@ -19,9 +20,18 @@
           <td><%= user.mail %></td>
           <% if (user.isAdmin()) { %>
             <td>Yes</td>
+            <td>Ninguna</td>
           <% } else { %>
-             <td>No <form action="<%= '/admin/users/' + user.id %>" method="post"><input type="submit" value="Promover"></form></td>
-
+             <td>No</td>
+             <td>
+               <form action="<%= '/admin/users/' + user.id %>" method="post">
+                 <input type="submit" value="Promover">
+               </form>
+               <form action="<%= '/admin/users/' + user.id %>" method="post">
+                 <input type="hidden" name="_method" value="delete" />
+                 <input type="submit" value="Eliminar">
+               </form>
+             </td>
           <% } %>
         </tr>
       <% }) %>
