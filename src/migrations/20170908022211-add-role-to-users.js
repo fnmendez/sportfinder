@@ -4,9 +4,9 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 1,
-    });
+    })
   },
   down(queryInterface, Sequelize) {
-    return queryInterface.removeColumn('users', 'role');
+    return queryInterface.removeColumn('users', 'role')
   },
-};
+}

@@ -4,10 +4,10 @@ module.exports = function defineuserMatch(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-  });
+  })
   userMatch.associate = function associate(models) {
-    userMatch.belongsTo(models.users);
-    userMatch.belongsTo(models.match);
-  };
-  return userMatch;
-};
+    userMatch.belongsTo(models.users)
+    userMatch.belongsTo(models.match)
+  }
+  return userMatch
+}

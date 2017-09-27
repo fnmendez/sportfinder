@@ -1,20 +1,20 @@
 const checkLogin = async (ctx, next) => {
   if (ctx.session.user) {
-    const user = await ctx.orm.users.findById(ctx.session.user.id);
-    if (!user) {
+    const currentUser = await ctx.orm.users.findById(ctx.session.user.id, {
+      attributes: ['id', 'username', 'role'],
+    })
+    if (!currentUser) {
       return ctx.render('welcome/loginError', {
         homeUrl: '/',
-      });
+      })
     }
-    Object.assign(ctx.state, {
-      currentUser: { id: user.id, username: user.username },
-    });
+    ctx.state = { ...ctx.state, currentUser }
   } else {
     return ctx.render('welcome/loginError', {
       homeUrl: '/',
-    });
+    })
   }
-  await next();
-};
+  return next()
+}
 
-module.exports = checkLogin;
+module.exports = checkLogin

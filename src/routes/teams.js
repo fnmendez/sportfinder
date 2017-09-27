@@ -1,38 +1,38 @@
-const KoaRouter = require('koa-router');
+const KoaRouter = require('koa-router')
 
-const router = new KoaRouter();
+const router = new KoaRouter()
 
 router.get('teams', '/', async (ctx) => {
-  const teams = await ctx.orm.team.findAll();
+  const teams = await ctx.orm.team.findAll()
   await ctx.render('teams/index', {
     teams,
     teamUrl: team => ctx.router.url('team', { id: team.id }),
     newTeamUrl: ctx.router.url('newTeam'),
     notice: ctx.flashMessage.notice,
-  });
-});
+  })
+})
 
 router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
   const user = await ctx.orm.users.findOne({
-    where: { username: ctx.request.body.name } });
+    where: { username: ctx.request.body.name } })
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
       include: ctx.orm.users,
     }],
-  });
-  const sport = await ctx.orm.sport.findById(team.sportId);
-  const members = team.userTeams;
+  })
+  const sport = await ctx.orm.sport.findById(team.sportId)
+  const members = team.userTeams
   // Si se ingresa un usuario existente
   if (user) {
     try {
     // Se busca la tupla en la tabla del join
       const joinTuple = await ctx.orm.userTeam.findOne({
         where: { userId: user.id, teamId: team.id },
-      });
-      await joinTuple.destroy();
-      ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.';
-      ctx.redirect(ctx.router.url('team', { id: team.id }));
+      })
+      await joinTuple.destroy()
+      ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.'
+      ctx.redirect(ctx.router.url('team', { id: team.id }))
     } catch (typeError) {
       // Se entrará si es que la tupla no existe, también podría ser con un if.
       await ctx.render('teams/show', {
@@ -45,40 +45,40 @@ router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
         indexUrl: ctx.router.url('teams'),
         addMemberUrl: ctx.router.url('addMember', team.id),
         removeMemberUrl: ctx.router.url('removeMember', team.id),
-      });
+      })
     }
   } else {
-    ctx.redirect(ctx.router.url('team', { id: team.id }));
+    ctx.redirect(ctx.router.url('team', { id: team.id }))
   }
-});
+})
 
 router.delete('deleteTeam', '/:id', async (ctx) => {
-  const team = await ctx.orm.team.findById(ctx.params.id);
-  await team.destroy();
-  ctx.flashMessage.notice = 'El equipo fue eliminado exitosamente.';
-  await ctx.redirect(ctx.router.url('teams'));
-});
+  const team = await ctx.orm.team.findById(ctx.params.id)
+  await team.destroy()
+  ctx.flashMessage.notice = 'El equipo fue eliminado exitosamente.'
+  await ctx.redirect(ctx.router.url('teams'))
+})
 
 router.get('newTeam', '/new', async (ctx) => {
-  const team = ctx.orm.team.build();
-  const sports = await ctx.orm.sport.findAll();
+  const team = ctx.orm.team.build()
+  const sports = await ctx.orm.sport.findAll()
   await ctx.render('/teams/new', {
     team,
     sports,
     createTeamUrl: ctx.router.url('createTeam'),
     indexUrl: ctx.router.url('teams'),
-  });
-});
+  })
+})
 
 router.post('createTeam', '/', async (ctx) => {
-  const sports = await ctx.orm.sport.findAll();
+  const sports = await ctx.orm.sport.findAll()
   try {
-    const sport = await ctx.orm.sport.findOne({ where: { name: ctx.request.body.sportname } });
+    const sport = await ctx.orm.sport.findOne({ where: { name: ctx.request.body.sportname } })
     const team = await ctx.orm.team.create({
       name: ctx.request.body.name,
       sportId: sport.id,
-    });
-    ctx.redirect(ctx.router.url('team', { id: team.id }));
+    })
+    ctx.redirect(ctx.router.url('team', { id: team.id }))
   } catch (validationError) {
     await ctx.render('/teams/new', {
       sports,
@@ -86,26 +86,26 @@ router.post('createTeam', '/', async (ctx) => {
       errors: validationError.errors,
       createTeamUrl: ctx.router.url('createTeam'),
       indexUrl: ctx.router.url('teams'),
-    });
+    })
   }
-});
+})
 
 router.post('addMember', '/:id', async (ctx) => {
-  const user = await ctx.orm.users.findOne({ where: { username: ctx.request.body.name } });
+  const user = await ctx.orm.users.findOne({ where: { username: ctx.request.body.name } })
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
       include: ctx.orm.users,
     }],
-  });
-  const sport = await ctx.orm.sport.findById(team.sportId);
-  const members = team.userTeams;
+  })
+  const sport = await ctx.orm.sport.findById(team.sportId)
+  const members = team.userTeams
   if (user) {
     // Si es que existe el usuario
     try {
       // Intentamos crear la tupla en la tabla de userTeam
-      await ctx.orm.userTeam.create({ teamId: team.id, userId: user.id });
-      ctx.redirect(ctx.router.url('team', { id: team.id }));
+      await ctx.orm.userTeam.create({ teamId: team.id, userId: user.id })
+      ctx.redirect(ctx.router.url('team', { id: team.id }))
     } catch (validationError) {
       // En caso de que el par usuario-equipo ya exista (se intentó agregar nuevamente un miembro)
       await ctx.render('teams/show', {
@@ -118,38 +118,38 @@ router.post('addMember', '/:id', async (ctx) => {
         indexUrl: ctx.router.url('teams'),
         addMemberUrl: ctx.router.url('addMember', team.id),
         removeMemberUrl: ctx.router.url('removeMember', team.id),
-      });
+      })
     }
   } else {
     // En caso de que no exista el usuario ingresado
-    ctx.redirect(ctx.router.url('team', { id: team.id }));
+    ctx.redirect(ctx.router.url('team', { id: team.id }))
   }
-});
+})
 
 router.get('editTeam', '/:id/edit', async (ctx) => {
-  const team = await ctx.orm.team.findById(ctx.params.id);
+  const team = await ctx.orm.team.findById(ctx.params.id)
   await ctx.render('teams/edit', {
     team,
     updateTeamUrl: ctx.router.url('updateTeam', team.id),
     showTeamUrl: ctx.router.url('team', team.id),
-  });
-});
+  })
+})
 
 router.patch('updateTeam', '/:id', async (ctx) => {
-  const team = await ctx.orm.team.findById(ctx.params.id);
+  const team = await ctx.orm.team.findById(ctx.params.id)
   try {
-    await team.update(ctx.request.body);
-    ctx.flashMessage.notice = 'El equipo ha sido actualizado.';
-    ctx.redirect(ctx.router.url('team', { id: team.id }));
+    await team.update(ctx.request.body)
+    ctx.flashMessage.notice = 'El equipo ha sido actualizado.'
+    ctx.redirect(ctx.router.url('team', { id: team.id }))
   } catch (validationError) {
     await ctx.render('teams/edit', {
       team,
       errors: validationError.errors,
       updateTeamUrl: ctx.router.url('updateTeam', { id: team.id }),
       showTeamUrl: ctx.router.url('team', team.id),
-    });
+    })
   }
-});
+})
 
 router.get('team', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id, {
@@ -157,9 +157,9 @@ router.get('team', '/:id', async (ctx) => {
       model: ctx.orm.userTeam,
       include: ctx.orm.users,
     }],
-  });
-  const sport = await ctx.orm.sport.findById(team.sportId);
-  const members = team.userTeams;
+  })
+  const sport = await ctx.orm.sport.findById(team.sportId)
+  const members = team.userTeams
   await ctx.render('teams/show', {
     team,
     sport,
@@ -170,7 +170,7 @@ router.get('team', '/:id', async (ctx) => {
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
     notice: ctx.flashMessage.notice,
-  });
-});
+  })
+})
 
-module.exports = router;
+module.exports = router

@@ -9,7 +9,9 @@
       <% }) %>
     </ul>
   </div>
-  <div>
-    <a href="<%= newClubUrl %>"> Agregar club </a>
-  </div>
+  <% if (isAdmin) { %>
+    <div>
+      <a href="<%= newClubUrl %>"> Agregar club </a>
+    </div>
+  <% } %>
 </div>
