@@ -8,10 +8,10 @@ module.exports = function defineteam(sequelize, DataTypes) {
         notEmpty: true,
       },
     },
-  });
+  })
   team.associate = function associate(models) {
-    team.hasMany(models.userTeam);
-    team.belongsTo(models.sport);
-  };
-  return team;
-};
+    team.hasMany(models.userTeam)
+    team.belongsTo(models.sport)
+  }
+  return team
+}

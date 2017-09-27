@@ -8,10 +8,10 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'cascade',
-      });
+      })
   },
 
   down(queryInterface, Sequelize) {
-    return queryInterface.removeColumn('teams', 'sportId');
+    return queryInterface.removeColumn('teams', 'sportId')
   },
-};
+}

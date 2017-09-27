@@ -10,9 +10,11 @@
       <% }) %>
     </ul>
   </div>
-  <div>
-    <a href="<%= editClubUrl %> ">Editar</a>
-  </div>
+  <% if (isAdmin) { %>
+    <div>
+      <a href="<%= editClubUrl %> ">Editar</a>
+    </div>
+  <% } %>
   <form action="<%= deleteClubUrl %>" method="post">
     <input type="hidden" name="_method" value="delete" />
     <input type="submit" name="delete" value="Borrar" />

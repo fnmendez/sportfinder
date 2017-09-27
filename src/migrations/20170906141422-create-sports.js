@@ -18,9 +18,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-    });
+    })
   },
   down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('sports');
+    return queryInterface.dropTable('sports')
   },
-};
+}
