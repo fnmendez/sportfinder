@@ -3,7 +3,6 @@ const KoaRouter = require('koa-router')
 const router = new KoaRouter()
 
 router.get('users', '/users', async (ctx) => {
-  console.log('Yep4');
   const users = await ctx.orm.users.findAll()
   return ctx.render('admin/users', {
     users,
