@@ -1,0 +1,30 @@
+<div>
+  <div>
+    <h1>Usuarios</h1>
+  </div>
+  <div class="table-div">
+    <table>
+      <tr>
+        <th>Usuario</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Mail</th>
+        <th>Admin</th>
+      </tr>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.username %></td>
+          <td><%= user.name %></td>
+          <td><%= user.surname %></td>
+          <td><%= user.mail %></td>
+          <% if (user.isAdmin()) { %>
+            <td>Yes</td>
+          <% } else { %>
+             <td>No <form action="<%= '/admin/users/' + user.id %>" method="post"><input type="submit" value="Promover"></form></td>
+
+          <% } %>
+        </tr>
+      <% }) %>
+    </table>
+  </div>
+</div>
