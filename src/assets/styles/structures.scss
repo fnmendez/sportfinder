@@ -18,6 +18,7 @@ th, td {
   border-bottom: 1px solid #ddd;
 }
 
-table, th, td {
-  //
+tr.admin {
+  @extend td;
+  background-color: #f5d0a9;
 }
