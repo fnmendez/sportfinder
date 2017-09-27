@@ -13,12 +13,13 @@
         <th>Acciones</th>
       </tr>
       <% users.forEach(user => { %>
-        <tr>
+        <% const isAdmin = user.isAdmin() %>
+        <tr <%= isAdmin ? 'class=admin' : '' %>>
           <td><%= user.username %></td>
           <td><%= user.name %></td>
           <td><%= user.surname %></td>
           <td><%= user.mail %></td>
-          <% if (user.isAdmin()) { %>
+          <% if (isAdmin) { %>
             <td>Yes</td>
             <td>Ninguna</td>
           <% } else { %>
