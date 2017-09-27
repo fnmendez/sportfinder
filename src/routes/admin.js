@@ -3,7 +3,10 @@ const KoaRouter = require('koa-router')
 const router = new KoaRouter()
 
 router.get('users', '/users', async (ctx) => {
-  const users = await ctx.orm.users.findAll()
+  const users = await ctx.orm.users.findAll({
+    attributes: { exclude: ['password'] },
+    where: { id: { not: ctx.state.currentUser.id } },
+  })
   return ctx.render('admin/users', {
     users,
     promoteUsersUrl: user => ctx.router.url('promoteUsers', { id: user.id }),
