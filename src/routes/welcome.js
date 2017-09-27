@@ -19,23 +19,6 @@ router.get('home', '/', async (ctx) => {
   })
 })
 
-router.get('users', '/users', async (ctx) => {
-  if (ctx.session.user) {
-    const user = await ctx.orm.users.findById(ctx.session.user.id)
-    if (user && !user.isAdmin) {
-      ctx.flashMessage.warning = 'No tienes los permisos.'
-      return ctx.redirect('profile')
-    } else if (user && user.isAdmin) {
-      const users = await ctx.orm.users.findAll()
-      return ctx.render('welcome/users', {
-        users,
-      })
-    }
-  }
-  ctx.session = null
-  return ctx.redirect('home')
-})
-
 router.post('login', 'login', async (ctx) => {
   const username = ctx.request.body.fields.username
   const password = ctx.request.body.fields.password
@@ -74,7 +57,7 @@ router.post('createUser', 'signup', async (ctx) => {
   }
 })
 
-router.del('deleteUser', 'profile', async (ctx) => {
+router.delete('deleteUser', 'profile', async (ctx) => {
   if (ctx.session.user) {
     const user = await ctx.orm.users.findById(ctx.session.user.id)
     await user.destroy()
