@@ -61,6 +61,11 @@ app.use(session({
 
 // flash messages support
 app.use(koaFlashMessage)
+app.use((ctx, next) => {
+  ctx.state.notice = ctx.flashMessage.notice
+  ctx.state.warning = ctx.flashMessage.warning
+  return next()
+})
 
 // parse request body
 app.use(koaBody({
@@ -68,6 +73,7 @@ app.use(koaBody({
   keepExtensions: true,
 }))
 
+// override method
 app.use((ctx, next) => {
   ctx.request.method = override.call(ctx, ctx.request.body)
   return next()
