@@ -7,12 +7,15 @@
     <table>
       <tr>
         <th>Deporte</th>
+        <% if (isAdmin) { %>
         <th>Acciones</th>
+        <% } %>
       </tr>
 
       <% clubSports.forEach((clubSport) => { %>
         <tr>
         <td> <%= clubSport.sport.name %> </td>
+        <% if (isAdmin) { %>
         <td>
           <form action="<%= removeSportUrl %> " method="post">
             <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
@@ -20,6 +23,7 @@
             <input type="submit" value="Borrar"/>
           </form>
         </td>
+        <% } %>
         </tr>
       <% }) %>
     </table>
