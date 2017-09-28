@@ -54,7 +54,8 @@ router.post('addSport', '/:id', async (ctx) => {
       });
       ctx.redirect(ctx.router.url('club', ctx.params.id))
     } catch (validationError) {
-      console.log("[ERROR]");
+      ctx.flashMessage.notice = 'El deporte ya existe en el club'
+      ctx.redirect(ctx.router.url('club', ctx.params.id))
     }
   } else{
     ctx.redirect(ctx.router.url('club', ctx.params.id))
