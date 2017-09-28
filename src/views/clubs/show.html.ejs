@@ -11,6 +11,18 @@
     </ul>
   </div>
   <div>
+    Agregar un deporte:
+    <form action="<%= addSportUrl %>" method="post">
+      <div>
+        <label for="sportname">Nombre de deporte</label>
+        <input type="text" name="sportname" value="" />
+      </div>
+      <div>
+        <input type="submit" name="add" value="Agregar Deporte" />
+      </div>
+    </form>
+  </div>
+  <div>
     <a href="<%= editClubUrl %> ">Editar</a>
   </div>
   <form action="<%= deleteClubUrl %>" method="post">

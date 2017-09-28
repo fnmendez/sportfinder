@@ -20,9 +20,11 @@ router.delete('deleteClub', '/:id', async (ctx) => {
 });
 
 router.get('newClub', '/new', async (ctx) => {
+  const sports = await ctx.orm.sport.findAll();
   const club = ctx.orm.club.build();
   await ctx.render('/clubs/new', {
     club,
+    sports,
     createClubUrl: ctx.router.url('createClub'),
     indexUrl: ctx.router.url('clubs'),
   });
@@ -39,6 +41,23 @@ router.post('createClub', '/', async (ctx) => {
       createClubUrl: ctx.router.url('createClub'),
       indexUrl: ctx.router.url('clubs'),
     });
+  }
+});
+
+router.post('addSport', '/:id', async (ctx) => {
+  const sport = await ctx.orm.sport.findOne({ where: {name: ctx.request.body.sportname }});
+  if (sport){
+    try {
+      await ctx.orm.clubSport.create({
+        clubId: ctx.params.id,
+        sportId: sport.id,
+      });
+      ctx.redirect(ctx.router.url('club', ctx.params.id))
+    } catch (validationError) {
+      console.log("[ERROR]");
+    }
+  } else{
+    ctx.redirect(ctx.router.url('club', ctx.params.id))
   }
 });
 
@@ -82,6 +101,7 @@ router.get('club', '/:id', async (ctx) => {
     indexUrl: ctx.router.url('clubs'),
     editClubUrl: ctx.router.url('editClub', club.id),
     notice: ctx.flashMessage.notice,
+    addSportUrl: ctx.router.url('addSport', club.id)
   });
 });
 
