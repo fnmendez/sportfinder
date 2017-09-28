@@ -17,13 +17,13 @@ const config = {
   production: {
     extend: 'default',
   },
-};
+}
 
 Object.keys(config).forEach((configKey) => {
-  const configValue = config[configKey];
+  const configValue = config[configKey]
   if (configValue.extend) {
-    config[configKey] = Object.assign({}, config[configValue.extend], configValue);
+    config[configKey] = Object.assign({}, config[configValue.extend], configValue)
   }
-});
+})
 
-module.exports = config;
+module.exports = config

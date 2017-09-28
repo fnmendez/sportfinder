@@ -1,82 +1,97 @@
-const KoaRouter = require('koa-router');
+const KoaRouter = require('koa-router')
 
-const router = new KoaRouter();
+const router = new KoaRouter()
 
 router.get('sports', '/', async (ctx) => {
-  const sports = await ctx.orm.sport.findAll();
+  const sports = await ctx.orm.sport.findAll()
   await ctx.render('sports/index', {
     sports,
+    isAdmin: ctx.state.currentUser.isAdmin(),
     sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
     newSportUrl: ctx.router.url('newSport'),
-    notice: ctx.flashMessage.notice,
-  });
-});
+  })
+})
 
 router.delete('deleteSport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id);
-  await sport.destroy();
-  ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.';
-  await ctx.redirect(ctx.router.url('sports'));
-});
+  const isAdmin = ctx.state.currentUser.isAdmin()
+  if (!isAdmin) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect('sports')
+  }
+  const sport = await ctx.orm.sport.findById(ctx.params.id)
+  await sport.destroy()
+  ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.'
+  return ctx.redirect(ctx.router.url('sports'))
+})
 
 router.get('newSport', '/new', async (ctx) => {
-  const sport = ctx.orm.sport.build();
+  const sport = ctx.orm.sport.build()
   await ctx.render('/sports/new', {
     sport,
     createSportUrl: ctx.router.url('createSport'),
     indexUrl: ctx.router.url('sports'),
-  });
-});
+  })
+})
 
 router.post('createSport', '/', async (ctx) => {
+  const isAdmin = ctx.state.currentUser.isAdmin()
+  if (!isAdmin) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect('sports')
+  }
   try {
-    const sport = await ctx.orm.sport.create(ctx.request.body);
-    ctx.redirect(ctx.router.url('sport', { id: sport.id }));
+    const sport = await ctx.orm.sport.create(ctx.request.body)
+    return ctx.redirect(ctx.router.url('sport', { id: sport.id }))
   } catch (validationError) {
-    await ctx.render('/sports/new', {
+    return ctx.render('/sports/new', {
       sport: ctx.orm.sport.build(ctx.request.body),
       errors: validationError.errors,
       createSportUrl: ctx.router.url('createSport'),
       indexUrl: ctx.router.url('sports'),
-    });
+    })
   }
-});
+})
 
 router.get('editSport', '/:id/edit', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  const sport = await ctx.orm.sport.findById(ctx.params.id)
   await ctx.render('sports/edit', {
     sport,
     updateSportUrl: ctx.router.url('updateSport', sport.id),
     showUrl: ctx.router.url('sport', sport.id),
-  });
-});
+  })
+})
 
 router.patch('updateSport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  const isAdmin = ctx.state.currentUser.isAdmin()
+  if (!isAdmin) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect('sports')
+  }
+  const sport = await ctx.orm.sport.findById(ctx.params.id)
   try {
-    await sport.update(ctx.request.body);
-    ctx.flashMessage.notice = 'El deporte ha sido actualizado.';
-    ctx.redirect(ctx.router.url('sport', { id: sport.id }));
+    await sport.update(ctx.request.body)
+    ctx.flashMessage.notice = 'El deporte ha sido actualizado.'
+    return ctx.redirect(ctx.router.url('sport', { id: sport.id }))
   } catch (validationError) {
-    await ctx.render('sports/edit', {
+    return ctx.render('sports/edit', {
       sport,
       errors: validationError.errors,
       updateSportUrl: ctx.router.url('updateSport', { id: sport.id }),
       showUrl: ctx.router.url('sport', sport.id),
-    });
+    })
   }
-});
+})
 
 
 router.get('sport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id);
+  const sport = await ctx.orm.sport.findById(ctx.params.id)
   await ctx.render('sports/show', {
     sport,
+    isAdmin: ctx.state.currentUser.isAdmin(),
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
-    notice: ctx.flashMessage.notice,
-  });
-});
+  })
+})
 
-module.exports = router;
+module.exports = router

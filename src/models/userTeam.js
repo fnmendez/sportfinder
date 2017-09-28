@@ -18,10 +18,10 @@ module.exports = function definesports(sequelize, DataTypes) {
         notEmpty: true,
       },
     },
-  });
+  })
   userTeam.associate = function associate(models) {
-    userTeam.belongsTo(models.users);
-    userTeam.belongsTo(models.team);
-  };
-  return userTeam;
-};
+    userTeam.belongsTo(models.users)
+    userTeam.belongsTo(models.team)
+  }
+  return userTeam
+}
