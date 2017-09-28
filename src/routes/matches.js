@@ -100,9 +100,6 @@ router.patch('updateMatch', '/:id', async (ctx) => {
 
 router.post('joinMatch', '/:id/join', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id)
-  // const matches = await ctx.orm.match.findAll({
-  //   include: [ctx.orm.sport, ctx.orm.club],
-  // });
   await ctx.orm.userMatch.create({ matchId: match.id, userId: ctx.state.currentUser.id })
   ctx.redirect(ctx.router.url('match', { id: match.id }))
 })
