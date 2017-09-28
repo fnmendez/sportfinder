@@ -14,8 +14,12 @@
     Agregar un deporte:
     <form action="<%= addSportUrl %>" method="post">
       <div>
-        <label for="sportname">Nombre de deporte</label>
-        <input type="text" name="sportname" value="" />
+        Deporte: <select name='sportid'>
+              <% sports.forEach((sport) => { %>
+                <option value="<%= sport.id %>"><%= sport.name %></option>
+              <% }) %>
+             </select>
+          <div>
       </div>
       <div>
         <input type="submit" name="add" value="Agregar Deporte" />

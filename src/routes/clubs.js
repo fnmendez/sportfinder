@@ -55,7 +55,7 @@ router.post('createClub', '/', async (ctx) => {
 })
 
 router.post('addSport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findOne({ where: {name: ctx.request.body.sportname }});
+  const sport = await ctx.orm.sport.findById(ctx.request.body.sportid);
   if (sport){
     try {
       await ctx.orm.clubSport.create({
@@ -64,10 +64,11 @@ router.post('addSport', '/:id', async (ctx) => {
       });
       ctx.redirect(ctx.router.url('club', ctx.params.id))
     } catch (validationError) {
-      ctx.flashMessage.notice = 'El deporte ya existe en el club'
+      ctx.flashMessage.warning = 'El deporte ya existe en el club.'
       ctx.redirect(ctx.router.url('club', ctx.params.id))
     }
   } else{
+    ctx.flashMessage.notice = 'El deporte ingresado no existe'
     ctx.redirect(ctx.router.url('club', ctx.params.id))
   }
 });
@@ -103,6 +104,7 @@ router.patch('updateClub', '/:id', async (ctx) => {
 })
 
 router.get('club', '/:id', async (ctx) => {
+  const sports = await ctx.orm.sport.findAll();
   const club = await ctx.orm.club.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.clubSport,
@@ -112,19 +114,17 @@ router.get('club', '/:id', async (ctx) => {
   const clubSports = club.clubSports
   return ctx.render('clubs/show', {
     club,
+    sports,
     clubSports,
     isAdmin: ctx.state.currentUser.isAdmin(),
     deleteClubUrl: ctx.router.url('deleteClub', club.id),
     indexUrl: ctx.router.url('clubs'),
     editClubUrl: ctx.router.url('editClub', club.id),
-<<<<<<< HEAD
+    warning: ctx.flashMessage.warning,
     notice: ctx.flashMessage.notice,
     addSportUrl: ctx.router.url('addSport', club.id)
   });
 });
-=======
-  })
-})
->>>>>>> origin/dev
+
 
 module.exports = router
