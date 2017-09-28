@@ -12,8 +12,7 @@ router.get('teams', '/', async (ctx) => {
 })
 
 router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
-  const user = await ctx.orm.users.findOne({
-    where: { username: ctx.request.body.name } })
+  const user = await ctx.orm.users.findById(ctx.request.body.userid)
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
@@ -163,6 +162,7 @@ router.get('team', '/:id', async (ctx) => {
     team,
     sport,
     members,
+    isAdmin: ctx.state.currentUser.isAdmin(),
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
