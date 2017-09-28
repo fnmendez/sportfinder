@@ -15,7 +15,6 @@ router.get('home', '/', async (ctx) => {
   return ctx.render('welcome/home', {
     appVersion: pkg.version,
     signupUrl: ctx.router.url('signup'),
-    warning: ctx.flashMessage.warning,
   })
 })
 
@@ -91,8 +90,6 @@ router.get('showUser', 'profile', async (ctx) => {
       editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
-      notice: ctx.flashMessage.notice,
-      warning: ctx.flashMessage.warning,
     })
   } else {
     ctx.session = null
