@@ -8,7 +8,6 @@ router.get('teams', '/', async (ctx) => {
     teams,
     teamUrl: team => ctx.router.url('team', { id: team.id }),
     newTeamUrl: ctx.router.url('newTeam'),
-    notice: ctx.flashMessage.notice,
   })
 })
 
@@ -169,7 +168,6 @@ router.get('team', '/:id', async (ctx) => {
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
-    notice: ctx.flashMessage.notice,
   })
 })
 

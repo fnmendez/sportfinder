@@ -9,8 +9,6 @@ router.get('clubs', '/', async (ctx) => {
     isAdmin: ctx.state.currentUser.isAdmin(),
     clubUrl: club => ctx.router.url('club', { id: club.id }),
     newClubUrl: ctx.router.url('newClub'),
-    notice: ctx.flashMessage.notice,
-    warning: ctx.flashMessage.warning,
   })
 })
 
@@ -99,7 +97,6 @@ router.get('club', '/:id', async (ctx) => {
     deleteClubUrl: ctx.router.url('deleteClub', club.id),
     indexUrl: ctx.router.url('clubs'),
     editClubUrl: ctx.router.url('editClub', club.id),
-    notice: ctx.flashMessage.notice,
   })
 })
 

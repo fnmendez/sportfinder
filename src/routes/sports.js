@@ -9,8 +9,6 @@ router.get('sports', '/', async (ctx) => {
     isAdmin: ctx.state.currentUser.isAdmin(),
     sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
     newSportUrl: ctx.router.url('newSport'),
-    notice: ctx.flashMessage.notice,
-    warning: ctx.flashMessage.warning,
   })
 })
 
@@ -93,7 +91,6 @@ router.get('sport', '/:id', async (ctx) => {
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
-    notice: ctx.flashMessage.notice,
   })
 })
 

@@ -5,6 +5,9 @@ module.exports = function defineuserMatch(sequelize, DataTypes) {
       defaultValue: false,
     },
   })
+  userMatch.prototype.isAdmin = function isAdmin() {
+    return this.admin === true
+  }
   userMatch.associate = function associate(models) {
     userMatch.belongsTo(models.users)
     userMatch.belongsTo(models.match)
