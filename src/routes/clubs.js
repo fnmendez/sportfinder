@@ -24,6 +24,17 @@ router.delete('deleteClub', '/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('clubs'))
 })
 
+router.delete('removeSport', '/:id/removeSport', async (ctx) => {
+  const club = await ctx.orm.club.findById(ctx.params.id)
+  const joinTuple = await ctx.orm.clubSport.findOne({where: {
+    sportId: ctx.request.body.sportid,
+    clubId: club.id,
+  }});
+  await joinTuple.destroy()
+  ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.'
+  return ctx.redirect(ctx.router.url('club', club.id))
+})
+
 router.get('newClub', '/new', async (ctx) => {
   const sports = await ctx.orm.sport.findAll();
   const club = ctx.orm.club.build();
@@ -122,7 +133,8 @@ router.get('club', '/:id', async (ctx) => {
     editClubUrl: ctx.router.url('editClub', club.id),
     warning: ctx.flashMessage.warning,
     notice: ctx.flashMessage.notice,
-    addSportUrl: ctx.router.url('addSport', club.id)
+    addSportUrl: ctx.router.url('addSport', club.id),
+    removeSportUrl: ctx.router.url('removeSport', club.id),
   });
 });
 

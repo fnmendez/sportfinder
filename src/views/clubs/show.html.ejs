@@ -4,11 +4,25 @@
     <h2>Dirección: <%= club.address %></h2>
   </div>
   <div>
-    <ul>
+    <table>
+      <tr>
+        <th>Deporte</th>
+        <th>Acciones</th>
+      </tr>
+
       <% clubSports.forEach((clubSport) => { %>
-        <li> <%= clubSport.sport.name %> </li>
+        <tr>
+        <td> <%= clubSport.sport.name %> </td>
+        <td>
+          <form action="<%= removeSportUrl %> " method="post">
+            <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
+            <input type="hidden" name="_method" value="delete" />
+            <input type="submit" value="Borrar"/>
+          </form>
+        </td>
+        </tr>
       <% }) %>
-    </ul>
+    </table>
   </div>
   <div>
     Agregar un deporte:
