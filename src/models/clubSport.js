@@ -1,4 +1,4 @@
-module.exports = function definesports(sequelize, DataTypes) {
+module.exports = function definesports(sequelize) {
   const clubSport = sequelize.define('clubSport', {})
   clubSport.associate = function associate(models) {
     clubSport.belongsTo(models.club)
