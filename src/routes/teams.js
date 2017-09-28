@@ -12,8 +12,7 @@ router.get('teams', '/', async (ctx) => {
 })
 
 router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
-  const user = await ctx.orm.users.findOne({
-    where: { username: ctx.request.body.name } })
+  const user = await ctx.orm.users.findById(ctx.request.body.userid)
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
