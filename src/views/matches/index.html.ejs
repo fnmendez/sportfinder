@@ -29,8 +29,16 @@
         <% }) %>
         <tr>
           <td><a href="<%= matchUrl(match) %>"><%= match.date %></a></td>
-          <td><%= match.sport.name %></td>
-          <td><%= match.club.name %></td>
+          <% if (match.sport) { %>
+            <td><%= match.sport.name %></td>
+          <% } else { %>
+            <td> Aún no se define un deporte </td>
+          <% } %>
+          <% if (match.club) { %>
+            <td><%= match.club.name %></td>
+          <% } else { %>
+            <td> Aún no hay sede </td>
+          <% } %>
           <td>
             <form action="<%= joinMatchUrl(match) %>" method="post">
               <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
