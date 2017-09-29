@@ -18,6 +18,7 @@
         <th>Fecha</th>
         <th>Deporte</th>
         <th>Club</th>
+        <th>Inscritos</th>
         <th>Acciones</th>
       </tr>
       <% matches.forEach(match => { %>
@@ -28,9 +29,10 @@
           <% } %>
         <% }) %>
         <tr>
-          <td><a href="<%= matchUrl(match) %>"><%= match.date %></a></td>
+          <td><a href="<%= matchUrl(match) %>"><%= match.displayDate %></a></td>
           <td><%= match.sport.name %></td>
           <td><%= match.club.name %></td>
+          <td><%= -1 %></td>
           <td>
             <form action="<%= joinMatchUrl(match) %>" method="post">
               <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
