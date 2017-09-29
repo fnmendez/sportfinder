@@ -22,17 +22,21 @@
         <th>Acciones</th>
       </tr>
       <% matches.forEach(match => { %>
+        <% match.playersCount = 0 %>
         <% alreadyIn = false %>
         <% userMatches.forEach(userMatch => { %>
-          <% if (userMatch.match.id == match.id && userMatch.user.id == user.id) { %>
-            <% alreadyIn = true %>
+          <% if (userMatch.match.id == match.id) { %>
+            <% match.playersCount++ %>
+            <% if (userMatch.user.id == user.id) { %>
+              <% alreadyIn = true %>
+            <% } %>
           <% } %>
         <% }) %>
         <tr>
           <td><a href="<%= matchUrl(match) %>"><%= match.displayDate %></a></td>
           <td><%= match.sport.name %></td>
           <td><%= match.club.name %></td>
-          <td><%= -1 %></td>
+          <td><%= match.playersCount %></td>
           <td>
             <form action="<%= joinMatchUrl(match) %>" method="post">
               <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
