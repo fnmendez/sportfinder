@@ -43,6 +43,7 @@ router.get('newMatch', '/new', async (ctx) => {
 
 router.post('createMatch', '/', async (ctx) => {
   try {
+    ctx.request.body.date = new Date(ctx.request.body.date)
     const match = await ctx.orm.match.create(ctx.request.body)
     await ctx.orm.userMatch.create({
       matchId: match.id,
