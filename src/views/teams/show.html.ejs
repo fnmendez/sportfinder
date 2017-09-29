@@ -1,7 +1,11 @@
 <div>
   <div>
     <h1> Equipo:  <%= team.name %> </h1>
-    <h1> Deporte que practican:  <%= sport.name %> </h1>
+    <% if (sport) {%>
+      <h1> Deporte que practican:  <%= sport.name %> </h1>
+    <% } else { %>
+      <h1> Aún no seleccionan un deporte </h1>
+    <% } %>
   </div>
   <div>
     <table>

@@ -11,6 +11,13 @@
           <input type="text" name="name" value="<%= team.name %>" />
         </div>
         <div>
+          Deporte: <select name='sportid'>
+                <% sports.forEach((sport) => { %>
+                  <option value="<%= sport.id %>"><%= sport.name %></option>
+                <% }) %>
+               </select>
+        </div>
+        <div>
           <input type="submit" value="Guardar" />
         </div>
       </form>
