@@ -11,6 +11,7 @@ module.exports = function defineuserMatch(sequelize, DataTypes) {
   userMatch.associate = function associate(models) {
     userMatch.belongsTo(models.users)
     userMatch.belongsTo(models.match)
+    userMatch.belongsTo(models.position)
   }
   return userMatch
 }
