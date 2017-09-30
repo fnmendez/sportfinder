@@ -4,7 +4,7 @@ const router = new KoaRouter()
 
 router.get('matches', '/', async (ctx) => {
   const matches = await ctx.orm.match.findAll({
-    include: [ctx.orm.sport, ctx.orm.club],
+    include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
   })
   const userMatches = await ctx.orm.userMatch.findAll({
     include: [ctx.orm.users, ctx.orm.match],

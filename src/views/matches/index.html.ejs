@@ -46,9 +46,13 @@
           <% } %>
           <td><%= match.playersCount %></td>
           <td>
+            <% if (!match.isFull()) { %>
             <form action="<%= joinMatchUrl(match) %>" method="post">
               <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
             </form>
+            <% } else { %>
+              Full
+            <% } %>
           </td>
         </tr>
       <% }) %>
