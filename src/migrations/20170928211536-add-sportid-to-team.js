@@ -7,7 +7,7 @@ module.exports = {
           model: 'sports',
           key: 'id',
         },
-        onDelete: 'cascade',
+        onDelete: 'set null',
       })
   },
 

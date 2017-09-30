@@ -1,17 +1,17 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.addColumn('teams', 'sportId',
+    return queryInterface.addColumn('matches', 'sportId',
       {
         type: Sequelize.INTEGER,
         references: {
           model: 'sports',
           key: 'id',
         },
-        onDelete: 'cascade',
+        onDelete: 'set null',
       })
   },
 
   down(queryInterface, Sequelize) {
-    return queryInterface.removeColumn('teams', 'sportId')
+    return queryInterface.removeColumn('matches', 'sportId')
   },
 }

@@ -5,13 +5,13 @@ module.exports = function defineteam(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {msg: 'Has ingresado un nombre vacío'},
       },
     },
-  });
+  })
   team.associate = function associate(models) {
-    team.hasMany(models.userTeam);
-    team.belongsTo(models.sport);
-  };
-  return team;
-};
+    team.hasMany(models.userTeam)
+    team.belongsTo(models.sport)
+  }
+  return team
+}

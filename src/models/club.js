@@ -5,20 +5,20 @@ module.exports = function defineclub(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {msg: 'Has ingresado un nombre vacío'},
       },
     },
     address: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
+        notEmpty: {msg: 'Has ingresado una dirección vacía'},
       },
     },
-  });
+  })
   club.associate = function associate(models) {
-    club.hasMany(models.clubSport);
-    club.hasMany(models.match);
-  };
-  return club;
-};
+    club.hasMany(models.clubSport)
+    club.hasMany(models.match)
+  }
+  return club
+}

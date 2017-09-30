@@ -1,24 +1,35 @@
 <div>
   <div>
     <h1> Equipo:  <%= team.name %> </h1>
-    <h1> Deporte que practican:  <%= sport.name %> </h1>
-  <% if (locals.errors) { %>
-    <div class="errors">
-      Necesitas arreglar los siguiente errores:
-      <ul>
-        <% errors.forEach(error => { %>
-          <li><%= error.message %></li>
-        <% }); %>
-      </ul>
-    </div>
-  <% } %>
+    <% if (sport) {%>
+      <h1> Deporte que practican:  <%= sport.name %> </h1>
+    <% } else { %>
+      <h1> Aún no seleccionan un deporte </h1>
+    <% } %>
   </div>
   <div>
-    <ul>
+    <table>
+      <tr>
+        <th>Nombre</th>
+        <% if (isAdmin) { %>
+        <th>Acciones</th>
+        <% } %>
+      </tr>
       <% members.forEach((m) => { %>
-        <li> <%= m.user.name %> </li>
+        <tr>
+        <td> <%= m.user.name %> </td>
+        <% if (isAdmin) { %>
+        <td>
+          <form action="<%= removeMemberUrl %> " method="post">
+            <input type="hidden" name="userid" value="<%= m.user.id %>" />
+            <input type="hidden" name="_method" value="delete" />
+            <input type="submit" value="Borrar"/>
+          </form>
+        </td>
+        <% } %>
+        </tr>
       <% }) %>
-    </ul>
+    </table>
   </div>
   <div>
     <a href="<%= editTeamUrl %> ">Editar</a>
@@ -44,19 +55,6 @@
         </div>
         <div>
           <input type="submit" name="add" value="Agregar miembro" />
-        </div>
-      </form>
-    </div>
-    <div>
-      Eliminar un miembro:
-      <form action="<%= removeMemberUrl %>" method="post">
-        <input type="hidden" name="_method" value="delete" />
-        <div>
-          <label for="name">Nombre de usuario</label>
-          <input type="text" name="name" value="" />
-        </div>
-        <div>
-          <input type="submit" name="add" value="Eliminar miembro" />
         </div>
       </form>
     </div>

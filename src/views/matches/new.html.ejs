@@ -5,7 +5,8 @@
   <div>
     <form action="<%= createMatchUrl %>" method="post">
       <div>
-        <input name="date" type="datetime-local" value="<%= match.date %>" />
+        <input type="datetime-local" name="date" required pattern="[0-9]{2}-[0-9]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}" placeholder="mm-dd-yyyy hh:mm" value="<%= match.date %>">
+        <span class="validity"></span>
       </div>
       <div>
         <select name="sportId">

@@ -9,7 +9,9 @@
       <% }) %>
     </ul>
   </div>
-  <div>
-    <a href="<%= newSportUrl %>"> Agregar deporte </a>
-  </div>
+  <% if (isAdmin) { %>
+    <div>
+      <a href="<%= newSportUrl %>"> Agregar deporte </a>
+    </div>
+  <% } %>
 </div>

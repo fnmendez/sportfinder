@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 
 async function buildPasswordHash(instance) {
   if (instance.changed('password')) {
-    const hash = await bcrypt.hash(instance.password, 10);
-    instance.set('password', hash);
+    const hash = await bcrypt.hash(instance.password, 10)
+    instance.set('password', hash)
   }
 }
 
@@ -20,8 +20,8 @@ module.exports = function defineusers(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
       validate: {
-        isAlphanumeric: true,
-        notEmpty: true,
+        isAlphanumeric: {msg: 'Has ingresado un nombre de usuario con caracteres inválidos'},
+        notEmpty: {msg: 'Has ingresado un nombre de usuario vacío'},
       },
     },
     role: {
@@ -33,16 +33,16 @@ module.exports = function defineusers(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
-        notEmpty: true,
+        isAlpha: {msg: 'Has ingresado un nombre con caracteres inválidos'},
+        notEmpty: {msg: 'Has ingresado un nombre vacío'},
       },
     },
     surname: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
-        notEmpty: true,
+        isAlpha: {msg: 'Has ingresado un nombre con caracteres inválidos'},
+        notEmpty: {msg: 'Has ingresado un apellido vacío'},
       },
     },
     mail: {
@@ -50,8 +50,8 @@ module.exports = function defineusers(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
-        notEmpty: true,
+        isEmail: {msg: 'Has ingresado un e-mail inválido'},
+        notEmpty: {msg: 'Has ingresado un e-mail vacío'},
       },
     },
     photoId: DataTypes.STRING,
@@ -59,20 +59,23 @@ module.exports = function defineusers(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: true,
-        len: [6, 10],
+        notEmpty: {msg: 'Has ingresado una contraseña vacía'},
+        len: {args: [6, 10], msg: 'Has ingresado una contraseña con largo incorrecto (entre 6 y 10 caracteres)'},
       },
     },
-  });
-  users.beforeUpdate(buildPasswordHash);
-  users.beforeCreate(buildPasswordHash);
+  })
+  users.beforeUpdate(buildPasswordHash)
+  users.beforeCreate(buildPasswordHash)
   users.prototype.checkPassword = function checkPassword(password) {
-    return bcrypt.compare(password, this.password);
-  };
+    return bcrypt.compare(password, this.password)
+  }
+  users.prototype.isAdmin = function isAdmin() {
+    return this.role === 0
+  }
 
   users.associate = function associate(models) {
-    users.hasMany(models.userTeam);
-    users.hasMany(models.userMatch);
-  };
-  return users;
-};
+    users.hasMany(models.userTeam)
+    users.hasMany(models.userMatch)
+  }
+  return users
+}

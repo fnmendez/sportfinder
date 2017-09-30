@@ -2,9 +2,11 @@
   <div>
     <h1>Bienvenido a la página de <%= sport.name %> </h1>
   </div>
-  <div>
-    <a href="<%= editSportUrl %> ">Editar</a>
-  </div>
+  <% if (isAdmin) { %>
+    <div>
+      <a href="<%= editSportUrl %> ">Editar</a>
+    </div>
+  <% } %>
   <div>
     <form action="<%= deleteSportUrl %>" method="post">
       <input type="hidden" name="_method" value="delete" />
