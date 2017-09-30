@@ -187,8 +187,9 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
 
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [ctx.orm.sport, ctx.orm.club],
+    include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
   })
+  console.log(match.isFull());
   const players = await ctx.orm.userMatch.findAll({
     where: { matchId: match.id },
     include: [ctx.orm.users],

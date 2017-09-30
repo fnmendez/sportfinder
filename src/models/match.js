@@ -38,6 +38,9 @@ module.exports = function definematch(sequelize, DataTypes) {
     })
     return query.dataValues.amount
   }
+  match.prototype.isFull = function isFull() {
+    return this.userMatches.length === this.sport.maxPlayers;
+  }
   match.associate = function associate(models) {
     match.belongsTo(models.club)
     match.belongsTo(models.sport)
