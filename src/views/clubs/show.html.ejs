@@ -16,7 +16,7 @@
         <td> <%= clubSport.sport.name %> </td>
         <% if (isAdmin) { %>
           <td>
-            <form action="<%= removeSportUrl %> " method="post">
+            <form action="<%= removeSportUrl %>" method="post">
               <input type="hidden" name="_method" value="delete" />
               <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
               <input type="submit" value="Borrar"/>
