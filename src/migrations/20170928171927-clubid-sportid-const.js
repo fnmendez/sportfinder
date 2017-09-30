@@ -1,12 +1,12 @@
 module.exports = {
-  up(queryInterface, Sequelize) {
+  up(queryInterface) {
     return queryInterface.addConstraint('clubSports', ['clubId', 'sportId'], {
       type: 'unique',
       name: 'clubSportConstraint',
     })
   },
 
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.removeConstraint('clubSports', 'clubSportConstraint')
   },
 }
