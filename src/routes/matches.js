@@ -142,7 +142,7 @@ router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {
   })
   if (!currentPlayer || !currentPlayer.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('match', matchId)
+    return ctx.redirect(ctx.router.url('match', matchId))
   }
   const userMatch = await ctx.orm.userMatch.findById(ctx.params.id)
   await userMatch.update({ admin: true })

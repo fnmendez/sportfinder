@@ -12,6 +12,7 @@ input[type=submit] {
     padding: 4px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    cursor: pointer;
 }
 
 input:invalid + span {
@@ -32,4 +33,28 @@ input:valid + span:after {
   content: '✓';
   position: absolute;
   right: -18px;
+}
+
+select {
+  height: 30px;
+  background-color: white;
+}
+
+a.btn {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: white;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font: 11.5px/100% Arial, Helvetica, sans-serif;
+    padding: 5px 13.5px;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .3em;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }

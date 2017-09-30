@@ -1,11 +1,58 @@
 <div>
   <div>
-    <h1>Bienvenido a la página de <%= sport.name %> </h1>
+    <h1>Deporte: <%= sport.name %> </h1>
     <h2>Cantidad de jugadores por partida: <%= sport.maxPlayers %> </h2>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <th>Posición</th>
+        <% if (isAdmin) { %>
+          <th>Alineamiento horizontal</th>
+          <th>Alineamiento vertical</th>
+          <th>Acciones</th>
+        <% } %>
+      </tr>
+      <% sport.positions.forEach((position) => { %>
+        <tr>
+        <td> <%= position.name %> </td>
+        <% if (isAdmin) { %>
+          <td><%= position.horizontalAlignment %></td>
+          <td><%= position.verticalAlignment %></td>
+          <td>
+            <form action="<%= removePositionUrl(position) %>" method="post">
+              <input type="hidden" name="_method" value="delete" />
+              <input type="submit" value="Borrar"/>
+            </form>
+          </td>
+        <% } %>
+        </tr>
+      <% }) %>
+    </table>
   </div>
   <% if (isAdmin) { %>
     <div>
-      <a href="<%= editSportUrl %> ">Editar</a>
+      <form action="<%= addPositionUrl %>" method="post">
+        <input type="text" name="name" placeholder="Nombre"/>
+        <select name="horizontalAlignment">
+          <option value="left">left</option>
+          <option value="center-left">center-left</option>
+          <option value="center">center</option>
+          <option value="center-right">center-right</option>
+          <option value="right">right</option>
+        </select>
+        <select name="verticalAlignment">
+          <option value="top">top</option>
+          <option value="center-top">center-top</option>
+          <option value="center">center</option>
+          <option value="center-bottom">center-bottom</option>
+          <option value="bottom">bottom</option>
+        </select>
+        <input type="submit" value="Agregar posición" />
+      </form>
+    </div>
+    <div>
+      <a class="btn" href="<%= editSportUrl %>">Editar</a>
     </div>
   <% } %>
   <div>
