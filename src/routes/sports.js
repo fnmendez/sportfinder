@@ -16,7 +16,7 @@ router.delete('deleteSport', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('sports')
+    return ctx.redirect(ctx.router.url('sports'))
   }
   const sport = await ctx.orm.sport.findById(ctx.params.id)
   await sport.destroy()
@@ -37,7 +37,7 @@ router.post('createSport', '/', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('sports')
+    return ctx.redirect(ctx.router.url('sports'))
   }
   try {
     const sport = await ctx.orm.sport.create(ctx.request.body)
@@ -65,7 +65,7 @@ router.patch('updateSport', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('sports')
+    return ctx.redirect(ctx.router.url('sports'))
   }
   const sport = await ctx.orm.sport.findById(ctx.params.id)
   try {
@@ -76,24 +76,64 @@ router.patch('updateSport', '/:id', async (ctx) => {
     return ctx.render('sports/edit', {
       sport,
       errors: validationError.errors,
-      updateSportUrl: ctx.router.url('updateSport', { id: sport.id }),
+      updateSportUrl: ctx.router.url('updateSport', sport.id),
       showUrl: ctx.router.url('sport', sport.id),
     })
   }
 })
 
 router.post('addPosition', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id)
-  
+  const sport = await ctx.orm.sport.findById(ctx.params.id, {
+    include: [ctx.orm.position],
+  })
+  if (!ctx.state.currentUser.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('sport', sport.id))
+  }
+  try {
+    await sport.createPosition(ctx.request.body)
+    return ctx.redirect(ctx.router.url('sport', sport.id))
+  } catch (validationError) {
+    return ctx.render('sports/show', {
+      sport,
+      errors: validationError.errors,
+      isAdmin: ctx.state.currentUser.isAdmin(),
+      addPositionUrl: ctx.router.url('addPosition', sport.id),
+      removePositionUrl: position => ctx.router.url('removePosition', {
+        sportId: sport.id,
+        id: position.id,
+      }),
+      editSportUrl: ctx.router.url('editSport', sport.id),
+      deleteSportUrl: ctx.router.url('deleteSport', sport.id),
+      indexUrl: ctx.router.url('sports'),
+    })
+  }
+})
+
+router.delete('removePosition', '/:sportId/positions/:id', async (ctx) => {
+  const sportId = ctx.params.sportId
+  const position = await ctx.orm.position.findById(ctx.params.id)
+  if (!ctx.state.currentUser.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('sport', sportId))
+  }
+  await position.destroy()
+  ctx.flashMessage.notice = 'La posición fue eliminada correctamente.'
+  return ctx.redirect(ctx.router.url('sport', sportId))
 })
 
 router.get('sport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id)
+  const sport = await ctx.orm.sport.findById(ctx.params.id, {
+    include: [ctx.orm.position],
+  })
   await ctx.render('sports/show', {
     sport,
     isAdmin: ctx.state.currentUser.isAdmin(),
     addPositionUrl: ctx.router.url('addPosition', sport.id),
-    removePositionUrl: ctx.router.url('removePosition', sport.id),
+    removePositionUrl: position => ctx.router.url('removePosition', {
+      sportId: sport.id,
+      id: position.id,
+    }),
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
