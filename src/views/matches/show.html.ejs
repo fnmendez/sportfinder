@@ -2,10 +2,18 @@
   <div>
     <h1>Match: <%= match.id %> </h1>
     <h2>Fecha: <%= match.displayDate %></h2>
-    <h2>Deporte: <%= match.sport.name %></h2>
+    <% if (match.sport) { %>
+      <h2>Deporte: <%= match.sport.name %></h2>
+    <% } else { %>
+      <h2>Deporte: Por definir</h2>
+    <% } %>
+    <% if (match.club) { %>
     <h2>Club: <%= match.club.name %>, <%= match.club.address %></h2>
     <button onclick="myMap()">¿Cómo llego?</button>
     <div id="googleMap"></div>
+    <% } else { %>
+      <h2>Club: Aún no se define la sede </h2>
+    <% } %>
   </div>
   <div>
     <h2>Inscritos:</h2>
@@ -53,6 +61,7 @@
     </form>
   </div>
 </div>
+<% if (match.club) { %>
 <script>
   function myMap() {
     document.getElementById('googleMap').style.display = 'block';
@@ -92,9 +101,10 @@
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
-                          'Error: La geolocalicación falló.' :
+                          'Error: La geolocalización falló.' :
                           'Error: Tu navegador no soporta geolocalización.');
     infoWindow.open(map);
   }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo9QsGpyoRHjiQrtuwgNYmO98VqcIiLS8"></script>
+<% } %> 

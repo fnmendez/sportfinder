@@ -12,8 +12,7 @@ router.get('teams', '/', async (ctx) => {
 })
 
 router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
-  const user = await ctx.orm.users.findOne({
-    where: { username: ctx.request.body.name } })
+  const user = await ctx.orm.users.findById(ctx.request.body.userid)
   const team = await ctx.orm.team.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.userTeam,
@@ -127,8 +126,10 @@ router.post('addMember', '/:id', async (ctx) => {
 
 router.get('editTeam', '/:id/edit', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id)
+  const sports = await ctx.orm.sport.findAll()
   await ctx.render('teams/edit', {
     team,
+    sports,
     updateTeamUrl: ctx.router.url('updateTeam', team.id),
     showTeamUrl: ctx.router.url('team', team.id),
   })
@@ -137,7 +138,10 @@ router.get('editTeam', '/:id/edit', async (ctx) => {
 router.patch('updateTeam', '/:id', async (ctx) => {
   const team = await ctx.orm.team.findById(ctx.params.id)
   try {
-    await team.update(ctx.request.body)
+    await team.update({
+      name: ctx.request.body.name,
+      sportId: ctx.request.body.sportid,
+    })
     ctx.flashMessage.notice = 'El equipo ha sido actualizado.'
     ctx.redirect(ctx.router.url('team', { id: team.id }))
   } catch (validationError) {
@@ -163,6 +167,7 @@ router.get('team', '/:id', async (ctx) => {
     team,
     sport,
     members,
+    isAdmin: ctx.state.currentUser.isAdmin(),
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),

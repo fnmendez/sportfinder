@@ -34,8 +34,16 @@
         <% }) %>
         <tr>
           <td><a href="<%= matchUrl(match) %>"><%= match.displayDate %></a></td>
-          <td><%= match.sport.name %></td>
-          <td><%= match.club.name %></td>
+          <% if (match.sport) { %>
+            <td><%= match.sport.name %></td>
+          <% } else { %>
+            <td>Por definir</td>
+          <% } %>
+          <% if (match.club) { %>
+            <td><%= match.club.name %></td>
+          <% } else { %>
+            <td>Por definir</td>
+          <% } %>
           <td><%= match.playersCount %></td>
           <td>
             <form action="<%= joinMatchUrl(match) %>" method="post">
