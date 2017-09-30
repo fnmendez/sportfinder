@@ -1,5 +1,5 @@
 module.exports = {
-  up(queryInterface, Sequelize) {
+  up(queryInterface) {
     return queryInterface.addConstraint('userTeams', ['userId', 'teamId'], {
       type: 'unique',
       name: 'memberConstraint',
