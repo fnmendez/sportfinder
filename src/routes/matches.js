@@ -148,10 +148,10 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
   const isCurrentPlayer = player.id === currentPlayer.id
   if (!currentPlayer || (!isCurrentPlayer && !currentPlayer.isAdmin())) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('match', matchId)
+    return ctx.redirect(ctx.router.url('match', matchId))
   } else if (!player) {
     ctx.flashMessage.warning = 'El jugador no es miembro de la partida.'
-    return ctx.redirect('match', matchId)
+    return ctx.redirect(ctx.router.url('match', matchId))
   } else if (!isCurrentPlayer && player.isAdmin()) {
     ctx.flashMessage.warning = 'No puedes eliminar a un administrador de la partida.'
     return ctx.redirect(ctx.router.url('match', matchId))
@@ -160,13 +160,14 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
     // offer to promote a player or delete match
     await player.destroy()
     ctx.flashMessage.notice = 'Has dejado la partida.'
-    return ctx.redirect('matches')
+    return ctx.redirect(ctx.router.url('matches'))
   } else if (!isCurrentPlayer && currentPlayer.isAdmin()) {
     await player.destroy()
     ctx.flashMessage.notice = 'El jugador fue eliminado correctamente.'
     return ctx.redirect(ctx.router.url('match', matchId))
   }
   // currentPlayer && !currentPlayer.isAdmin()
+  await player.destroy()
   ctx.flashMessage.notice = 'Has dejado la partida.'
   return ctx.redirect(ctx.router.url('matches'))
 })
