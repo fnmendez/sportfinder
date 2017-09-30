@@ -9,6 +9,7 @@
     <% } %>
     <% if (match.club) { %>
       <h2>Club: <%= match.club.name %>, <%= match.club.address %></h2>
+      <h3>Precio: <%= match.club.matchDisplay(match.sport.id) %></h3>
       <button onclick="myMap()">¿Cómo llego?</button>
       <div id="googleMap"></div>
     <% } else { %>

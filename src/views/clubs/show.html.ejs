@@ -7,6 +7,8 @@
     <table>
       <tr>
         <th>Deporte</th>
+        <th>Precio</th>
+        <th>Unidad de tiempo</th>
         <% if (isAdmin) { %>
           <th>Acciones</th>
         <% } %>
@@ -14,6 +16,8 @@
       <% clubSports.forEach((clubSport) => { %>
         <tr>
         <td> <%= clubSport.sport.name %> </td>
+        <td> <%= clubSport.priceDisplay() %> </td>
+        <td> <%= clubSport.timeUnit %> </td>
         <% if (isAdmin) { %>
           <td>
             <form action="<%= removeSportUrl %>" method="post">
@@ -36,8 +40,17 @@
                 <option value="<%= sport.id %>"><%= sport.name %></option>
               <% }) %>
              </select>
-          <div>
       </div>
+      <div>
+        <label for="name">Precio:</label>
+        <input type="text" name="price" value="" />
+      </div>
+
+      <div>
+        <label for="name">Unidad de tiempo:</label>
+        <input type="text" name="timeUnit" value="" />
+      </div>
+
       <div>
         <input type="submit" name="add" value="Agregar Deporte" />
       </div>
