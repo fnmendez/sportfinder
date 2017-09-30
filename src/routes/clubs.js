@@ -16,7 +16,7 @@ router.delete('deleteClub', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   const club = await ctx.orm.club.findById(ctx.params.id)
   await club.destroy()
@@ -50,7 +50,7 @@ router.post('createClub', '/', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   try {
     const club = await ctx.orm.club.create(ctx.request.body)
@@ -97,7 +97,7 @@ router.patch('updateClub', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   const club = await ctx.orm.club.findById(ctx.params.id)
   try {
