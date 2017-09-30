@@ -22,6 +22,7 @@ router.post('promoteUsers', '/users/:id', async (ctx) => {
 router.delete('deleteUsers', '/users/:id', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.params.id)
   await user.destroy()
+  ctx.flashMessage.notice = 'El usuario ha sido eliminado correctamente.'
   return ctx.redirect(ctx.router.url('users'))
 })
 
