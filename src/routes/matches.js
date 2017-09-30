@@ -55,12 +55,13 @@ router.post('createMatch', '/', async (ctx) => {
     const match = ctx.orm.match.build(ctx.request.body)
     const sports = await ctx.orm.sport.findAll()
     const clubs = await ctx.orm.club.findAll()
-    return ctx.redirect('newMatch', {
+    return ctx.render('matches/new', {
       match,
       sports,
       clubs,
       errors: validationError.errors,
       createMatchUrl: ctx.router.url('createMatch'),
+      indexUrl: ctx.router.url('matches'),
     })
   }
 })
