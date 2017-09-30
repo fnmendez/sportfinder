@@ -1,11 +1,11 @@
 <div>
   <div>
     <h1>Match: <%= match.id %> </h1>
-    <h2>Fecha: <%= match.date %></h2>
+    <h2>Fecha: <%= match.displayDate %></h2>
     <% if (match.sport) { %>
       <h2>Deporte: <%= match.sport.name %></h2>
     <% } else { %>
-      <h2>Deporte: Aún no se define </h2>
+      <h2>Deporte: Por definir</h2>
     <% } %>
     <% if (match.club) { %>
     <h2>Club: <%= match.club.name %>, <%= match.club.address %></h2>
