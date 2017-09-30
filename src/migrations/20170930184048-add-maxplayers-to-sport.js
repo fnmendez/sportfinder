@@ -3,7 +3,7 @@ module.exports = {
     return queryInterface.addColumn('sports', 'maxPlayers',
       {
         type: Sequelize.INTEGER,
-        allowNull: {msg: 'Debes ingresar una cantidad de jugadores'},
+        allowNull: false,
       })
   },
 
