@@ -7,6 +7,6 @@ module.exports = {
   },
 
   down(queryInterface, Sequelize) {
-    return queryInterface.removeConstraint('userTeams', 'memberConstraint');
+    return queryInterface.removeConstraint('userTeams', 'memberConstraint')
   },
 }

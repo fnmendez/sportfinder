@@ -20,8 +20,8 @@ module.exports = function defineusers(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
       validate: {
-        isAlphanumeric: {msg: 'Has ingresado un nombre de usuario con caracteres inválidos'},
-        notEmpty: {msg: 'Has ingresado un nombre de usuario vacío'},
+        isAlphanumeric: { msg: 'Has ingresado un nombre de usuario con caracteres inválidos' },
+        notEmpty: { msg: 'Has ingresado un nombre de usuario vacío' },
       },
     },
     role: {
@@ -33,16 +33,16 @@ module.exports = function defineusers(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: {msg: 'Has ingresado un nombre con caracteres inválidos'},
-        notEmpty: {msg: 'Has ingresado un nombre vacío'},
+        isAlpha: { msg: 'Has ingresado un nombre con caracteres inválidos' },
+        notEmpty: { msg: 'Has ingresado un nombre vacío' },
       },
     },
     surname: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: {msg: 'Has ingresado un nombre con caracteres inválidos'},
-        notEmpty: {msg: 'Has ingresado un apellido vacío'},
+        isAlpha: { msg: 'Has ingresado un nombre con caracteres inválidos' },
+        notEmpty: { msg: 'Has ingresado un apellido vacío' },
       },
     },
     mail: {
@@ -50,8 +50,8 @@ module.exports = function defineusers(sequelize, DataTypes) {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: {msg: 'Has ingresado un e-mail inválido'},
-        notEmpty: {msg: 'Has ingresado un e-mail vacío'},
+        isEmail: { msg: 'Has ingresado un e-mail inválido' },
+        notEmpty: { msg: 'Has ingresado un e-mail vacío' },
       },
     },
     photoId: DataTypes.STRING,
@@ -59,8 +59,8 @@ module.exports = function defineusers(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {msg: 'Has ingresado una contraseña vacía'},
-        len: {args: [6, 10], msg: 'Has ingresado una contraseña con largo incorrecto (entre 6 y 10 caracteres)'},
+        notEmpty: { msg: 'Has ingresado una contraseña vacía' },
+        len: { args: [6, 10], msg: 'Has ingresado una contraseña con largo incorrecto (entre 6 y 10 caracteres)' },
       },
     },
   })
