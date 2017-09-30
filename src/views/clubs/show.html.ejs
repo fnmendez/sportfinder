@@ -16,7 +16,7 @@
       <% clubSports.forEach((clubSport) => { %>
         <tr>
         <td> <%= clubSport.sport.name %> </td>
-        <td> <%= clubSport.price %> </td>
+        <td> <%= clubSport.priceDisplay() %> </td>
         <td> <%= clubSport.timeUnit %> </td>
         <% if (isAdmin) { %>
           <td>
