@@ -7,7 +7,6 @@ module.exports = function definematch(sequelize, DataTypes) {
       allowNull: false,
       validate: {
         isRealistic(value) {
-          console.log('entra');
           if
           (value.getTime() < (new Date(Date.now() + (5 * 3600 * 1000))).getTime()) {
             throw new Error('La fecha a lo menos en 5 horas más.')
