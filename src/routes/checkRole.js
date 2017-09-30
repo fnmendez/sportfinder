@@ -5,11 +5,14 @@ const checkRole = async (ctx, next) => {
     })
     if (currentUser && currentUser.isAdmin()) {
       return next()
+    } else if (currentUser) {
+      ctx.flashMessage.warning = 'No tienes los permisos.'
+      return ctx.redirect(ctx.router.url('profile'))
     }
   }
   ctx.flashMessage.warning = 'No tienes los permisos.'
   ctx.session = null
-  return ctx.redirect('home')
+  return ctx.router.redirect('home')
 }
 
 module.exports = checkRole

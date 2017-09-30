@@ -6,7 +6,7 @@ module.exports = {
       unique: true,
     })
   },
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.removeColumn('users', 'username')
   },
 }

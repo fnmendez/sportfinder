@@ -5,7 +5,7 @@ module.exports = {
       defaultValue: false,
     })
   },
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.removeColumn('matches', 'private')
   },
 }

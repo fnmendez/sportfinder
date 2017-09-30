@@ -1,9 +1,9 @@
 module.exports = {
-  up(queryInterface, Sequelize) {
+  up(queryInterface) {
     return queryInterface.renameTable('club_sports', 'clubSports')
   },
 
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.renameTable('clubSports', 'club_sports')
   },
 }

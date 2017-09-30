@@ -5,14 +5,14 @@ module.exports = function defineclub(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {msg: 'Has ingresado un nombre vacío'},
+        notEmpty: { msg: 'Has ingresado un nombre vacío' },
       },
     },
     address: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {msg: 'Has ingresado una dirección vacía'},
+        notEmpty: { msg: 'Has ingresado una dirección vacía' },
       },
     },
   })
