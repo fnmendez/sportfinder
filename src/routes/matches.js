@@ -23,6 +23,13 @@ router.get('matches', '/', async (ctx) => {
 
 router.delete('deleteMatch', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id)
+  const currentPlayer = await ctx.orm.userMatch.findOne({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  if (!currentPlayer || !currentPlayer.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('match', match.id))
+  }
   await match.destroy()
   ctx.flashMessage.notice = 'La partida fue eliminada exitosamente.'
   return ctx.redirect(ctx.router.url('matches'))
@@ -82,10 +89,16 @@ router.get('editMatch', '/:id/edit', async (ctx) => {
 })
 
 router.patch('updateMatch', '/:id', async (ctx) => {
-  // const match = await ctx.orm.match.findById(ctx.params.id);
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [ctx.orm.sport, ctx.orm.club],
   })
+  const currentPlayer = await ctx.orm.userMatch.findOne({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  if (!currentPlayer || !currentPlayer.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('match', match.id))
+  }
   try {
     await match.update(ctx.request.body)
     ctx.flashMessage.notice = 'La partida ha sido actualizada.'

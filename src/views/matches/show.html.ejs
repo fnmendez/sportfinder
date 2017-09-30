@@ -15,6 +15,7 @@
       <h2>Club: Por definir </h2>
     <% } %>
   </div>
+  <% isCurrentPlayerAdmin = currentPlayer.isAdmin() %>
   <div>
     <h2>Inscritos:</h2>
     <ul>
@@ -22,11 +23,11 @@
         <li>
           <%= player.user.username %>
           <% isCurrentPlayer = currentPlayer.id === player.id %>
-          <% playerIsAdmin = player.isAdmin() %>
-          <% if (playerIsAdmin) { %>
+          <% isPlayerAdmin = player.isAdmin() %>
+          <% if (isPlayerAdmin) { %>
             (admin)
           <% } %>
-          <% if (!isCurrentPlayer && currentPlayer.isAdmin() && !playerIsAdmin) { %>
+          <% if (!isCurrentPlayer && isCurrentPlayerAdmin && !isPlayerAdmin) { %>
             <form action="<%= promotePlayerUrl(player) %>" method="post">
               <input type="submit" value="Promover" />
             </form>
@@ -44,9 +45,11 @@
       <% }) %>
     </ul>
   </div>
-  <div>
-    <a href="<%= editMatchUrl %> ">Editar</a>
-  </div>
+  <% if (isCurrentPlayerAdmin) { %>
+    <div>
+      <a href="<%= editMatchUrl %> ">Editar</a>
+    </div>
+  <% } %>
   <div>
     <form action="<%= indexUrl %>" method="get">
       <div>
@@ -54,12 +57,14 @@
       </div>
     </form>
   </div>
-  <div>
-    <form action="<%= deleteMatchUrl %>" method="post">
-      <input type="hidden" name="_method" value="delete" />
-      <input type="submit" value="Borrar" />
-    </form>
-  </div>
+  <% if (isCurrentPlayerAdmin) { %>
+    <div>
+      <form action="<%= deleteMatchUrl %>" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" value="Borrar" />
+      </form>
+    </div>
+  <% } %>
 </div>
 <% if (match.club) { %>
 <script>
