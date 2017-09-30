@@ -19,7 +19,7 @@ module.exports = function defineclub(sequelize, DataTypes) {
 
   club.prototype.matchDisplay = function matchDisplay(sportid) {
     // Instances refered with this might have clubsports loaded
-    var displayString = ""
+    var displayString = "No definido aún por el club"
     this.clubSports.forEach( (clubSport) => {
       if (clubSport.sportId === parseInt(sportid)) {
         displayString = `${clubSport.priceDisplay()} por cada ${clubSport.timeUnit}`
