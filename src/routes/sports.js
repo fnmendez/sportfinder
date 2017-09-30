@@ -82,12 +82,18 @@ router.patch('updateSport', '/:id', async (ctx) => {
   }
 })
 
+router.post('addPosition', '/:id', async (ctx) => {
+  const sport = await ctx.orm.sport.findById(ctx.params.id)
+  
+})
 
 router.get('sport', '/:id', async (ctx) => {
   const sport = await ctx.orm.sport.findById(ctx.params.id)
   await ctx.render('sports/show', {
     sport,
     isAdmin: ctx.state.currentUser.isAdmin(),
+    addPositionUrl: ctx.router.url('addPosition', sport.id),
+    removePositionUrl: ctx.router.url('removePosition', sport.id),
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),
