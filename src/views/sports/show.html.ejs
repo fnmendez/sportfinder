@@ -1,11 +1,11 @@
 <div>
   <div>
     <h1>Deporte: <%= sport.name %> </h1>
-    <h2>Cantidad de jugadores por partida: <%= sport.maxPlayers %> </h2>
+    <h2>Jugadores por partida: <%= sport.maxPlayers %> </h2>
   </div>
   <div>
     <% if (sport.positions.length > 0) { %>
-      <table>
+      <table class="index">
         <tr>
           <th>Posición</th>
           <% if (isAdmin) { %>
@@ -57,11 +57,15 @@
       <a class="btn" href="<%= editSportUrl %>">Editar</a>
     </div>
   <% } %>
+  <% if (currentUser.isAdmin()) { %>
+    <div>
+      <form action="<%= deleteSportUrl %>" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" name="delete" value="Borrar" />
+      </form>
+    </div>
+  <% } %>
   <div>
-    <form action="<%= deleteSportUrl %>" method="post">
-      <input type="hidden" name="_method" value="delete" />
-      <input type="submit" name="delete" value="Borrar" />
-    </form>
     <form action="<%= indexUrl %>" method="get">
       <input type="submit" value="Volver" />
     </form>
