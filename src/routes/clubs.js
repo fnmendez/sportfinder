@@ -77,6 +77,8 @@ router.post('addSport', '/:id', async (ctx) => {
       await ctx.orm.clubSport.create({
         clubId,
         sportId: sport.id,
+        price: ctx.request.body.price,
+        timeUnit: ctx.request.body.timeUnit,
       })
       return ctx.redirect(ctx.router.url('club', clubId))
     } catch (validationError) {
