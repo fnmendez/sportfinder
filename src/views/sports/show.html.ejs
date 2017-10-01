@@ -4,31 +4,33 @@
     <h2>Cantidad de jugadores por partida: <%= sport.maxPlayers %> </h2>
   </div>
   <div>
-    <table>
-      <tr>
-        <th>Posición</th>
-        <% if (isAdmin) { %>
-          <th>Alineamiento horizontal</th>
-          <th>Alineamiento vertical</th>
-          <th>Acciones</th>
-        <% } %>
-      </tr>
-      <% sport.positions.forEach((position) => { %>
+    <% if (sport.positions.length > 0) { %>
+      <table>
         <tr>
-        <td> <%= position.name %> </td>
-        <% if (isAdmin) { %>
-          <td><%= position.horizontalAlignment %></td>
-          <td><%= position.verticalAlignment %></td>
-          <td>
-            <form action="<%= removePositionUrl(position) %>" method="post">
-              <input type="hidden" name="_method" value="delete" />
-              <input type="submit" value="Borrar"/>
-            </form>
-          </td>
-        <% } %>
+          <th>Posición</th>
+          <% if (isAdmin) { %>
+            <th>Alineamiento horizontal</th>
+            <th>Alineamiento vertical</th>
+            <th>Acciones</th>
+          <% } %>
         </tr>
-      <% }) %>
-    </table>
+        <% sport.positions.forEach((position) => { %>
+          <tr>
+          <td> <%= position.name %> </td>
+          <% if (isAdmin) { %>
+            <td><%= position.horizontalAlignment %></td>
+            <td><%= position.verticalAlignment %></td>
+            <td>
+              <form action="<%= removePositionUrl(position) %>" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <input type="submit" value="Borrar"/>
+              </form>
+            </td>
+          <% } %>
+          </tr>
+        <% }) %>
+      </table>
+    <% } %>
   </div>
   <% if (isAdmin) { %>
     <div>
