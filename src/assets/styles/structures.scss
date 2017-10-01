@@ -2,31 +2,81 @@
   overflow-x: auto;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+.inline {
+  display: inline;
+}
+
+button {
+  background: white;
+  padding: 4px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 table {
+  padding-bottom: 20px;
+}
+
+table.index {
   tr:hover {background-color: #f5f5f5};
   width: 100%;
+  th {
+    background-color: #424242;
+    color: white;
+    font-weight: lighter;
+  }
+  th, td {
+    height: 15px;
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  td.actions {
+    cursor: default;
+    background-color: white;
+    border-bottom: none;
+  }
+  tr.admin {
+    @extend td;
+    background-color: #f5d0a9;
+  }
 }
 
-th {
-  background-color: #424242;
-  color: white;
-  font-weight: lighter;
+table.players td {
+  padding: 2px 15px;
 }
 
-th, td {
-  height: 15px;
-  text-align: left;
-  padding: 15px;
-  border-bottom: 1px solid #ddd;
+div.buttons {
+  padding-top: 15px;
 }
 
-tr.admin {
-  @extend td;
-  background-color: #f5d0a9;
-}
-
-#googleMap {
-  display: none;
-  width:100%;
-  height:400px;
+div.googleMap {
+  button {
+    background-color: #084B8A;
+    color: white;
+    font-weight: lighter;
+    font-size: 14px;
+    padding: 8px 24px;
+    border: 1px solid black;
+    &:hover {
+      color: yellow;
+    }
+    &:focus {
+      background-color: green;
+    }
+  }
+  #map {
+    display: none;
+    top: 20px;
+    width:100%;
+    height:400px;
+  }
+  #status {
+    display: inline;
+  }
 }
