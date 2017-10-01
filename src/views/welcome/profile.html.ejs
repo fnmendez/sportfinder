@@ -1,37 +1,50 @@
 <div>
   <div>
-    <h3>Hola <%= user.username %></h3>
+    <h2>Hola <%= user.username %></h2>
   </div>
   <div>
     <div>
       <h4>Datos de usuario</h4>
-      <div>
-        Usuario: <%= user.username %>
-      </div>
-      <div>
-        Mail: <%= user.mail %>
-      </div>
+      <table>
+        <tr>
+          <td>Usuario:</td>
+          <td><%= user.username %></td>
+        </tr>
+        <tr>
+          <td>Email:</td>
+          <td><%= user.mail %></td>
+        </tr>
+      </table>
     </div>
     <div>
       <h4>Datos personales</h4>
-      <div>
-        Nombre: <%= user.name %>
-      </div>
-      <div>
-        Apellido: <%= user.surname %>
-      </div>
-      <div>
-        RUT: <%= user.pid %>
-      </div>
+      <table>
+        <tr>
+          <td>Nombre:</td>
+          <td><%= user.name %></td>
+        </tr>
+        <tr>
+          <td>Apellido:</td>
+          <td><%= user.surname %></td>
+        </tr>
+        <tr>
+          <td>RUT:</td>
+          <td><%= user.pid %></td>
+        </tr>
+        <tr>
+          <td>Usuario:</td>
+          <td><%= user.username %></td>
+        </tr>
+          <tr>
+            <td>Foto carné:</td>
+            <% if (user.photoId) { %>
+              <td>user.photoId</td>
+            <% } else { %>
+              <td>Sube tu foto de carné, ¡encontrarás más partidas!</td>
+            <% } %>
+          </tr>
+      </table>
     </div>
-    <% if (user.photoId) { %>
-      <div>
-        Foto carné:
-      </div>
-    <% } else %>
-      <div>
-        Sube tu foto de carné, ¡encontrarás más partidas!
-      </div>
   </div>
   <div>
     <div>
