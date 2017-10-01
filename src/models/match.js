@@ -24,22 +24,14 @@ module.exports = function definematch(sequelize, DataTypes) {
       },
     },
   })
-  match.prototype.howManyPlayers = async function howManyPlayers(ctx) {
-    const query = await ctx.orm.userMatch.findOne({
-      attributes: [[sequelize.fn('COUNT', sequelize.col('*')), 'amount']],
-      where: { matchId: this.id },
-    })
-    return query.dataValues.amount
+  match.prototype.playersCount = function playersCount() {
+    return this.userMatches.length
   }
-  match.prototype.howManyAdmins = async function howManyAdmins(ctx) {
-    const query = await ctx.orm.userMatch.findOne({
-      attributes: [[sequelize.fn('COUNT', sequelize.col('*')), 'amount']],
-      where: { matchId: this.id, admin: true },
-    })
-    return query.dataValues.amount
+  match.prototype.maxPlayers = function maxPlayers() {
+    return this.sport.maxPlayers
   }
   match.prototype.isFull = function isFull() {
-    return this.userMatches.length === this.sport.maxPlayers;
+    return this.userMatches.length === this.sport.maxPlayers
   }
   match.associate = function associate(models) {
     match.belongsTo(models.club)
