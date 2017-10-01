@@ -83,13 +83,14 @@ router.patch('updateSport', '/:id', async (ctx) => {
 })
 
 router.post('addPosition', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.params.id, {
-    include: [ctx.orm.position],
-  })
+  const sportId = ctx.params.id
   if (!ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect(ctx.router.url('sport', sport.id))
+    return ctx.redirect(ctx.router.url('sport', sportId))
   }
+  const sport = await ctx.orm.sport.findById(sportId, {
+    include: [ctx.orm.position],
+  })
   try {
     await sport.createPosition(ctx.request.body)
     return ctx.redirect(ctx.router.url('sport', sport.id))
