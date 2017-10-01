@@ -1,6 +1,6 @@
 <div>
   <div>
-    <h1>Match: <%= match.id %> </h1>
+    <h1>Partida: <%= match.id %> </h1>
     <h2>Fecha: <%= match.displayDate %></h2>
     <% if (match.sport) { %>
       <h2>Deporte: <%= match.sport.name %></h2>
@@ -10,41 +10,56 @@
     <% if (match.club) { %>
       <h2>Club: <%= match.club.name %>, <%= match.club.address %></h2>
       <h3>Precio: <%= match.club.matchDisplay(match.sport.id) %></h3>
-      <button onclick="myMap()">¿Cómo llego?</button>
-      <div id="googleMap"></div>
+      <div class="googleMap">
+        <button class="showMap" onclick="myMap()">¿Cómo llego?</button>
+        <div id="status"></div>
+        <div id="map"></div>
+      </div>
     <% } else { %>
       <h2>Club: Por definir </h2>
     <% } %>
   </div>
   <% isCurrentPlayerAdmin = currentPlayer.isAdmin() %>
+  <% i = 1 %>
   <div>
     <h2>Inscritos:</h2>
-    <ul>
+    <table class="players">
       <% players.forEach(player => { %>
-        <li>
-          <%= player.user.username %>
-          <% isCurrentPlayer = currentPlayer.id === player.id %>
-          <% isPlayerAdmin = player.isAdmin() %>
+        <% isCurrentPlayer = currentPlayer.id === player.id %>
+        <% isPlayerAdmin = player.isAdmin() %>
+        <tr>
+          <td><%= i %>.</td><% i++ %>
+          <td><%= player.user.name + ' ' + player.user.surname %></td>
           <% if (isPlayerAdmin) { %>
-            (admin)
+            <td>admin</td>
+          <% } else if (!isCurrentPlayer && isCurrentPlayerAdmin) { %>
+            <td>
+              <form action="<%= promotePlayerUrl(player) %>" method="post">
+                <input type="submit" value="Promover" />
+              </form>
+            </td>
+          <% } else { %>
+            <td></td>
+          <% } if (isCurrentPlayer) { %>
+            <td>
+              <form action="<%= removePlayerUrl(player) %>" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <input type="submit" value="Abandonar" />
+              </form>
+            </td>
+          <% } else if (isCurrentPlayerAdmin) { %>
+            <td>
+              <form action="<%= removePlayerUrl(player) %>" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <input type="submit" value="Eliminar" />
+              </form>
+            </td>
+          <% } else { %>
+            <td></td>
           <% } %>
-          <% if (!isCurrentPlayer && isCurrentPlayerAdmin && !isPlayerAdmin) { %>
-            <form action="<%= promotePlayerUrl(player) %>" method="post">
-              <input type="submit" value="Promover" />
-            </form>
-            <form action="<%= removePlayerUrl(player) %>" method="post">
-              <input type="hidden" name="_method" value="delete" />
-              <input type="submit" value="Eliminar" />
-            </form>
-          <% } else if (isCurrentPlayer) { %>
-            <form action="<%= removePlayerUrl(player) %>" method="post">
-              <input type="hidden" name="_method" value="delete" />
-              <input type="submit" value="Abandonar" />
-            </form>
-          <% } %>
-        </li>
+        </tr>
       <% }) %>
-    </ul>
+    </table>
   </div>
   <% if (isCurrentPlayerAdmin) { %>
     <div>
@@ -70,11 +85,12 @@
 <% if (match.club) { %>
 <script>
   function myMap() {
-    document.getElementById('googleMap').style.display = 'block';
+    document.getElementById('status').innerHTML = 'Cargando...';
+    document.getElementById('map').style.display = 'block';
     var directionsService = new google.maps.DirectionsService;
     var directionsDisplay = new google.maps.DirectionsRenderer;
     var infoWindow = new google.maps.InfoWindow;
-    var map = new google.maps.Map(document.getElementById("googleMap"),{
+    var map = new google.maps.Map(document.getElementById("map"),{
       center:new google.maps.LatLng(-33.4726,-70.6472),
       zoom:10,
     });
@@ -92,6 +108,7 @@
           travelMode: 'DRIVING'
         }, function(response, status) {
           if (status === 'OK') {
+            document.getElementById('status').innerHTML = '';
             directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);

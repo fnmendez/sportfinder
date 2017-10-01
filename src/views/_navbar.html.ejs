@@ -1,6 +1,6 @@
 <header>
   <div id="logo">
-    <img src="/assets/logo.png" alt="Logo" />
+    <a href="/play"><img src="/assets/logo.png" alt="Logo" /></a>
   </div>
   <nav>
     <a href="/play">Jugar</a>
@@ -13,10 +13,8 @@
   </nav>
   <div id="user-bar">
     <% if (locals.currentUser) { %>
-      <span class="name">Hola <%= currentUser.username %></span>
-      <form action="/profile" method="get">
-        <input type="submit" value="Mi perfil" />
-      </form>
+      <a href="/profile"><%= currentUser.username %></a>
+      <a href="/logout">Logout</a>
     <% } %>
   </div>
 </header>

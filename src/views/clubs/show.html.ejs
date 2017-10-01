@@ -4,7 +4,7 @@
     <h2>Dirección: <%= club.address %></h2>
   </div>
   <div>
-    <table>
+    <table class="index">
       <tr>
         <th>Deporte</th>
         <th>Precio</th>
@@ -31,43 +31,42 @@
       <% }) %>
     </table>
   </div>
+  <% if (isAdmin) { %>
   <div>
-    Agregar un deporte:
     <form action="<%= addSportUrl %>" method="post">
-      <div>
-        Deporte: <select name='sportid'>
-              <% sports.forEach((sport) => { %>
-                <option value="<%= sport.id %>"><%= sport.name %></option>
-              <% }) %>
-             </select>
+      <select name='sportId'>
+        <% sports.forEach((sport) => { %>
+          <option value="<%= sport.id %>"><%= sport.name %></option>
+        <% }) %>
+      </select>
+      <div class="inline">
+        <input type="text" name="price" placeholder="Precio" />
       </div>
-      <div>
-        <label for="name">Precio:</label>
-        <input type="text" name="price" value="" />
+      <div class="inline">
+        <input type="text" name="timeUnit" placeholder="Unidad de tiempo" />
       </div>
-
-      <div>
-        <label for="name">Unidad de tiempo:</label>
-        <input type="text" name="timeUnit" value="" />
-      </div>
-
-      <div>
+      <div class="inline">
         <input type="submit" name="add" value="Agregar Deporte" />
       </div>
     </form>
   </div>
-  <% if (isAdmin) { %>
+  <div class="buttons">
     <div>
       <a class="btn" href="<%= editClubUrl %> ">Editar</a>
     </div>
-  <% } %>
-  <form action="<%= deleteClubUrl %>" method="post">
-    <input type="hidden" name="_method" value="delete" />
-    <input type="submit" name="delete" value="Borrar" />
-  </form>
-  <form action="<%= indexUrl %>" method="get">
     <div>
-      <input type="submit" value="Volver" />
+      <form action="<%= deleteClubUrl %>" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" name="delete" value="Borrar" />
+      </form>
     </div>
-  </form>
+    <% } %>
+    <div>
+      <form action="<%= indexUrl %>" method="get">
+        <div>
+          <input type="submit" value="Volver" />
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

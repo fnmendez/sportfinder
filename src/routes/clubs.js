@@ -66,23 +66,27 @@ router.post('createClub', '/', async (ctx) => {
 })
 
 router.post('addSport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.request.body.sportid)
+  const clubId = ctx.params.id
+  if (!ctx.state.currentUser.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('sport', clubId))
+  }
+  const sport = await ctx.orm.sport.findById(ctx.request.body.sportId)
   if (sport) {
     try {
       await ctx.orm.clubSport.create({
-        clubId: ctx.params.id,
+        clubId,
         sportId: sport.id,
         price: ctx.request.body.price,
         timeUnit: ctx.request.body.timeUnit,
       })
-      ctx.redirect(ctx.router.url('club', ctx.params.id))
+      return ctx.redirect(ctx.router.url('club', clubId))
     } catch (validationError) {
-      ctx.flashMessage.warning = 'El deporte ya existe en el club.'
-      ctx.redirect(ctx.router.url('club', ctx.params.id))
+      return ctx.redirect(ctx.router.url('club', clubId))
     }
   } else {
-    ctx.flashMessage.notice = 'El deporte ingresado no existe'
-    ctx.redirect(ctx.router.url('club', ctx.params.id))
+    ctx.flashMessage.notice = 'El deporte ingresado no existe.'
+    return ctx.redirect(ctx.router.url('club', clubId))
   }
 })
 

@@ -1,34 +1,36 @@
 <div>
   <div>
     <h1>Deporte: <%= sport.name %> </h1>
-    <h2>Cantidad de jugadores por partida: <%= sport.maxPlayers %> </h2>
+    <h2>Jugadores por partida: <%= sport.maxPlayers %> </h2>
   </div>
   <div>
-    <table>
-      <tr>
-        <th>Posición</th>
-        <% if (isAdmin) { %>
-          <th>Alineamiento horizontal</th>
-          <th>Alineamiento vertical</th>
-          <th>Acciones</th>
-        <% } %>
-      </tr>
-      <% sport.positions.forEach((position) => { %>
+    <% if (sport.positions.length > 0) { %>
+      <table class="index">
         <tr>
-        <td> <%= position.name %> </td>
-        <% if (isAdmin) { %>
-          <td><%= position.horizontalAlignment %></td>
-          <td><%= position.verticalAlignment %></td>
-          <td>
-            <form action="<%= removePositionUrl(position) %>" method="post">
-              <input type="hidden" name="_method" value="delete" />
-              <input type="submit" value="Borrar"/>
-            </form>
-          </td>
-        <% } %>
+          <th>Posición</th>
+          <% if (isAdmin) { %>
+            <th>Alineamiento horizontal</th>
+            <th>Alineamiento vertical</th>
+            <th>Acciones</th>
+          <% } %>
         </tr>
-      <% }) %>
-    </table>
+        <% sport.positions.forEach((position) => { %>
+          <tr>
+          <td> <%= position.name %> </td>
+          <% if (isAdmin) { %>
+            <td><%= position.horizontalAlignment %></td>
+            <td><%= position.verticalAlignment %></td>
+            <td>
+              <form action="<%= removePositionUrl(position) %>" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <input type="submit" value="Borrar"/>
+              </form>
+            </td>
+          <% } %>
+          </tr>
+        <% }) %>
+      </table>
+    <% } %>
   </div>
   <% if (isAdmin) { %>
     <div>
@@ -55,11 +57,15 @@
       <a class="btn" href="<%= editSportUrl %>">Editar</a>
     </div>
   <% } %>
+  <% if (currentUser.isAdmin()) { %>
+    <div>
+      <form action="<%= deleteSportUrl %>" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" name="delete" value="Borrar" />
+      </form>
+    </div>
+  <% } %>
   <div>
-    <form action="<%= deleteSportUrl %>" method="post">
-      <input type="hidden" name="_method" value="delete" />
-      <input type="submit" name="delete" value="Borrar" />
-    </form>
     <form action="<%= indexUrl %>" method="get">
       <input type="submit" value="Volver" />
     </form>
