@@ -82,21 +82,6 @@ router.patch('updateUser', 'profile', async (ctx) => {
   }
 })
 
-router.get('showUser', 'profile', async (ctx) => {
-  const user = await ctx.orm.users.findById(ctx.session.user.id)
-  if (user) {
-    await ctx.render('welcome/profile', {
-      user,
-      editUrl: ctx.router.url('editUser'),
-      logoutUrl: ctx.router.url('logout'),
-      startUrl: '/play',
-    })
-  } else {
-    ctx.session = null
-    ctx.redirect('/')
-  }
-})
-
 router.get('editUser', 'profile/edit', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
@@ -112,7 +97,23 @@ router.get('editUser', 'profile/edit', async (ctx) => {
   }
 })
 
-router.post('logout', 'logout', async (ctx) => {
+router.get('showUser', 'profile', async (ctx) => {
+  const user = await ctx.orm.users.findById(ctx.session.user.id)
+  if (user) {
+    ctx.state.currentUser = user
+    await ctx.render('welcome/profile', {
+      user,
+      editUrl: ctx.router.url('editUser'),
+      logoutUrl: ctx.router.url('logout'),
+      startUrl: '/play',
+    })
+  } else {
+    ctx.session = null
+    ctx.redirect('/')
+  }
+})
+
+router.get('logout', 'logout', async (ctx) => {
   ctx.session = null
   ctx.redirect('/')
 })
