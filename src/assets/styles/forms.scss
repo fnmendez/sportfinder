@@ -36,6 +36,19 @@ input[type=submit] {
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
+    &.danger {
+      background-color: #DF0101;
+      border: #2e6da4;
+      font-size: 15px;
+      color: #fff;
+      letter-spacing: 1px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: normal;
+      border-radius: 4px;
+      line-height: 1.5;
+      text-decoration: none;
+    }
 }
 
 input:invalid + span {
