@@ -18,6 +18,10 @@ $sportfinder-blue: #466BBB;
   }
 }
 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+   font-size: 13.5px;
+}
+
 input[type=text], input[type=password] {
     padding: 8px 12px;
     margin: 8px 4px;
@@ -27,7 +31,8 @@ input[type=text], input[type=password] {
 
 input[type=submit] {
     background: white;
-    padding: 4px 12px;
+    padding: 8px 18px;
+    font-size: 80%;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
@@ -55,6 +60,7 @@ input:valid + span:after {
 
 select {
   height: 30px;
+  width: 140px;
   background-color: white;
 }
 
@@ -67,8 +73,8 @@ a.btn {
     text-align: center;
     text-decoration: none;
     color: black;
-    font: 11.5px/100% Arial, Helvetica, sans-serif;
-    padding: 5px 13.5px;
+    font: 13px/100% Arial, Helvetica, sans-serif;
+    padding: 9.5px 20px;
     -webkit-border-radius: .5em;
     -moz-border-radius: .5em;
     border-radius: .3em;
