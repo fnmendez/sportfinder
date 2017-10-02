@@ -10,10 +10,9 @@ module.exports = function definesports(sequelize, DataTypes) {
 
   clubSport.prototype.priceDisplay = function priceDisplay() {
     if (this.price) {
-      return `$${this.price}`;
-    } else {
-      return 'No definido'
+      return `$${this.price}`
     }
+    return 'No definido'
   }
 
   clubSport.associate = function associate(models) {

@@ -13,7 +13,7 @@ module.exports = function definesports(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        notEmpty: {msg: 'Debes ingresar un número de jugadores'},
+        notEmpty: { msg: 'Debes ingresar un número de jugadores' },
       },
     },
   })
