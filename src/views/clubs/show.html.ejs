@@ -9,9 +9,6 @@
         <th>Deporte</th>
         <th>Precio</th>
         <th>Unidad de tiempo</th>
-        <% if (isAdmin) { %>
-          <th>Acciones</th>
-        <% } %>
       </tr>
       <% clubSports.forEach((clubSport) => { %>
         <tr>
@@ -19,7 +16,7 @@
         <td> <%= clubSport.priceDisplay() %> </td>
         <td> <%= clubSport.timeUnit %> </td>
         <% if (isAdmin) { %>
-          <td>
+          <td class="actions">
             <form action="<%= removeSportUrl %>" method="post">
               <input type="hidden" name="_method" value="delete" />
               <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />

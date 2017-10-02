@@ -2,24 +2,22 @@
   <div>
     <h1> Equipo:  <%= team.name %> </h1>
     <% if (sport) {%>
-      <h1> Deporte que practican:  <%= sport.name %> </h1>
+      <h2> Deporte:  <%= sport.name %> </h2>
     <% } else { %>
-      <h1> Aún no seleccionan un deporte </h1>
+      <h2> Deporte: Por definir</h2>
     <% } %>
   </div>
   <div>
+    <h2>Miembros</h2>
     <table class="index">
       <tr>
         <th>Nombre</th>
-        <% if (isAdmin) { %>
-        <th>Acciones</th>
-        <% } %>
       </tr>
       <% members.forEach((m) => { %>
         <tr>
         <td> <%= m.user.name %> </td>
         <% if (isAdmin) { %>
-        <td>
+        <td class="actions">
           <form action="<%= removeMemberUrl %> " method="post">
             <input type="hidden" name="userid" value="<%= m.user.id %>" />
             <input type="hidden" name="_method" value="delete" />
@@ -32,9 +30,17 @@
     </table>
   </div>
   <div>
-    <a class="btn" href="<%= editTeamUrl %> ">Editar</a>
-  </div>
-  <div>
+    <div>
+      <form action="<%= addMemberUrl %>" method="post">
+        <div>
+          <input type="text" name="name" placeholder="Nombre de usuario" />
+          <input type="submit" name="add" value="Agregar miembro" />
+        </div>
+      </form>
+    </div>
+    <div>
+      <a class="btn" href="<%= editTeamUrl %> ">Editar</a>
+    </div>
     <div>
       <form action="<%= deleteTeamUrl %>" method="post">
         <input type="hidden" name="_method" value="delete" />
@@ -44,18 +50,6 @@
     <div>
       <form action="<%= indexUrl %>" method="get">
         <input type="submit" value="Volver" />
-      </form>
-    </div>
-    <div>
-      Agregar un nuevo miembro:
-      <form action="<%= addMemberUrl %>" method="post">
-        <div>
-          <label for="name">Nombre de usuario</label>
-          <input type="text" name="name" value="" />
-        </div>
-        <div>
-          <input type="submit" name="add" value="Agregar miembro" />
-        </div>
       </form>
     </div>
   </div>
