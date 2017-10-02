@@ -29,14 +29,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <span class="close">&times;</span>
-        ¿Estás seguro de borrar tu cuenta?
+        ¿Estás seguro de eliminar tu cuenta?
       </div>
       <div class="modal-body">
         <p>Esta acción no es reversible.</p>
         <div>
+          <button class="left">Cancelar</button>
           <form action="<%= deleteUrl %>" method="post">
             <input type="hidden" name="_method" value="delete" />
-            <input type="submit" value="Eliminar cuenta" />
+            <input class="right danger" type="submit" value="Eliminar cuenta" />
           </form>
         </div>
       </div>
