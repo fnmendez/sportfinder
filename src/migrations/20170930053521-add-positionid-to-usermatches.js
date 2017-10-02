@@ -1,17 +1,16 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.addColumn('matches', 'sportId',
+    return queryInterface.addColumn('userMatches', 'positionId',
       {
         type: Sequelize.INTEGER,
         references: {
-          model: 'sports',
+          model: 'positions',
           key: 'id',
         },
         onDelete: 'set null',
       })
   },
-
   down(queryInterface) {
-    return queryInterface.removeColumn('matches', 'sportId')
+    return queryInterface.removeColumn('userMatches', 'positionId')
   },
 }

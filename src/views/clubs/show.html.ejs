@@ -4,58 +4,66 @@
     <h2>Dirección: <%= club.address %></h2>
   </div>
   <div>
-    <table>
+    <table class="index">
       <tr>
         <th>Deporte</th>
-        <% if (isAdmin) { %>
-        <th>Acciones</th>
-        <% } %>
+        <th>Precio</th>
+        <th>Unidad de tiempo</th>
       </tr>
-
       <% clubSports.forEach((clubSport) => { %>
         <tr>
         <td> <%= clubSport.sport.name %> </td>
+        <td> <%= clubSport.priceDisplay() %> </td>
+        <td> <%= clubSport.timeUnit %> </td>
         <% if (isAdmin) { %>
-        <td>
-          <form action="<%= removeSportUrl %> " method="post">
-            <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
-            <input type="hidden" name="_method" value="delete" />
-            <input type="submit" value="Borrar"/>
-          </form>
-        </td>
+          <td class="actions">
+            <form action="<%= removeSportUrl %>" method="post">
+              <input type="hidden" name="_method" value="delete" />
+              <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
+              <input type="submit" value="Borrar"/>
+            </form>
+          </td>
         <% } %>
         </tr>
       <% }) %>
     </table>
   </div>
+  <% if (isAdmin) { %>
   <div>
-    Agregar un deporte:
     <form action="<%= addSportUrl %>" method="post">
-      <div>
-        Deporte: <select name='sportid'>
-              <% sports.forEach((sport) => { %>
-                <option value="<%= sport.id %>"><%= sport.name %></option>
-              <% }) %>
-             </select>
-          <div>
+      <select name='sportId'>
+        <% sports.forEach((sport) => { %>
+          <option value="<%= sport.id %>"><%= sport.name %></option>
+        <% }) %>
+      </select>
+      <div class="inline">
+        <input type="text" name="price" placeholder="Precio" />
       </div>
-      <div>
+      <div class="inline">
+        <input type="text" name="timeUnit" placeholder="Unidad de tiempo" />
+      </div>
+      <div class="inline">
         <input type="submit" name="add" value="Agregar Deporte" />
       </div>
     </form>
   </div>
-  <% if (isAdmin) { %>
+  <div class="buttons">
     <div>
-      <a href="<%= editClubUrl %> ">Editar</a>
+      <a class="btn" href="<%= editClubUrl %> ">Editar</a>
     </div>
-  <% } %>
-  <form action="<%= deleteClubUrl %>" method="post">
-    <input type="hidden" name="_method" value="delete" />
-    <input type="submit" name="delete" value="Borrar" />
-  </form>
-  <form action="<%= indexUrl %>" method="get">
     <div>
-      <input type="submit" value="Volver" />
+      <form action="<%= deleteClubUrl %>" method="post">
+        <input type="hidden" name="_method" value="delete" />
+        <input type="submit" name="delete" value="Borrar" />
+      </form>
     </div>
-  </form>
+    <% } %>
+    <div>
+      <form action="<%= indexUrl %>" method="get">
+        <div>
+          <input type="submit" value="Volver" />
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

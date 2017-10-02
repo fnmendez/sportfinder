@@ -4,10 +4,10 @@
 <div>
   <ul>
     <% teams.forEach((team) => { %>
-      <li><a href="<%= teamUrl(team) %> "> <%= team.name %> </a></li>
+      <li><a href="<%= teamUrl(team) %>"><%= team.name %></a></li>
     <% }) %>
   </ul>
 </div>
-<div>  
-  <a href="<%= newTeamUrl %>"> Agregar equipo </a>
+<div>
+  <a class="btn" href="<%= newTeamUrl %>">Agregar equipo</a>
 </div>

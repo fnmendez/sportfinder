@@ -16,7 +16,7 @@ router.delete('deleteClub', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   const club = await ctx.orm.club.findById(ctx.params.id)
   await club.destroy()
@@ -26,18 +26,18 @@ router.delete('deleteClub', '/:id', async (ctx) => {
 
 router.delete('removeSport', '/:id/removeSport', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id)
-  const joinTuple = await ctx.orm.clubSport.findOne({where: {
+  const joinTuple = await ctx.orm.clubSport.findOne({ where: {
     sportId: ctx.request.body.sportid,
     clubId: club.id,
-  }});
+  } })
   await joinTuple.destroy()
   ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.'
   return ctx.redirect(ctx.router.url('club', club.id))
 })
 
 router.get('newClub', '/new', async (ctx) => {
-  const sports = await ctx.orm.sport.findAll();
-  const club = ctx.orm.club.build();
+  const sports = await ctx.orm.sport.findAll()
+  const club = ctx.orm.club.build()
   await ctx.render('/clubs/new', {
     club,
     sports,
@@ -50,7 +50,7 @@ router.post('createClub', '/', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   try {
     const club = await ctx.orm.club.create(ctx.request.body)
@@ -66,23 +66,29 @@ router.post('createClub', '/', async (ctx) => {
 })
 
 router.post('addSport', '/:id', async (ctx) => {
-  const sport = await ctx.orm.sport.findById(ctx.request.body.sportid);
-  if (sport){
+  const clubId = ctx.params.id
+  if (!ctx.state.currentUser.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('sport', clubId))
+  }
+  const sport = await ctx.orm.sport.findById(ctx.request.body.sportId)
+  if (sport) {
     try {
       await ctx.orm.clubSport.create({
-        clubId: ctx.params.id,
+        clubId,
         sportId: sport.id,
-      });
-      ctx.redirect(ctx.router.url('club', ctx.params.id))
+        price: ctx.request.body.price,
+        timeUnit: ctx.request.body.timeUnit,
+      })
+      return ctx.redirect(ctx.router.url('club', clubId))
     } catch (validationError) {
-      ctx.flashMessage.warning = 'El deporte ya existe en el club.'
-      ctx.redirect(ctx.router.url('club', ctx.params.id))
+      return ctx.redirect(ctx.router.url('club', clubId))
     }
-  } else{
-    ctx.flashMessage.notice = 'El deporte ingresado no existe'
-    ctx.redirect(ctx.router.url('club', ctx.params.id))
+  } else {
+    ctx.flashMessage.notice = 'El deporte ingresado no existe.'
+    return ctx.redirect(ctx.router.url('club', clubId))
   }
-});
+})
 
 router.get('editClub', '/:id/edit', async (ctx) => {
   const club = await ctx.orm.club.findById(ctx.params.id)
@@ -97,7 +103,7 @@ router.patch('updateClub', '/:id', async (ctx) => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('clubs')
+    return ctx.redirect(ctx.router.url('clubs'))
   }
   const club = await ctx.orm.club.findById(ctx.params.id)
   try {
@@ -115,7 +121,7 @@ router.patch('updateClub', '/:id', async (ctx) => {
 })
 
 router.get('club', '/:id', async (ctx) => {
-  const sports = await ctx.orm.sport.findAll();
+  const sports = await ctx.orm.sport.findAll()
   const club = await ctx.orm.club.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.clubSport,
@@ -135,8 +141,8 @@ router.get('club', '/:id', async (ctx) => {
     notice: ctx.flashMessage.notice,
     addSportUrl: ctx.router.url('addSport', club.id),
     removeSportUrl: ctx.router.url('removeSport', club.id),
-  });
-});
+  })
+})
 
 
 module.exports = router

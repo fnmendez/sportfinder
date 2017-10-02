@@ -4,7 +4,7 @@ const router = new KoaRouter()
 
 router.get('matches', '/', async (ctx) => {
   const matches = await ctx.orm.match.findAll({
-    include: [ctx.orm.sport, ctx.orm.club],
+    include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
   })
   const userMatches = await ctx.orm.userMatch.findAll({
     include: [ctx.orm.users, ctx.orm.match],
@@ -23,6 +23,13 @@ router.get('matches', '/', async (ctx) => {
 
 router.delete('deleteMatch', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id)
+  const currentPlayer = await ctx.orm.userMatch.findOne({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  if (!currentPlayer || !currentPlayer.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('match', match.id))
+  }
   await match.destroy()
   ctx.flashMessage.notice = 'La partida fue eliminada exitosamente.'
   return ctx.redirect(ctx.router.url('matches'))
@@ -82,10 +89,16 @@ router.get('editMatch', '/:id/edit', async (ctx) => {
 })
 
 router.patch('updateMatch', '/:id', async (ctx) => {
-  // const match = await ctx.orm.match.findById(ctx.params.id);
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [ctx.orm.sport, ctx.orm.club],
   })
+  const currentPlayer = await ctx.orm.userMatch.findOne({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  if (!currentPlayer || !currentPlayer.isAdmin()) {
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect(ctx.router.url('match', match.id))
+  }
   try {
     await match.update(ctx.request.body)
     ctx.flashMessage.notice = 'La partida ha sido actualizada.'
@@ -129,7 +142,7 @@ router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {
   })
   if (!currentPlayer || !currentPlayer.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
-    return ctx.redirect('match', matchId)
+    return ctx.redirect(ctx.router.url('match', matchId))
   }
   const userMatch = await ctx.orm.userMatch.findById(ctx.params.id)
   await userMatch.update({ admin: true })
@@ -174,7 +187,14 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
 
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [ctx.orm.sport, ctx.orm.club],
+    include: [{
+      model: ctx.orm.sport,
+    }, {
+      model: ctx.orm.club,
+      include: [ctx.orm.clubSport],
+    }, {
+      model: ctx.orm.userMatch,
+    }],
   })
   const players = await ctx.orm.userMatch.findAll({
     where: { matchId: match.id },

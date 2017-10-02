@@ -1,33 +1,30 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('positions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      pid: {
-        type: Sequelize.STRING,
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'No definida',
       },
-      surname: {
-        type: Sequelize.STRING,
-        allowNull: false,
+      sportId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'sports',
+          key: 'id',
+        },
+        onDelete: 'cascade',
       },
-      mail: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      photoId: {
+      horizontalAlignment: {
         type: Sequelize.STRING,
       },
-      password: {
+      verticalAlignment: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +37,6 @@ module.exports = {
     })
   },
   down(queryInterface) {
-    return queryInterface.dropTable('users')
+    return queryInterface.dropTable('positions')
   },
 }

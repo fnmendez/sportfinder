@@ -3,7 +3,7 @@
     <h1>Usuarios</h1>
   </div>
   <div class="table-div">
-    <table>
+    <table class="index">
       <tr>
         <th>Usuario</th>
         <th>Nombre</th>
@@ -20,7 +20,7 @@
           <td><%= user.surname %></td>
           <td><%= user.mail %></td>
           <% if (isAdmin) { %>
-            <td>Yes</td>
+            <td>Sí</td>
             <td>Ninguna</td>
           <% } else { %>
              <td>No</td>

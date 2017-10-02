@@ -5,7 +5,15 @@ module.exports = function definesports(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: {msg: 'Has ingresado un nombre vacío'},
+        notEmpty: { msg: 'Has ingresado un nombre vacío.' },
+      },
+    },
+    maxPlayers:
+    {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: { msg: 'Debes ingresar un número de jugadores' },
       },
     },
   })
@@ -13,6 +21,7 @@ module.exports = function definesports(sequelize, DataTypes) {
     sports.hasMany(models.clubSport)
     sports.hasMany(models.match)
     sports.hasMany(models.team)
+    sports.hasMany(models.position)
   }
   return sports
 }

@@ -13,48 +13,45 @@
     <% } %>
   </div>
   <div>
-    <table>
-      <tr>
-        <th>Fecha</th>
-        <th>Deporte</th>
-        <th>Club</th>
-        <th>Inscritos</th>
-        <th>Acciones</th>
-      </tr>
-      <% matches.forEach(match => { %>
-        <% match.playersCount = 0 %>
-        <% alreadyIn = false %>
-        <% userMatches.forEach(userMatch => { %>
-          <% if (userMatch.match.id == match.id) { %>
-            <% match.playersCount++ %>
-            <% if (userMatch.user.id == user.id) { %>
+    <% if (matches.length > 0) { %>
+      <table class="index">
+        <tr>
+          <th>Fecha</th>
+          <th>Deporte</th>
+          <th>Club</th>
+          <th>Inscritos</th>
+        </tr>
+        <% matches.forEach(match => { %>
+          <% alreadyIn = false %>
+          <% userMatches.forEach(userMatch => { %>
+            <% if ((userMatch.match.id == match.id) && (userMatch.user.id == user.id)) { %>
               <% alreadyIn = true %>
             <% } %>
-          <% } %>
+          <% }) %>
+          <tr class="clickable" onclick="document.location = '<%= matchUrl(match) %>';">
+            <td><%= match.displayDate %></td>
+            <% if (match.sport) { %>
+              <td><%= match.sport.name %></td>
+            <% } else { %>
+              <td>Por definir</td>
+            <% } %>
+            <% if (match.club) { %>
+              <td><%= match.club.name %></td>
+            <% } else { %>
+              <td>Por definir</td>
+            <% } %>
+            <td><%= match.playersCount() %> / <%= match.maxPlayers() %></td>
+            <td class="actions">
+              <form action="<%= joinMatchUrl(match) %>" method="post">
+                <input type="submit" value="Unirse" <%= alreadyIn || match.isFull() ? 'disabled' : '' %>/>
+              </form>
+            </td>
+          </tr>
         <% }) %>
-        <tr>
-          <td><a href="<%= matchUrl(match) %>"><%= match.displayDate %></a></td>
-          <% if (match.sport) { %>
-            <td><%= match.sport.name %></td>
-          <% } else { %>
-            <td>Por definir</td>
-          <% } %>
-          <% if (match.club) { %>
-            <td><%= match.club.name %></td>
-          <% } else { %>
-            <td>Por definir</td>
-          <% } %>
-          <td><%= match.playersCount %></td>
-          <td>
-            <form action="<%= joinMatchUrl(match) %>" method="post">
-              <input type="submit" value="Unirse" <%= alreadyIn ? 'disabled' : '' %>/>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </table>
+      </table>
+    <% } %>
   </div>
   <div>
-    <a href="<%= newMatchUrl %>"> Crear Partida </a>
+    <a class="btn" href="<%= newMatchUrl %>"> Crear Partida </a>
   </div>
 </div>

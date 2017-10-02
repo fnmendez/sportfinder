@@ -6,12 +6,13 @@ module.exports = function definematch(sequelize, DataTypes) {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
+        notEmpty: { msg: 'Debes ingresar la fecha.' },
         isRealistic(value) {
           if
-          (value.getTime() < (new Date(Date.now() + (5 * 3600 * 1000))).getTime()) {
+          (value && value.getTime() < (new Date(Date.now() + (5 * 3600 * 1000))).getTime()) {
             throw new Error('La fecha a lo menos en 5 horas más.')
           } else if
-          (value.getTime() > (new Date(Date.now() + (365 * 24 * 3600 * 1000))).getTime()) {
+          (value && value.getTime() > (new Date(Date.now() + (365 * 24 * 3600 * 1000))).getTime()) {
             throw new Error('La fecha no puede exceder de un año')
           }
         },
@@ -24,19 +25,14 @@ module.exports = function definematch(sequelize, DataTypes) {
       },
     },
   })
-  match.prototype.howManyPlayers = async function howManyPlayers(ctx) {
-    const query = await ctx.orm.userMatch.findOne({
-      attributes: [[sequelize.fn('COUNT', sequelize.col('*')), 'amount']],
-      where: { matchId: this.id },
-    })
-    return query.dataValues.amount
+  match.prototype.playersCount = function playersCount() {
+    return this.userMatches.length
   }
-  match.prototype.howManyAdmins = async function howManyAdmins(ctx) {
-    const query = await ctx.orm.userMatch.findOne({
-      attributes: [[sequelize.fn('COUNT', sequelize.col('*')), 'amount']],
-      where: { matchId: this.id, admin: true },
-    })
-    return query.dataValues.amount
+  match.prototype.maxPlayers = function maxPlayers() {
+    return this.sport.maxPlayers
+  }
+  match.prototype.isFull = function isFull() {
+    return this.userMatches.length === this.sport.maxPlayers
   }
   match.associate = function associate(models) {
     match.belongsTo(models.club)

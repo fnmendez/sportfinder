@@ -21,10 +21,8 @@ router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
-  // Si se ingresa un usuario existente
   if (user) {
     try {
-    // Se busca la tupla en la tabla del join
       const joinTuple = await ctx.orm.userTeam.findOne({
         where: { userId: user.id, teamId: team.id },
       })
@@ -32,7 +30,6 @@ router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
       ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.'
       ctx.redirect(ctx.router.url('team', { id: team.id }))
     } catch (typeError) {
-      // Se entrará si es que la tupla no existe, también podría ser con un if.
       await ctx.render('teams/show', {
         errors: typeError.errors,
         team,
