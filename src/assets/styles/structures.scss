@@ -10,9 +10,18 @@
   display: inline;
 }
 
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
 button {
   background: white;
-  padding: 4px 12px;
+  font-size: 13px;
+  padding: 8px 18px;
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
