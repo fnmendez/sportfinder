@@ -51,6 +51,16 @@ router.get('newMatch', '/new', async (ctx) => {
 router.post('createMatch', '/', async (ctx) => {
   try {
     ctx.request.body.date = new Date(ctx.request.body.date)
+    const clubSport = await ctx.orm.clubSport.findOne({
+      where: {
+        clubId: ctx.request.body.clubId,
+        sportId: ctx.request.body.sportId,
+      },
+    })
+    if (!clubSport) {
+      ctx.flashMessage.warning = 'El club no tiene habilitado ese deporte.'
+      return ctx.redirect(ctx.router.url('newMatch'))
+    }
     const match = await ctx.orm.match.create(ctx.request.body)
     await ctx.orm.userMatch.create({
       matchId: match.id,
