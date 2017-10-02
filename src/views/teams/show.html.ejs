@@ -19,7 +19,7 @@
         <% if (isAdmin) { %>
         <td class="actions">
           <form action="<%= removeMemberUrl %> " method="post">
-            <input type="hidden" name="userid" value="<%= m.user.id %>" />
+            <input type="hidden" name="userid" value="<%= member.user.id %>" />
             <input type="hidden" name="_method" value="delete" />
             <input type="submit" value="Borrar"/>
           </form>
