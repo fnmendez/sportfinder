@@ -13,9 +13,9 @@
       <tr>
         <th>Nombre</th>
       </tr>
-      <% members.forEach((m) => { %>
+      <% members.forEach((member) => { %>
         <tr>
-        <td> <%= m.user.name %> </td>
+        <td><%= member.user.name + ' ' + member.user.surname %></td>
         <% if (isAdmin) { %>
         <td class="actions">
           <form action="<%= removeMemberUrl %> " method="post">

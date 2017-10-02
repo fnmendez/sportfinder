@@ -73,6 +73,10 @@ router.post('createTeam', '/', async (ctx) => {
       name: ctx.request.body.name,
       sportId: sport.id,
     })
+    await ctx.orm.userTeam.create({
+      teamId: team.id,
+      userId: ctx.state.currentUser.id,
+    })
     ctx.redirect(ctx.router.url('team', { id: team.id }))
   } catch (validationError) {
     await ctx.render('/teams/new', {
