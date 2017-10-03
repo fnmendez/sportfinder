@@ -47,7 +47,7 @@
                 <input type="submit" value="Abandonar" />
               </form>
             </td>
-          <% } else if (isCurrentPlayerAdmin) { %>
+          <% } else if (!isPlayerAdmin && isCurrentPlayerAdmin) { %>
             <td>
               <form action="<%= removePlayerUrl(player) %>" method="post">
                 <input type="hidden" name="_method" value="delete" />

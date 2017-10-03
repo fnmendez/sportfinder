@@ -43,8 +43,11 @@ router.get('signup', 'signup', async (ctx) => {
 })
 
 router.post('createUser', 'signup', async (ctx) => {
+  const user = ctx.orm.users.build(ctx.request.body)
   try {
-    const user = await ctx.orm.users.create(ctx.request.body)
+    await user.save({
+      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid'],
+    })
     ctx.session.user = { id: user.id }
     ctx.redirect('profile')
   } catch (validationError) {
