@@ -1,3 +1,4 @@
+const sendWelcomeEmail = require('../mailers/welcome');
 const KoaRouter = require('koa-router')
 
 const pkg = require('../../package.json')
@@ -49,6 +50,7 @@ router.post('createUser', 'signup', async (ctx) => {
       fields: ['username', 'password', 'name', 'surname', 'mail', 'pid'],
     })
     ctx.session.user = { id: user.id }
+    sendWelcomeEmail(ctx, { user })
     ctx.redirect('profile')
   } catch (validationError) {
     await ctx.render('welcome/signup', {
