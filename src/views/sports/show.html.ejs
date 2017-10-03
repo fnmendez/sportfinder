@@ -53,20 +53,22 @@
       </form>
     </div>
     <div>
-      <a class="btn" href="<%= editSportUrl %>">Editar</a>
+      <a class="btn left" href="<%= editSportUrl %>">Editar</a>
     </div>
   <% } %>
   <% if (currentUser.isAdmin()) { %>
+    <br />
+    <br />
     <div>
       <form action="<%= deleteSportUrl %>" method="post">
         <input type="hidden" name="_method" value="delete" />
-        <input type="submit" name="delete" value="Borrar" />
+        <input class="right" type="submit" name="delete" value="Eliminar" />
       </form>
     </div>
   <% } %>
-  <div>
+  <div class="hide-overflow">
     <form action="<%= indexUrl %>" method="get">
-      <input type="submit" value="Volver" />
+      <input class="left" type="submit" value="Volver" />
     </form>
   </div>
 </div>

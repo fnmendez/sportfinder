@@ -1,6 +1,6 @@
 <div>
   <div>
-    <h2>Hola <%= user.username %></h2>
+    <h1>Hola <%= user.username %></h1>
   </div>
   <div>
     <div>
@@ -46,15 +46,15 @@
       </table>
     </div>
   </div>
-  <div>
+  <div class="hide-overflow">
     <div>
       <form action="<%= editUrl %>" method="get">
-          <input type="submit" value="Editar perfil"/>
+          <input class="left" type="submit" value="Editar perfil"/>
       </form>
     </div>
     <div>
       <form action="<%= startUrl %>" method="get">
-          <input type="submit" value="Jugar"/>
+          <input class="right" type="submit" value="Jugar"/>
       </form>
     </div>
   </div>

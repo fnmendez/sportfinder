@@ -88,6 +88,7 @@ router.patch('updateUser', 'profile', async (ctx) => {
 router.get('editUser', 'profile/edit', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
+    ctx.state.currentUser = user
     await ctx.render('welcome/editProfile', {
       user,
       updateUrl: ctx.router.url('updateUser'),
