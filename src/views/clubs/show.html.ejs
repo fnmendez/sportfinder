@@ -49,19 +49,21 @@
   </div>
   <div class="buttons">
     <div>
-      <a class="btn" href="<%= editClubUrl %> ">Editar</a>
+      <a class="btn left" href="<%= editClubUrl %> ">Editar</a>
     </div>
+    <br />
+    <br />
     <div>
       <form action="<%= deleteClubUrl %>" method="post">
         <input type="hidden" name="_method" value="delete" />
-        <input type="submit" name="delete" value="Borrar" />
+        <input class="right" type="submit" name="delete" value="Eliminar" />
       </form>
     </div>
     <% } %>
     <div>
       <form action="<%= indexUrl %>" method="get">
-        <div>
-          <input type="submit" value="Volver" />
+        <div class="hide-overflow">
+          <input class="left" type="submit" value="Volver" />
         </div>
       </form>
     </div>
