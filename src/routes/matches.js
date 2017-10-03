@@ -5,6 +5,7 @@ const router = new KoaRouter()
 router.get('matches', '/', async (ctx) => {
   const matches = await ctx.orm.match.findAll({
     include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
+    order: [['date', 'ASC']],
   })
   const userMatches = await ctx.orm.userMatch.findAll({
     include: [ctx.orm.users, ctx.orm.match],
@@ -26,7 +27,7 @@ router.delete('deleteMatch', '/:id', async (ctx) => {
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: { userId: ctx.state.currentUser.id },
   })
-  if (!currentPlayer || !currentPlayer.isAdmin()) {
+  if ((!currentPlayer || !currentPlayer.isAdmin()) && !ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
     return ctx.redirect(ctx.router.url('match', match.id))
   }
@@ -105,11 +106,21 @@ router.patch('updateMatch', '/:id', async (ctx) => {
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: { userId: ctx.state.currentUser.id },
   })
-  if (!currentPlayer || !currentPlayer.isAdmin()) {
+  if ((!currentPlayer || !currentPlayer.isAdmin()) && !ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
     return ctx.redirect(ctx.router.url('match', match.id))
   }
   try {
+    const clubSport = await ctx.orm.clubSport.findOne({
+      where: {
+        clubId: ctx.request.body.clubId,
+        sportId: ctx.request.body.sportId,
+      },
+    })
+    if (!clubSport) {
+      ctx.flashMessage.warning = 'El club no tiene habilitado ese deporte.'
+      return ctx.redirect(ctx.router.url('editMatch', match.id))
+    }
     await match.update(ctx.request.body)
     ctx.flashMessage.notice = 'La partida ha sido actualizada.'
     return ctx.redirect(ctx.router.url('match', { id: match.id }))
@@ -195,6 +206,19 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('matches'))
 })
 
+// router.patch('setPosition', '/:matchId/players/:id', async (ctx) => {
+//   const matchId = ctx.params.matchId
+//   const thisPlayer = await ctx.orm.userMatch.findById(ctx.params.id)
+//   try {
+//     await thisPlayer.update({ positionId: ctx.request.body.positionId })
+//     ctx.flashMessage.notice = 'Tu posición se ha actualizado correctamente.'
+//     return ctx.redirect(ctx.router.url('match', matchId))
+//   } catch (validationError) {
+//     ctx.flashMessage.warning = 'Ha ocurrido un error mientras se actualizaba tu posición.'
+//     return ctx.redirect(ctx.router.url('match', matchId))
+//   }
+// })
+
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [{
@@ -219,6 +243,7 @@ router.get('match', '/:id', async (ctx) => {
   return ctx.render('matches/show', {
     match,
     currentPlayer,
+    currentUser: ctx.state.currentUser,
     players,
     promotePlayerUrl: player => ctx.router.url('promotePlayer', {
       matchId: match.id,
