@@ -44,19 +44,27 @@ router.get('signup', 'signup', async (ctx) => {
 })
 
 router.post('createUser', 'signup', async (ctx) => {
+  const developmentMode = ctx.state.env === 'development'
+  if (developmentMode) {
+    ctx.request.body.confirmed = true
+  } else {
+    ctx.request.body.confirmed = false
+  }
   const user = ctx.orm.users.build(ctx.request.body)
   try {
     await user.save({
-      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid'],
+      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid', 'confirmed'],
     })
     ctx.session.user = { id: user.id }
     const key = 'h4rc0d3dK3y'
     const id = user.id
-    sendWelcomeEmail(ctx, {
-      user,
-      confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
-    })
-    ctx.flashMessage.notice = 'Revisa tu mail para confirmar tu cuenta.'
+    if (!developmentMode) {
+      sendWelcomeEmail(ctx, {
+        user,
+        confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
+      })
+      ctx.flashMessage.notice = 'Revisa tu mail para confirmar tu cuenta.'
+    }
     ctx.redirect('profile')
   } catch (validationError) {
     await ctx.render('welcome/signup', {
