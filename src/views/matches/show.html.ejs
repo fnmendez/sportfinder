@@ -7,6 +7,9 @@
     <% } else { %>
       <h2>Deporte: Por definir</h2>
     <% } %>
+    <% if (match.isOver()) { %>
+      <h2>La partida ya terminó</h2>
+    <% } %>
     <% if (match.club) { %>
       <h2>Club: <%= match.club.name %>, <%= match.club.address %></h2>
       <% if (match.sport) { %>
