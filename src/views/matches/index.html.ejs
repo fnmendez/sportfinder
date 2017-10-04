@@ -43,7 +43,7 @@
             <td><%= match.playersCount() %> / <%= match.maxPlayers() %></td>
             <td class="actions">
               <form action="<%= joinMatchUrl(match) %>" method="post">
-                <input type="submit" value="Unirse" <%= alreadyIn || match.isFull() ? 'disabled' : '' %>/>
+                <input type="submit" value="Unirse" <%= alreadyIn || match.isFull() || !match.sport ? 'disabled' : '' %>/>
               </form>
             </td>
           </tr>
