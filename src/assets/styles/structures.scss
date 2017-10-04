@@ -73,6 +73,12 @@ div.buttons {
   padding-top: 15px;
 }
 
+img.profilePicture {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+}
+
 div.googleMap {
   button {
     background-color: #084B8A;
