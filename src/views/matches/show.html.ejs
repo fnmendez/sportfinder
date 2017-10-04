@@ -29,10 +29,51 @@
         <tr>
           <td><%= i %>.</td><% i++ %>
           <td><a href=<%= '/users/' + player.user.id %>><%= player.user.name + ' ' + player.user.surname %></a></td>
-          <!-- admin/promote column -->
-          <% if (visitMode && player.isAdmin()) { %>
-            <td>admin</td>
-          <% } else if (!visitMode) { %>
+          <% if (visitMode) { %>
+            <!-- position column to visitor -->
+            <% if (!player.position) { %>
+              <td>(posición no definida)</td>
+            <% } else { %>
+              <td><%= player.position.name %></td>
+            <% } %>
+            <!-- admin/promote column to visitor -->
+            <% if (player.isAdmin()) { %>
+              <td>admin</td>
+            <% } else { %>
+              <td></td>
+            <% } %>
+          <% } else { %>
+            <!-- position column to member -->
+            <% if (((player.user.id) != (currentPlayer.user.id))) { %>
+              <!-- other player -->
+              <% if (!player.position) { %>
+                <td>(posición no definida)</td>
+              <% } else { %>
+                <td><%= player.position.name %></td>
+              <% } %>
+            <% } else { %>
+              <!-- to the player -->
+              <% if (match.sport) { %>
+                <td>
+                  <form action="<%= setPositionUrl(player) %>" method="post">
+                    <input type="hidden" name="_method" value="patch" />
+                    <select name="positionId" onchange="this.form.submit()">
+                      <% if (!player.position) { %>
+                        <option>Posición no definida</option>
+                      <% } %>
+                      <% match.sport.positions.forEach(position => { %>
+                        <option value="<%= position.id %>" <%= player.position && player.position.id === position.id ? 'selected' : '' %>>
+                          <%= position.name %>
+                        </option>
+                      <% }) %>
+                    </select>
+                  </form>
+                </td>
+              <% } else { %>
+                <td>(posición no definida)</td>
+              <% } %>
+            <% } %>
+            <!-- admin/promote column to player -->
             <% if (player.isAdmin()) { %>
               <td>admin</td>
             <% } else if (((player.user.id) != (currentPlayer.user.id)) && (currentPlayer.isAdmin())) { %>
@@ -83,7 +124,6 @@
       </form>
     </div>
     <% if ((currentUser.isAdmin()) || (!visitMode && currentPlayer.isAdmin())) { %>
-      <% console.log(currentPlayer) %>
       <div id="confirmDeletion" class="modal">
         <div class="modal-content hide-overflow">
           <div class="modal-header">
@@ -126,7 +166,6 @@
     }
     window.onclick = function(event) {
       if (event.target == modal) {
-        console.log("hola")
         modal.style.display = "none";
       }
     }
