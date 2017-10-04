@@ -107,7 +107,10 @@ router.patch('updateMatch', '/:id', async (ctx) => {
     include: [ctx.orm.sport, ctx.orm.club],
   })
   const currentPlayer = await ctx.orm.userMatch.findOne({
-    where: { userId: ctx.state.currentUser.id },
+    where: {
+      userId: ctx.state.currentUser.id,
+      matchId: match.id,
+    },
   })
   if ((!currentPlayer || !currentPlayer.isAdmin()) && !ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -179,7 +182,10 @@ router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {
 router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
   const matchId = ctx.params.matchId
   const currentPlayer = await ctx.orm.userMatch.findOne({
-    where: { userId: ctx.state.currentUser.id },
+    where: {
+      userId: ctx.state.currentUser.id,
+      matchId,
+    },
     include: [ctx.orm.users],
   })
   const player = await ctx.orm.userMatch.findById(ctx.params.id, {
@@ -211,23 +217,24 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('matches'))
 })
 
-// router.patch('setPosition', '/:matchId/players/:id', async (ctx) => {
-//   const matchId = ctx.params.matchId
-//   const thisPlayer = await ctx.orm.userMatch.findById(ctx.params.id)
-//   try {
-//     await thisPlayer.update({ positionId: ctx.request.body.positionId })
-//     ctx.flashMessage.notice = 'Tu posición se ha actualizado correctamente.'
-//     return ctx.redirect(ctx.router.url('match', matchId))
-//   } catch (validationError) {
-//     ctx.flashMessage.warning = 'Ha ocurrido un error mientras se actualizaba tu posición.'
-//     return ctx.redirect(ctx.router.url('match', matchId))
-//   }
-// })
+router.patch('setPosition', '/:matchId/players/:id', async (ctx) => {
+  const matchId = ctx.params.matchId
+  const player = await ctx.orm.userMatch.findById(ctx.params.id)
+  try {
+    await player.update({ positionId: ctx.request.body.positionId })
+    ctx.flashMessage.notice = 'Tu posición se ha actualizado correctamente.'
+    return ctx.redirect(ctx.router.url('match', matchId))
+  } catch (validationError) {
+    ctx.flashMessage.warning = 'Ha ocurrido un error mientras se actualizaba tu posición.'
+    return ctx.redirect(ctx.router.url('match', matchId))
+  }
+})
 
 router.get('match', '/:id', async (ctx) => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [{
       model: ctx.orm.sport,
+      include: [ctx.orm.position],
     }, {
       model: ctx.orm.club,
       include: [ctx.orm.clubSport],
@@ -237,14 +244,15 @@ router.get('match', '/:id', async (ctx) => {
   })
   const players = await ctx.orm.userMatch.findAll({
     where: { matchId: match.id },
-    include: [ctx.orm.users],
+    include: [ctx.orm.users, ctx.orm.position],
+    order: [['createdAt', 'ASC']],
   })
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: {
       userId: ctx.state.currentUser.id,
       matchId: match.id,
     },
-    include: [ctx.orm.users],
+    include: [ctx.orm.users, ctx.orm.position],
   })
   const visitMode = currentPlayer === null
   return ctx.render('matches/show', {
@@ -258,6 +266,10 @@ router.get('match', '/:id', async (ctx) => {
       id: player.id,
     }),
     removePlayerUrl: player => ctx.router.url('removePlayer', {
+      matchId: match.id,
+      id: player.id,
+    }),
+    setPositionUrl: player => ctx.router.url('setPosition', {
       matchId: match.id,
       id: player.id,
     }),
