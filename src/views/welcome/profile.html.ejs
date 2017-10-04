@@ -40,7 +40,7 @@
           <tr>
             <td>Foto carné:</td>
             <% if (user.photoId) { %>
-              <td>user.photoId</td>
+              <td><img class="profilePicture" src="<%= user.photoId %>" alt="Foto de perfil"/></td>
             <% } else { %>
               <td>Sube tu foto de carné, ¡encontrarás más partidas!</td>
             <% } %>
