@@ -77,15 +77,54 @@
       </form>
     </div>
     <% if (isCurrentPlayerAdmin || currentUser.isAdmin()) { %>
+      <div id="confirmDeletion" class="modal">
+        <div class="modal-content hide-overflow">
+          <div class="modal-header">
+            <span class="close">&times;</span>
+            ¿Estás seguro de eliminar la partida?
+          </div>
+          <div class="modal-body">
+            <p>Se perderán todos los datos de la partida.</p>
+            <div>
+              <button class="left cancel">Cancelar</button>
+              <form action="<%= deleteMatchUrl %>" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <input class="right" type="submit" value="Eliminar partida" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
-        <form action="<%= deleteMatchUrl %>" method="post">
-          <input type="hidden" name="_method" value="delete" />
-          <input class="right" type="submit" value="Borrar" />
-        </form>
+        <button id="deleteButton" class="right">Eliminar</button>
       </div>
     <% } %>
   </div>
 </div>
+<% if (isCurrentPlayerAdmin || currentUser.isAdmin()) { %>
+  <script>
+    var modal = document.getElementById("confirmDeletion");
+    var deleteButton = document.getElementById("deleteButton");
+    var span = document.getElementsByClassName("close")[0];
+    var cancelButton = document.getElementsByClassName("cancel")[0];
+
+    deleteButton.onclick = function() {
+      modal.style.display = "block";
+    }
+    cancelButton.onclick = function() {
+      modal.style.display = "none";
+    }
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        console.log("hola")
+        modal.style.display = "none";
+      }
+    }
+  </script>
+<% } %>
 <% if (match.club) { %>
   <script>
     function myMap() {
