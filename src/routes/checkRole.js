@@ -1,4 +1,4 @@
-const checkRole = async (ctx, next) => {
+module.exports = async (ctx, next) => {
   if (ctx.session.user) {
     const currentUser = await ctx.orm.users.findById(ctx.session.user.id, {
       attributes: ['id', 'username', 'role'],
@@ -14,5 +14,3 @@ const checkRole = async (ctx, next) => {
   ctx.session = null
   return ctx.router.redirect('home')
 }
-
-module.exports = checkRole
