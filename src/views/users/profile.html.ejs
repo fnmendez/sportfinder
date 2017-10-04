@@ -34,7 +34,7 @@
           <tr>
             <td>Foto carné:</td>
             <% if (user.photoId) { %>
-              <td>user.photoId</td>
+              <td><img class="profilePicture" src="<%= user.photoId %>" alt="Foto de perfil"/></td>
             <% } else { %>
               <td>No tiene</td>
             <% } %>
