@@ -6,6 +6,7 @@ const sports = require('./routes/sports')
 const clubs = require('./routes/clubs')
 const teams = require('./routes/teams')
 const matches = require('./routes/matches')
+const users = require('./routes/users')
 const admin = require('./routes/admin')
 
 const checkAccountConfirmation = require('./routes/checkAccountConfirmation')
@@ -29,6 +30,7 @@ router.use('/sports', sports.routes())
 router.use('/clubs', clubs.routes())
 router.use('/teams', teams.routes())
 router.use('/play', matches.routes())
+router.use('/users', users.routes())
 
 // check role
 router.use(checkRole)

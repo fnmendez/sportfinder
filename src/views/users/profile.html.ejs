@@ -1,12 +1,6 @@
 <div>
   <div>
-    <h1>Hola <%= user.username %></h1>
-    <% if (!user.confirmed) { %>
-      <h2>¡Aún debes confirmar tu cuenta!</h2>
-      <p>
-        ¿ No te llega el email ? <a href="<%= sendEmailUrl %>">Intentar nuevamente</a>
-      </p>
-    <% } %>
+    <h1>Perfil de <%= user.username %></h1>
   </div>
   <div>
     <div>
@@ -42,22 +36,26 @@
             <% if (user.photoId) { %>
               <td>user.photoId</td>
             <% } else { %>
-              <td>Sube tu foto de carné, ¡encontrarás más partidas!</td>
+              <td>No tiene</td>
             <% } %>
           </tr>
+      </table>
+    </div>
+    <div>
+      <h4>Estadísticas</h4>
+      <table>
+        <tr>
+          <td>Soon</td>
+        </tr>
       </table>
     </div>
   </div>
   <div class="hide-overflow">
     <div>
-      <form action="<%= editUrl %>" method="get">
-          <input class="left" type="submit" value="Editar perfil"/>
-      </form>
+      <button onclick="window.history.back()" class="left">Volver</button>
     </div>
     <div>
-      <form action="<%= startUrl %>" method="get">
-          <input class="right" type="submit" value="Jugar"/>
-      </form>
+      <button class="right" onclick="alert('Si tuvieras lentes...')">Agregar a mis amigos</button>
     </div>
   </div>
 </div>

@@ -29,7 +29,7 @@
         <% isPlayerAdmin = player.isAdmin() %>
         <tr>
           <td><%= i %>.</td><% i++ %>
-          <td><%= player.user.name + ' ' + player.user.surname %></td>
+          <td><a href=<%= '/users/' + player.user.id %>><%= player.user.name + ' ' + player.user.surname %></a></td>
           <% if (isPlayerAdmin) { %>
             <td>admin</td>
           <% } else if (!isCurrentPlayer && isCurrentPlayerAdmin) { %>
