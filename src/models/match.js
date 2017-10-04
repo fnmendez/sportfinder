@@ -62,6 +62,7 @@ module.exports = function definematch(sequelize, DataTypes) {
       return false
     }
   }
+
   match.associate = function associate(models) {
     match.belongsTo(models.club)
     match.belongsTo(models.sport)
