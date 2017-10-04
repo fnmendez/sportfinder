@@ -21,12 +21,12 @@
         <input type="file" name="photoId" accept=".jpg, .jpeg, .png"><br><br>
       </div>
       <div>
-        <input type="submit" value="Actualizar">
+        <input class="left" type="submit" value="Actualizar">
       </div>
     </form>
   </div>
   <div id="confirmDeletion" class="modal">
-    <div class="modal-content">
+    <div class="modal-content hide-overflow">
       <div class="modal-header">
         <span class="close">&times;</span>
         ¿Estás seguro de eliminar tu cuenta?
@@ -34,7 +34,7 @@
       <div class="modal-body">
         <p>Esta acción no es reversible.</p>
         <div>
-          <button class="left">Cancelar</button>
+          <button class="left cancel">Cancelar</button>
           <form action="<%= deleteUrl %>" method="post">
             <input type="hidden" name="_method" value="delete" />
             <input class="right danger" type="submit" value="Eliminar cuenta" />
@@ -44,20 +44,28 @@
     </div>
   </div>
   <!-- Trigger/Open The Modal -->
-  <button id="deleteButton">Eliminar</button>
+  <br />
+  <br />
+  <div>
+    <button id="deleteButton" class="right">Eliminar</button>
+  </div>
   <div>
     <form action="<%= profileUrl %>" method="get">
-        <input type="submit" value="Volver"/>
+      <input type="submit" value="Volver"/>
     </form>
   </div>
 </div>
 <script>
   var modal = document.getElementById("confirmDeletion");
-  var btn = document.getElementById("deleteButton");
+  var deleteButton = document.getElementById("deleteButton");
   var span = document.getElementsByClassName("close")[0];
+  var cancelButton = document.getElementsByClassName("cancel")[0];
 
-  btn.onclick = function() {
+  deleteButton.onclick = function() {
     modal.style.display = "block";
+  }
+  cancelButton.onclick = function() {
+    modal.style.display = "none";
   }
   span.onclick = function() {
     modal.style.display = "none";

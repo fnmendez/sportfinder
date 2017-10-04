@@ -8,6 +8,7 @@ const teams = require('./routes/teams')
 const matches = require('./routes/matches')
 const admin = require('./routes/admin')
 
+const checkAccountConfirmation = require('./routes/checkAccountConfirmation')
 const checkLogin = require('./routes/checkLogin')
 const checkRole = require('./routes/checkRole')
 
@@ -19,6 +20,9 @@ router.use('/hello', hello.routes())
 
 // check login
 router.use(checkLogin)
+
+// check account confirmation
+router.use(checkAccountConfirmation)
 
 // private
 router.use('/sports', sports.routes())
