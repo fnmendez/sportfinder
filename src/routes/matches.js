@@ -139,21 +139,20 @@ router.patch('updateMatch', '/:id', async (ctx) => {
 })
 
 router.post('joinMatch', '/:id/players', async (ctx) => {
-  const match = await ctx.orm.match.findById(ctx.params.id)
-  const userMatches = await ctx.orm.userMatch.findAll({
-    where: { matchId: match.id },
-    include: [ctx.orm.users],
+  const match = await ctx.orm.match.findById(ctx.params.id, {
+    include: [{
+      model: ctx.orm.sport,
+    }, {
+      model: ctx.orm.userMatch,
+      include: [ctx.orm.users],
+    }],
   })
-  if (userMatches) {
-    userMatches.forEach((userMatch) => {
-      if (userMatch.user.id === ctx.state.currentUser.id) {
-        return ctx.router.redirect('matches')
-      }
-      return null
-    })
+  if (match.isPlayer(ctx.state.currentUser.id)) {
+    ctx.flashMessage.warning = 'Ya eres miembros de la partida.'
+    return ctx.router.redirect(ctx.router.url('match', match.id))
   }
   await ctx.orm.userMatch.create({ matchId: match.id, userId: ctx.state.currentUser.id })
-  return ctx.redirect(ctx.router.url('match', { id: match.id }))
+  return ctx.redirect(ctx.router.url('match', match.id))
 })
 
 router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {

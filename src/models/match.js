@@ -25,14 +25,31 @@ module.exports = function definematch(sequelize, DataTypes) {
       },
     },
   })
+  match.prototype.isPlayer = function isPlayer(userId) {
+    let belongs = false
+    if (this.userMatches.length) {
+      this.userMatches.forEach((player) => {
+        if (player.user.id === userId) {
+          belongs = true
+        }
+      })
+    }
+    return belongs
+  }
   match.prototype.playersCount = function playersCount() {
     return this.userMatches.length
   }
   match.prototype.maxPlayers = function maxPlayers() {
-    return this.sport.maxPlayers
+    if (this.sport) {
+      return this.sport.maxPlayers
+    }
+    return ' - '
   }
   match.prototype.isFull = function isFull() {
-    return this.userMatches.length === this.sport.maxPlayers
+    if (this.sport) {
+      return this.userMatches.length === this.sport.maxPlayers
+    }
+    return false
   }
   match.associate = function associate(models) {
     match.belongsTo(models.club)
