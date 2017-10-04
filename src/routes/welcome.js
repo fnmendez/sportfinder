@@ -50,7 +50,13 @@ router.post('createUser', 'signup', async (ctx) => {
       fields: ['username', 'password', 'name', 'surname', 'mail', 'pid'],
     })
     ctx.session.user = { id: user.id }
-    sendWelcomeEmail(ctx, { user })
+    const key = 'h4rc0d3dK3y'
+    const id = user.id
+    sendWelcomeEmail(ctx, {
+      user,
+      confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
+    })
+    ctx.flashMessage.notice = 'Revisa tu mail para confirmar tu cuenta.'
     ctx.redirect('profile')
   } catch (validationError) {
     await ctx.render('welcome/signup', {
@@ -103,6 +109,35 @@ router.get('editUser', 'profile/edit', async (ctx) => {
   }
 })
 
+router.get('confirmateAccount', 'users/:id/:key', async (ctx) => {
+  const user = await ctx.orm.users.findById(ctx.params.id)
+  if (user && ctx.params.key === 'h4rc0d3dK3y') {
+    console.log('usuario')
+    console.log(user)
+    await user.update({ confirmed: true })
+    ctx.flashMessage.notice = '¡Estás listo para jugar!'
+    return ctx.redirect(ctx.router.url('matches'))
+  }
+  return ctx.throw(403)
+})
+
+router.get('sendEmail', ':id/sendConfirmationEmail', async (ctx) => {
+  const id = ctx.params.id
+  const user = await ctx.orm.users.findById(ctx.params.id)
+  if (!user) {
+    ctx.session = null
+    ctx.flashMessage.warning = 'No tienes los permisos.'
+    return ctx.redirect('/')
+  }
+  const key = 'h4rc0d3dK3y'
+  await sendWelcomeEmail(ctx, {
+    user,
+    confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
+  })
+  ctx.flashMessage.notice = `Se ha enviado nuevamente el mail de confirmación a ${user.mail}.`
+  return ctx.redirect(ctx.router.url('profile'))
+})
+
 router.get('showUser', 'profile', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
@@ -112,6 +147,9 @@ router.get('showUser', 'profile', async (ctx) => {
       editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
+      sendEmailUrl: ctx.router.url('sendEmail', {
+        id: ctx.state.currentUser.id,
+      }),
     })
   } else {
     ctx.session = null

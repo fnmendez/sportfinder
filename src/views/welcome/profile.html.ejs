@@ -1,6 +1,12 @@
 <div>
   <div>
     <h1>Hola <%= user.username %></h1>
+    <% if (!user.confirmed) { %>
+      <h2>¡Aún debes confirmar tu cuenta!</h2>
+      <p>
+        ¿ No te llega el email ? <a href="<%= sendEmailUrl %>">Intentar nuevamente</a>
+      </p>
+    <% } %>
   </div>
   <div>
     <div>

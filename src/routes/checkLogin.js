@@ -1,7 +1,7 @@
-const checkLogin = async (ctx, next) => {
+module.exports = async (ctx, next) => {
   if (ctx.session.user) {
     const currentUser = await ctx.orm.users.findById(ctx.session.user.id, {
-      attributes: ['id', 'username', 'role'],
+      attributes: ['id', 'username', 'role', 'confirmed'],
     })
     if (!currentUser) {
       return ctx.render('welcome/loginError', {
@@ -16,5 +16,3 @@ const checkLogin = async (ctx, next) => {
   }
   return next()
 }
-
-module.exports = checkLogin
