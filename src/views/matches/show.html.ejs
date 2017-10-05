@@ -90,12 +90,57 @@
             <% } %>
             <!-- leave/delete column -->
             <% if (player.user.id === currentPlayer.user.id) { %>
-              <td>
-                <form action="<%= removePlayerUrl(player) %>" method="post">
-                  <input type="hidden" name="_method" value="delete" />
-                  <input type="submit" value="Abandonar" />
-                </form>
-              </td>
+              <% if (player.isAdmin() && (match.adminsCount() === 1)) { %>
+                <td>
+                  <button id="deleteButton2" class="right">Abandonar</button>
+                </td>
+                <div id="confirmDeletion2" class="modal2">
+                  <div class="modal2-content hide-overflow">
+                    <div class="modal2-header">
+                      <span id="spanAdmin" class="close2">&times;</span>
+                      Se eliminará la partida
+                    </div>
+                    <div class="modal2-body">
+                      <p>Si no quieres que se pierda la partida, deja otro administrador.</p>
+                      <div>
+                        <button id="cancelAdmin" class="left">Cancelar</button>
+                        <form action="<%= deleteMatchUrl %>" method="post">
+                          <input type="hidden" name="_method" value="delete" />
+                          <input class="right danger" type="submit" value="Eliminar partida" />
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <script>
+                  var modal2 = document.getElementById("confirmDeletion2");
+                  var deleteButton2 = document.getElementById("deleteButton2");
+                  var span2 = document.getElementById("spanAdmin");
+                  var cancelButton2 = document.getElementById("cancelAdmin");
+
+                  deleteButton2.onclick = function() {
+                    modal2.style.display = "block";
+                  }
+                  cancelButton2.onclick = function() {
+                    modal2.style.display = "none";
+                  }
+                  span2.onclick = function() {
+                    modal2.style.display = "none";
+                  }
+                  window.onclick = function(event) {
+                    if (event.target == modal2) {
+                      modal2.style.display = "none";
+                    }
+                  }
+                </script>
+              <% } else { %>
+                <td>
+                  <form action="<%= removePlayerUrl(player) %>" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <input type="submit" value="Abandonar" />
+                  </form>
+                </td>
+              <% } %>
             <% } else if ((!player.isAdmin()) && (currentPlayer.isAdmin())) { %>
               <td>
                 <form action="<%= removePlayerUrl(player) %>" method="post">
