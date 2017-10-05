@@ -36,6 +36,12 @@ module.exports = function definematch(sequelize, DataTypes) {
     }
     return belongs
   }
+  match.prototype.adminsCount = function adminsCount() {
+    function getAdmins(player) {
+      return player.dataValues.admin === true
+    }
+    return this.userMatches.filter(getAdmins).length
+  }
   match.prototype.playersCount = function playersCount() {
     return this.userMatches.length
   }

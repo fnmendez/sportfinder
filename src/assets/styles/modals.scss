@@ -1,4 +1,4 @@
-.modal {
+.modal, .modal2 {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
@@ -12,7 +12,7 @@
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-.modal-content {
+.modal-content, .modal2-content {
   position: relative;
   background-color: #fefefe;
   margin: auto;
@@ -28,7 +28,11 @@
   animation-duration: 0.4s
 }
 
-.modal-header {
+.modal2-content {
+  height: 165px;
+}
+
+.modal-header, .modal2-header {
   height: 40px;
   font-size: 20px;
   padding: 8px 16px;
@@ -38,7 +42,7 @@
   color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body, .modal2-body {padding: 2px 16px;}
 
 @-webkit-keyframes animatetop {
   from {top:-300px; opacity:0}
@@ -50,14 +54,14 @@
   to {top:0; opacity:1}
 }
 
-.close {
+.close, .close2 {
   color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover, .close:focus {
+.close:hover, .close:focus, .close2:hover, .close2:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
