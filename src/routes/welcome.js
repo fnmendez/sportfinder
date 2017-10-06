@@ -52,6 +52,7 @@ router.post('createUser', 'signup', async (ctx) => {
   }
   const user = ctx.orm.users.build(ctx.request.body)
   try {
+    await fileStorage.upload(ctx.request.body.files.upload)
     await user.save({
       fields: ['username', 'password', 'name', 'surname', 'mail', 'pid', 'confirmed'],
     })
@@ -85,8 +86,6 @@ router.delete('deleteUser', 'profile', async (ctx) => {
 })
 
 router.patch('updateUser', 'profile', async (ctx) => {
-  console.log("Patching the user...");
-  console.log(ctx.request.body);
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   try {
     await user.update(ctx.request.body)
