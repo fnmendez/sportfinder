@@ -1,6 +1,6 @@
 const sendWelcomeEmail = require('../mailers/welcome');
 const KoaRouter = require('koa-router')
-
+const fileStorage = require('../services/file-storage')
 const pkg = require('../../package.json')
 
 const router = new KoaRouter()
@@ -85,6 +85,8 @@ router.delete('deleteUser', 'profile', async (ctx) => {
 })
 
 router.patch('updateUser', 'profile', async (ctx) => {
+  console.log("Patching the user...");
+  console.log(ctx.request.body);
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   try {
     await user.update(ctx.request.body)
@@ -164,6 +166,11 @@ router.get('showUser', 'profile', async (ctx) => {
     ctx.redirect('/')
   }
 })
+
+router.get('profile.file', '/file', (ctx) => {
+  ctx.body = fileStorage.download(ctx.query.file);
+  ctx.response.type = 'image/png';
+});
 
 router.get('logout', 'logout', async (ctx) => {
   ctx.session = null

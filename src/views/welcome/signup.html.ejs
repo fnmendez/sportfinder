@@ -3,7 +3,7 @@
     <h1>Registro</h1>
   </div>
   <div>
-    <form action="/signup" method="post">
+    <form action="/signup" enctype=multipart/form-data method="post">
       <div>
         <label>Datos de usuario</label><br>
         <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
@@ -18,7 +18,7 @@
       </div>
       <div>
         <label>Foto del carné de identidad</label><br>
-        <input type="text" name="photoId" placeholder="URL de la imágen" height="10" width="10"><br><br>
+        <input type="file" name="upload"><br><br>
       </div>
       <div>
         <input type="submit" name="create" value="Registrarme">
