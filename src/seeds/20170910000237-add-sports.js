@@ -1,8 +1,7 @@
 module.exports = {
   up(queryInterface) {
     const sportsData = []
-    const sportsNames = ['Futbol', 'Basquetbol', 'Tenis',
-      'Natacion', 'Polo']
+    const sportsNames = ['Futbol', 'Basquetbol', 'Tenis', 'Natacion', 'Polo']
     for (let i = 0; i < 5; i += 1) {
       sportsData.push({
         name: sportsNames[i],

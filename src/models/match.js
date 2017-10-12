@@ -1,34 +1,43 @@
-const parseDate = require('../routes/parseDate')
+const parseDate = require('../helpers/parseDate')
 
 module.exports = function definematch(sequelize, DataTypes) {
-  const match = sequelize.define('match', {
-    date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'Debes ingresar la fecha.' },
-        isRealistic(value) {
-          if
-          (value && value.getTime() < (new Date(Date.now() + (5 * 3600 * 1000))).getTime()) {
-            throw new Error('La fecha a lo menos en 5 horas más.')
-          } else if
-          (value && value.getTime() > (new Date(Date.now() + (365 * 24 * 3600 * 1000))).getTime()) {
-            throw new Error('La fecha no puede exceder de un año')
-          }
+  const match = sequelize.define(
+    'match',
+    {
+      date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: { msg: 'Debes ingresar la fecha.' },
+          isRealistic(value) {
+            if (
+              value &&
+              value.getTime() < new Date(Date.now() + 5 * 3600 * 1000).getTime()
+            ) {
+              throw new Error('La fecha a lo menos en 5 horas más.')
+            } else if (
+              value &&
+              value.getTime() >
+                new Date(Date.now() + 365 * 24 * 3600 * 1000).getTime()
+            ) {
+              throw new Error('La fecha no puede exceder de un año')
+            }
+          },
         },
       },
     },
-  }, {
-    getterMethods: {
-      displayDate() {
-        return parseDate(this.date)
+    {
+      getterMethods: {
+        displayDate() {
+          return parseDate(this.date)
+        },
       },
-    },
-  })
+    }
+  )
   match.prototype.isPlayer = function isPlayer(userId) {
     let belongs = false
     if (this.userMatches.length) {
-      this.userMatches.forEach((player) => {
+      this.userMatches.forEach(player => {
         if (player.user.id === userId) {
           belongs = true
         }

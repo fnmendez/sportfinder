@@ -9,9 +9,9 @@ const matches = require('./routes/matches')
 const users = require('./routes/users')
 const admin = require('./routes/admin')
 
-const checkAccountConfirmation = require('./routes/checkAccountConfirmation')
-const checkLogin = require('./routes/checkLogin')
-const checkRole = require('./routes/checkRole')
+const checkAccountConfirmation = require('./helpers/checkAccountConfirmation')
+const checkLogin = require('./helpers/checkLogin')
+const checkRole = require('./helpers/checkRole')
 
 const router = new KoaRouter()
 

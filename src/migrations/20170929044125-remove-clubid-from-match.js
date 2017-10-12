@@ -4,14 +4,13 @@ module.exports = {
   },
 
   down(queryInterface, Sequelize) {
-    return queryInterface.addColumn('matches', 'clubId',
-      {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'clubs',
-          key: 'id',
-        },
-        onDelete: 'cascade',
-      })
+    return queryInterface.addColumn('matches', 'clubId', {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'clubs',
+        key: 'id',
+      },
+      onDelete: 'cascade',
+    })
   },
 }

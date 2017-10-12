@@ -20,7 +20,7 @@ app.keys = [
   'these secret keys are used to sign HTTP cookies',
   'to make sure only this app can generate a valid one',
   'and thus preventing someone just writing a cookie',
-  'saying he is logged in when it\'s really not',
+  "saying he is logged in when it's really not",
 ]
 
 // expose ORM through context's prototype
@@ -41,23 +41,30 @@ app.use(koaLogger())
 
 // webpack middleware for dev mode only
 if (developmentMode) {
-  app.use(require('koa-webpack')({
-    dev: {
-      index: 'index.html',
-      stats: {
-        colors: true,
+  app.use(
+    require('koa-webpack')({
+      dev: {
+        index: 'index.html',
+        stats: {
+          colors: true,
+        },
       },
-    },
-    hot: false,
-  }))
+      hot: false,
+    })
+  )
 }
 
 app.use(koaStatic(path.join(__dirname, '..', 'build'), {}))
 
 // expose a session hash to store information across requests from same client
-app.use(session({
-  maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks
-}, app))
+app.use(
+  session(
+    {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 2 weeks
+    },
+    app
+  )
+)
 
 // flash messages support
 app.use(koaFlashMessage)
@@ -68,10 +75,12 @@ app.use((ctx, next) => {
 })
 
 // parse request body
-app.use(koaBody({
-  multipart: true,
-  keepExtensions: true,
-}))
+app.use(
+  koaBody({
+    multipart: true,
+    keepExtensions: true,
+  })
+)
 
 // override method
 app.use((ctx, next) => {

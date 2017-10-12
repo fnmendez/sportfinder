@@ -2,7 +2,7 @@ const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
 
-router.get('matches', '/', async (ctx) => {
+router.get('matches', '/', async ctx => {
   const matches = await ctx.orm.match.findAll({
     include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
     order: [['date', 'ASC']],
@@ -22,7 +22,7 @@ router.get('matches', '/', async (ctx) => {
   })
 })
 
-router.delete('deleteMatch', '/:id', async (ctx) => {
+router.delete('deleteMatch', '/:id', async ctx => {
   const match = await ctx.orm.match.findById(ctx.params.id)
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: {
@@ -30,7 +30,10 @@ router.delete('deleteMatch', '/:id', async (ctx) => {
       matchId: match.id,
     },
   })
-  if ((!currentPlayer || !currentPlayer.isAdmin()) && !ctx.state.currentUser.isAdmin()) {
+  if (
+    (!currentPlayer || !currentPlayer.isAdmin()) &&
+    !ctx.state.currentUser.isAdmin()
+  ) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
     return ctx.redirect(ctx.router.url('match', match.id))
   }
@@ -39,7 +42,7 @@ router.delete('deleteMatch', '/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('matches'))
 })
 
-router.get('newMatch', '/new', async (ctx) => {
+router.get('newMatch', '/new', async ctx => {
   const match = ctx.orm.match.build()
   const sports = await ctx.orm.sport.findAll()
   const clubs = await ctx.orm.club.findAll()
@@ -52,7 +55,7 @@ router.get('newMatch', '/new', async (ctx) => {
   })
 })
 
-router.post('createMatch', '/', async (ctx) => {
+router.post('createMatch', '/', async ctx => {
   try {
     ctx.request.body.date = new Date(ctx.request.body.date)
     const clubSport = await ctx.orm.clubSport.findOne({
@@ -87,7 +90,7 @@ router.post('createMatch', '/', async (ctx) => {
   }
 })
 
-router.get('editMatch', '/:id/edit', async (ctx) => {
+router.get('editMatch', '/:id/edit', async ctx => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [ctx.orm.sport, ctx.orm.club],
   })
@@ -102,7 +105,7 @@ router.get('editMatch', '/:id/edit', async (ctx) => {
   })
 })
 
-router.patch('updateMatch', '/:id', async (ctx) => {
+router.patch('updateMatch', '/:id', async ctx => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [ctx.orm.sport, ctx.orm.club],
   })
@@ -112,7 +115,10 @@ router.patch('updateMatch', '/:id', async (ctx) => {
       matchId: match.id,
     },
   })
-  if ((!currentPlayer || !currentPlayer.isAdmin()) && !ctx.state.currentUser.isAdmin()) {
+  if (
+    (!currentPlayer || !currentPlayer.isAdmin()) &&
+    !ctx.state.currentUser.isAdmin()
+  ) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
     return ctx.redirect(ctx.router.url('match', match.id))
   }
@@ -144,24 +150,30 @@ router.patch('updateMatch', '/:id', async (ctx) => {
   }
 })
 
-router.post('joinMatch', '/:id/players', async (ctx) => {
+router.post('joinMatch', '/:id/players', async ctx => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.sport,
-    }, {
-      model: ctx.orm.userMatch,
-      include: [ctx.orm.users],
-    }],
+    include: [
+      {
+        model: ctx.orm.sport,
+      },
+      {
+        model: ctx.orm.userMatch,
+        include: [ctx.orm.users],
+      },
+    ],
   })
   if (match.isPlayer(ctx.state.currentUser.id)) {
     ctx.flashMessage.warning = 'Ya eres miembros de la partida.'
     return ctx.router.redirect(ctx.router.url('match', match.id))
   }
-  await ctx.orm.userMatch.create({ matchId: match.id, userId: ctx.state.currentUser.id })
+  await ctx.orm.userMatch.create({
+    matchId: match.id,
+    userId: ctx.state.currentUser.id,
+  })
   return ctx.redirect(ctx.router.url('match', match.id))
 })
 
-router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {
+router.post('promotePlayer', '/:matchId/players/:id', async ctx => {
   const matchId = ctx.params.matchId
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: {
@@ -179,7 +191,7 @@ router.post('promotePlayer', '/:matchId/players/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('match', matchId))
 })
 
-router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
+router.delete('removePlayer', '/:matchId/players/:id', async ctx => {
   const matchId = ctx.params.matchId
   const currentPlayer = await ctx.orm.userMatch.findOne({
     where: {
@@ -199,7 +211,8 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
     ctx.flashMessage.warning = 'El jugador no es miembro de la partida.'
     return ctx.redirect(ctx.router.url('match', matchId))
   } else if (!isCurrentPlayer && player.isAdmin()) {
-    ctx.flashMessage.warning = 'No puedes eliminar a un administrador de la partida.'
+    ctx.flashMessage.warning =
+      'No puedes eliminar a un administrador de la partida.'
     return ctx.redirect(ctx.router.url('match', matchId))
   } else if (isCurrentPlayer && currentPlayer.isAdmin()) {
     // Check if there's still admins
@@ -217,7 +230,7 @@ router.delete('removePlayer', '/:matchId/players/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('matches'))
 })
 
-router.patch('setPosition', '/:matchId/players/:id', async (ctx) => {
+router.patch('setPosition', '/:matchId/players/:id', async ctx => {
   const matchId = ctx.params.matchId
   const player = await ctx.orm.userMatch.findById(ctx.params.id)
   try {
@@ -225,22 +238,27 @@ router.patch('setPosition', '/:matchId/players/:id', async (ctx) => {
     ctx.flashMessage.notice = 'Tu posición se ha actualizado correctamente.'
     return ctx.redirect(ctx.router.url('match', matchId))
   } catch (validationError) {
-    ctx.flashMessage.warning = 'Ha ocurrido un error mientras se actualizaba tu posición.'
+    ctx.flashMessage.warning =
+      'Ha ocurrido un error mientras se actualizaba tu posición.'
     return ctx.redirect(ctx.router.url('match', matchId))
   }
 })
 
-router.get('match', '/:id', async (ctx) => {
+router.get('match', '/:id', async ctx => {
   const match = await ctx.orm.match.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.sport,
-      include: [ctx.orm.position],
-    }, {
-      model: ctx.orm.club,
-      include: [ctx.orm.clubSport],
-    }, {
-      model: ctx.orm.userMatch,
-    }],
+    include: [
+      {
+        model: ctx.orm.sport,
+        include: [ctx.orm.position],
+      },
+      {
+        model: ctx.orm.club,
+        include: [ctx.orm.clubSport],
+      },
+      {
+        model: ctx.orm.userMatch,
+      },
+    ],
   })
   const players = await ctx.orm.userMatch.findAll({
     where: { matchId: match.id },
@@ -261,18 +279,21 @@ router.get('match', '/:id', async (ctx) => {
     visitMode,
     currentPlayer,
     currentUser: ctx.state.currentUser,
-    promotePlayerUrl: player => ctx.router.url('promotePlayer', {
-      matchId: match.id,
-      id: player.id,
-    }),
-    removePlayerUrl: player => ctx.router.url('removePlayer', {
-      matchId: match.id,
-      id: player.id,
-    }),
-    setPositionUrl: player => ctx.router.url('setPosition', {
-      matchId: match.id,
-      id: player.id,
-    }),
+    promotePlayerUrl: player =>
+      ctx.router.url('promotePlayer', {
+        matchId: match.id,
+        id: player.id,
+      }),
+    removePlayerUrl: player =>
+      ctx.router.url('removePlayer', {
+        matchId: match.id,
+        id: player.id,
+      }),
+    setPositionUrl: player =>
+      ctx.router.url('setPosition', {
+        matchId: match.id,
+        id: player.id,
+      }),
     editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),

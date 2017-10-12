@@ -2,7 +2,7 @@ const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
 
-router.get('sports', '/', async (ctx) => {
+router.get('sports', '/', async ctx => {
   const sports = await ctx.orm.sport.findAll()
   await ctx.render('sports/index', {
     sports,
@@ -12,7 +12,7 @@ router.get('sports', '/', async (ctx) => {
   })
 })
 
-router.delete('deleteSport', '/:id', async (ctx) => {
+router.delete('deleteSport', '/:id', async ctx => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -24,7 +24,7 @@ router.delete('deleteSport', '/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('sports'))
 })
 
-router.get('newSport', '/new', async (ctx) => {
+router.get('newSport', '/new', async ctx => {
   const sport = ctx.orm.sport.build()
   await ctx.render('/sports/new', {
     sport,
@@ -33,7 +33,7 @@ router.get('newSport', '/new', async (ctx) => {
   })
 })
 
-router.post('createSport', '/', async (ctx) => {
+router.post('createSport', '/', async ctx => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -52,7 +52,7 @@ router.post('createSport', '/', async (ctx) => {
   }
 })
 
-router.get('editSport', '/:id/edit', async (ctx) => {
+router.get('editSport', '/:id/edit', async ctx => {
   const sport = await ctx.orm.sport.findById(ctx.params.id)
   await ctx.render('sports/edit', {
     sport,
@@ -61,7 +61,7 @@ router.get('editSport', '/:id/edit', async (ctx) => {
   })
 })
 
-router.patch('updateSport', '/:id', async (ctx) => {
+router.patch('updateSport', '/:id', async ctx => {
   const isAdmin = ctx.state.currentUser.isAdmin()
   if (!isAdmin) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -82,7 +82,7 @@ router.patch('updateSport', '/:id', async (ctx) => {
   }
 })
 
-router.post('addPosition', '/:id', async (ctx) => {
+router.post('addPosition', '/:id', async ctx => {
   const sportId = ctx.params.id
   if (!ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -100,10 +100,11 @@ router.post('addPosition', '/:id', async (ctx) => {
       errors: validationError.errors,
       isAdmin: ctx.state.currentUser.isAdmin(),
       addPositionUrl: ctx.router.url('addPosition', sport.id),
-      removePositionUrl: position => ctx.router.url('removePosition', {
-        sportId: sport.id,
-        id: position.id,
-      }),
+      removePositionUrl: position =>
+        ctx.router.url('removePosition', {
+          sportId: sport.id,
+          id: position.id,
+        }),
       editSportUrl: ctx.router.url('editSport', sport.id),
       deleteSportUrl: ctx.router.url('deleteSport', sport.id),
       indexUrl: ctx.router.url('sports'),
@@ -111,7 +112,7 @@ router.post('addPosition', '/:id', async (ctx) => {
   }
 })
 
-router.delete('removePosition', '/:sportId/positions/:id', async (ctx) => {
+router.delete('removePosition', '/:sportId/positions/:id', async ctx => {
   const sportId = ctx.params.sportId
   const position = await ctx.orm.position.findById(ctx.params.id)
   if (!ctx.state.currentUser.isAdmin()) {
@@ -123,7 +124,7 @@ router.delete('removePosition', '/:sportId/positions/:id', async (ctx) => {
   return ctx.redirect(ctx.router.url('sport', sportId))
 })
 
-router.get('sport', '/:id', async (ctx) => {
+router.get('sport', '/:id', async ctx => {
   const sport = await ctx.orm.sport.findById(ctx.params.id, {
     include: [ctx.orm.position],
   })
@@ -131,10 +132,11 @@ router.get('sport', '/:id', async (ctx) => {
     sport,
     isAdmin: ctx.state.currentUser.isAdmin(),
     addPositionUrl: ctx.router.url('addPosition', sport.id),
-    removePositionUrl: position => ctx.router.url('removePosition', {
-      sportId: sport.id,
-      id: position.id,
-    }),
+    removePositionUrl: position =>
+      ctx.router.url('removePosition', {
+        sportId: sport.id,
+        id: position.id,
+      }),
     editSportUrl: ctx.router.url('editSport', sport.id),
     deleteSportUrl: ctx.router.url('deleteSport', sport.id),
     indexUrl: ctx.router.url('sports'),

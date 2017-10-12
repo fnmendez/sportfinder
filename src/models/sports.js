@@ -1,15 +1,13 @@
 module.exports = function definesports(sequelize, DataTypes) {
   const sports = sequelize.define('sport', {
-    name:
-    {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: { msg: 'Has ingresado un nombre vacío.' },
       },
     },
-    maxPlayers:
-    {
+    maxPlayers: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
