@@ -1,7 +1,6 @@
 module.exports = function defineclub(sequelize, DataTypes) {
   const club = sequelize.define('club', {
-    name:
-    {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
@@ -20,10 +19,11 @@ module.exports = function defineclub(sequelize, DataTypes) {
   club.prototype.matchDisplay = function matchDisplay(sportId) {
     // Instances refered with this might have clubsports loaded
     let displayString = 'No definido aún por el club'
-    this.clubSports.forEach((clubSport) => {
+    this.clubSports.forEach(clubSport => {
       if (clubSport.sportId === parseInt(sportId, 10)) {
-        displayString = clubSport.timeUnit ?
-          `${clubSport.priceDisplay()} por cada ${clubSport.timeUnit}` : clubSport.priceDisplay()
+        displayString = clubSport.timeUnit
+          ? `${clubSport.priceDisplay()} por cada ${clubSport.timeUnit}`
+          : clubSport.priceDisplay()
       }
     })
     return displayString

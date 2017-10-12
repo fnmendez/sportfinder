@@ -1,7 +1,8 @@
 const moment = require('moment')
 
 module.exports = function parseDate(date) {
-  const dt = moment(date).format('ddd D [de] MMMM YYYY, H:mm')
+  const dt = moment(date)
+    .format('ddd D [de] MMMM YYYY, H:mm')
     .replace('Mon', 'Lun')
     .replace('Tue', 'Mar')
     .replace('Wed', 'Mie')
