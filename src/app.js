@@ -41,8 +41,7 @@ app.use(koaLogger())
 
 // webpack middleware for dev mode only
 if (developmentMode) {
-  /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
-  app.use(require('koa-webpack')({ // eslint-disable-line global-require
+  app.use(require('koa-webpack')({
     dev: {
       index: 'index.html',
       stats: {
