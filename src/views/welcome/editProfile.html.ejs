@@ -3,8 +3,7 @@
     <h3>Modificar tu cuenta</h3>
   </div>
   <div>
-    <form action="<%= updateUrl %>" method="post">
-      <input type="hidden" name="_method" value="patch" />
+    <form action="<%= updateUrl %>" enctype=multipart/form-data method="post">
       <div>
         <label>Datos de usuario</label><br>
         <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">

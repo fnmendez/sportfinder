@@ -46,15 +46,16 @@ router.get('signup', 'signup', async (ctx) => {
 router.post('createUser', 'signup', async (ctx) => {
   const developmentMode = ctx.state.env === 'development'
   if (developmentMode) {
-    ctx.request.body.confirmed = true
+    ctx.request.body.fields.confirmed = true
   } else {
-    ctx.request.body.confirmed = false
+    ctx.request.body.fields.confirmed = false
   }
-  const user = ctx.orm.users.build(ctx.request.body)
+  const user = ctx.orm.users.build({...ctx.request.body.fields,
+                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`})
   try {
     await fileStorage.upload(ctx.request.body.files.upload)
     await user.save({
-      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid', 'confirmed'],
+      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid', 'confirmed', 'photoId'],
     })
     ctx.session.user = { id: user.id }
     const key = 'h4rc0d3dK3y'
@@ -62,7 +63,7 @@ router.post('createUser', 'signup', async (ctx) => {
     if (!developmentMode) {
       sendWelcomeEmail(ctx, {
         user,
-        confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
+        confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${id}/${key}`,
       })
       ctx.flashMessage.notice = 'Revisa tu mail para confirmar tu cuenta.'
     }
@@ -70,7 +71,7 @@ router.post('createUser', 'signup', async (ctx) => {
   } catch (validationError) {
     await ctx.render('welcome/signup', {
       homeUrl: '/',
-      user: ctx.orm.users.build(ctx.request.body),
+      user: ctx.orm.users.build(ctx.request.body.fields),
       errors: validationError.errors,
     })
   }
@@ -85,10 +86,17 @@ router.delete('deleteUser', 'profile', async (ctx) => {
   await ctx.redirect('/')
 })
 
-router.patch('updateUser', 'profile', async (ctx) => {
+router.post('updateUser', 'profile', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   try {
-    await user.update(ctx.request.body)
+    await fileStorage.upload(ctx.request.body.files.upload)
+    await user.update({username: ctx.request.body.fields.username,
+                        mail: ctx.request.body.fields.mail,
+                        name: ctx.request.body.fields.name,
+                        surname: ctx.request.body.fields.surname,
+                        pid: ctx.request.body.fields.pid,
+                        photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`
+                      })
     ctx.flashMessage.notice = 'Tu perfil ha sido actualizado.'
     return ctx.redirect('profile')
   } catch (validationError) {
@@ -149,6 +157,7 @@ router.get('sendEmail', ':id/sendConfirmationEmail', async (ctx) => {
 
 router.get('showUser', 'profile', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
+  console.log(user.get());
   if (user) {
     ctx.state.currentUser = user
     await ctx.render('welcome/profile', {
