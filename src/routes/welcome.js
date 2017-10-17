@@ -55,7 +55,7 @@ router.post('createUser', 'signup', async ctx => {
   }
   const token = uuid()
   const user = ctx.orm.users.build({...ctx.request.body.fields,
-                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name`,
+                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`,
                                     token,
                                    })
 
