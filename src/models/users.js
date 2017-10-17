@@ -12,15 +12,20 @@ module.exports = function defineusers(sequelize, DataTypes) {
     pid: {
       type: DataTypes.STRING,
       validate: {
-        is:  /^(\d{1,3}(\.?\d{3}){2})\-?([\dkK])$/,
-      }
+        is: /^(\d{1,3}(\.?\d{3}){2})\-?([\dkK])$/, // eslint-disable-line no-useless-escape
+      },
+    },
+    token: {
+      type: DataTypes.STRING,
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
-        isAlphanumeric: { msg: 'Has ingresado un nombre de usuario con caracteres inválidos' },
+        isAlphanumeric: {
+          msg: 'Has ingresado un nombre de usuario con caracteres inválidos',
+        },
         notEmpty: { msg: 'Has ingresado un nombre de usuario vacío' },
       },
     },
@@ -65,7 +70,11 @@ module.exports = function defineusers(sequelize, DataTypes) {
       allowNull: false,
       validate: {
         notEmpty: { msg: 'Has ingresado una contraseña vacía' },
-        len: { args: [6, 10], msg: 'Has ingresado una contraseña con largo incorrecto (entre 6 y 10 caracteres)' },
+        len: {
+          args: [6, 10],
+          msg:
+            'Has ingresado una contraseña con largo incorrecto (entre 6 y 10 caracteres)',
+        },
       },
     },
   })

@@ -1,7 +1,6 @@
 module.exports = function definesports(sequelize, DataTypes) {
   const userTeam = sequelize.define('userTeam', {
-    userId:
-    {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: 'memberConstraint',
@@ -9,8 +8,7 @@ module.exports = function definesports(sequelize, DataTypes) {
         notEmpty: true,
       },
     },
-    teamId:
-    {
+    teamId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: 'memberConstraint',

@@ -1,11 +1,12 @@
-const sendWelcomeEmail = require('../mailers/welcome');
+const sendWelcomeEmail = require('../mailers/welcome')
 const KoaRouter = require('koa-router')
 const fileStorage = require('../services/file-storage')
+const uuid = require('uuid/v4')
 const pkg = require('../../package.json')
 
 const router = new KoaRouter()
 
-router.get('home', '/', async (ctx) => {
+router.get('home', '/', async ctx => {
   if (ctx.session.user) {
     const user = await ctx.orm.users.findById(ctx.session.user.id)
     if (user) {
@@ -19,7 +20,7 @@ router.get('home', '/', async (ctx) => {
   })
 })
 
-router.post('login', 'login', async (ctx) => {
+router.post('login', 'login', async ctx => {
   const username = ctx.request.body.fields.username
   const password = ctx.request.body.fields.password
   const user = await ctx.orm.users.findOne({ where: { username } })
@@ -34,8 +35,10 @@ router.post('login', 'login', async (ctx) => {
   return ctx.redirect('/')
 })
 
-router.get('signup', 'signup', async (ctx) => {
-  if (ctx.session.user) { ctx.redirect('profile') }
+router.get('signup', 'signup', async ctx => {
+  if (ctx.session.user) {
+    ctx.redirect('profile')
+  }
   const user = ctx.orm.users.build()
   await ctx.render('welcome/signup', {
     homeUrl: '/',
@@ -43,23 +46,37 @@ router.get('signup', 'signup', async (ctx) => {
   })
 })
 
-router.post('createUser', 'signup', async (ctx) => {
+router.post('createUser', 'signup', async ctx => {
   const developmentMode = ctx.state.env === 'development'
   if (developmentMode) {
     ctx.request.body.fields.confirmed = true
   } else {
     ctx.request.body.fields.confirmed = false
   }
+  const token = uuid()
   const user = ctx.orm.users.build({...ctx.request.body.fields,
-                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`})
+                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name`,
+                                    token,
+                                   })
+
   try {
     await fileStorage.upload(ctx.request.body.files.upload)
     await user.save({
-      fields: ['username', 'password', 'name', 'surname', 'mail', 'pid', 'confirmed', 'photoId'],
+      fields: [
+        'username',
+        'password',
+        'name',
+        'surname',
+        'mail',
+        'pid',
+        'photoId',
+        'token',
+        'confirmed',
+      ],
     })
     ctx.session.user = { id: user.id }
-    const key = 'h4rc0d3dK3y'
     const id = user.id
+    const key = user.token
     if (!developmentMode) {
       sendWelcomeEmail(ctx, {
         user,
@@ -77,14 +94,15 @@ router.post('createUser', 'signup', async (ctx) => {
   }
 })
 
-router.delete('deleteUser', 'profile', async (ctx) => {
+router.delete('deleteUser', 'profile', async ctx => {
   if (ctx.session.user) {
     const user = await ctx.orm.users.findById(ctx.session.user.id)
     await user.destroy()
     ctx.session = null
   }
-  await ctx.redirect('/')
+  return ctx.redirect('/')
 })
+
 
 router.post('updateUser', 'profile', async (ctx) => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
@@ -110,7 +128,7 @@ router.post('updateUser', 'profile', async (ctx) => {
   }
 })
 
-router.get('editUser', 'profile/edit', async (ctx) => {
+router.get('editUser', 'profile/edit', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
     ctx.state.currentUser = user
@@ -126,11 +144,9 @@ router.get('editUser', 'profile/edit', async (ctx) => {
   }
 })
 
-router.get('confirmateAccount', 'users/:id/:key', async (ctx) => {
+router.get('confirmateAccount', 'users/:id/:key', async ctx => {
   const user = await ctx.orm.users.findById(ctx.params.id)
-  if (user && ctx.params.key === 'h4rc0d3dK3y') {
-    console.log('usuario')
-    console.log(user)
+  if (user && ctx.params.key === user.token) {
     await user.update({ confirmed: true })
     ctx.flashMessage.notice = '¡Estás listo para jugar!'
     return ctx.redirect(ctx.router.url('matches'))
@@ -138,24 +154,24 @@ router.get('confirmateAccount', 'users/:id/:key', async (ctx) => {
   return ctx.throw(403)
 })
 
-router.get('sendEmail', ':id/sendConfirmationEmail', async (ctx) => {
-  const id = ctx.params.id
-  const user = await ctx.orm.users.findById(ctx.params.id)
+router.get('sendEmail', 'sendConfirmationEmail', async ctx => {
+  const id = ctx.session.user.id
+  const user = await ctx.orm.users.findById(id)
   if (!user) {
     ctx.session = null
     ctx.flashMessage.warning = 'No tienes los permisos.'
     return ctx.redirect('/')
   }
-  const key = 'h4rc0d3dK3y'
+  const key = user.token
   await sendWelcomeEmail(ctx, {
     user,
-    confirmateAccountUrl: 'https://sportfinder-app.herokuapp.com/users/' + id + '/' + key,
+    confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${id}/${key}`,
   })
   ctx.flashMessage.notice = `Se ha enviado nuevamente el mail de confirmación a ${user.mail}.`
   return ctx.redirect(ctx.router.url('profile'))
 })
 
-router.get('showUser', 'profile', async (ctx) => {
+router.get('showUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   console.log(user.get());
   if (user) {
@@ -165,15 +181,14 @@ router.get('showUser', 'profile', async (ctx) => {
       editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
-      sendEmailUrl: ctx.router.url('sendEmail', {
-        id: ctx.state.currentUser.id,
-      }),
+      sendEmailUrl: ctx.router.url('sendEmail'),
     })
   } else {
     ctx.session = null
     ctx.redirect('/')
   }
 })
+
 
 router.get('profile.file', '/file', (ctx) => {
   ctx.body = fileStorage.download(ctx.query.file);

@@ -1,9 +1,8 @@
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.addColumn('clubSports', 'price',
-      {
-        type: Sequelize.INTEGER,
-      })
+    return queryInterface.addColumn('clubSports', 'price', {
+      type: Sequelize.INTEGER,
+    })
   },
 
   down(queryInterface) {

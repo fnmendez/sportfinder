@@ -2,7 +2,7 @@ const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
 
-router.get('teams', '/', async (ctx) => {
+router.get('teams', '/', async ctx => {
   const teams = await ctx.orm.team.findAll()
   await ctx.render('teams/index', {
     teams,
@@ -11,13 +11,15 @@ router.get('teams', '/', async (ctx) => {
   })
 })
 
-router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
+router.delete('removeMember', '/:id/memberDelete', async ctx => {
   const user = await ctx.orm.users.findById(ctx.request.body.userid)
   const team = await ctx.orm.team.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.userTeam,
-      include: ctx.orm.users,
-    }],
+    include: [
+      {
+        model: ctx.orm.userTeam,
+        include: ctx.orm.users,
+      },
+    ],
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
@@ -47,14 +49,14 @@ router.delete('removeMember', '/:id/memberDelete', async (ctx) => {
   }
 })
 
-router.delete('deleteTeam', '/:id', async (ctx) => {
+router.delete('deleteTeam', '/:id', async ctx => {
   const team = await ctx.orm.team.findById(ctx.params.id)
   await team.destroy()
   ctx.flashMessage.notice = 'El equipo fue eliminado exitosamente.'
   await ctx.redirect(ctx.router.url('teams'))
 })
 
-router.get('newTeam', '/new', async (ctx) => {
+router.get('newTeam', '/new', async ctx => {
   const team = ctx.orm.team.build()
   const sports = await ctx.orm.sport.findAll()
   await ctx.render('/teams/new', {
@@ -65,10 +67,12 @@ router.get('newTeam', '/new', async (ctx) => {
   })
 })
 
-router.post('createTeam', '/', async (ctx) => {
+router.post('createTeam', '/', async ctx => {
   const sports = await ctx.orm.sport.findAll()
   try {
-    const sport = await ctx.orm.sport.findOne({ where: { name: ctx.request.body.sportname } })
+    const sport = await ctx.orm.sport.findOne({
+      where: { name: ctx.request.body.sportname },
+    })
     const team = await ctx.orm.team.create({
       name: ctx.request.body.name,
       sportId: sport.id,
@@ -89,13 +93,17 @@ router.post('createTeam', '/', async (ctx) => {
   }
 })
 
-router.post('addMember', '/:id', async (ctx) => {
-  const user = await ctx.orm.users.findOne({ where: { username: ctx.request.body.name } })
+router.post('addMember', '/:id', async ctx => {
+  const user = await ctx.orm.users.findOne({
+    where: { username: ctx.request.body.name },
+  })
   const team = await ctx.orm.team.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.userTeam,
-      include: ctx.orm.users,
-    }],
+    include: [
+      {
+        model: ctx.orm.userTeam,
+        include: ctx.orm.users,
+      },
+    ],
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
@@ -125,7 +133,7 @@ router.post('addMember', '/:id', async (ctx) => {
   }
 })
 
-router.get('editTeam', '/:id/edit', async (ctx) => {
+router.get('editTeam', '/:id/edit', async ctx => {
   const team = await ctx.orm.team.findById(ctx.params.id)
   const sports = await ctx.orm.sport.findAll()
   await ctx.render('teams/edit', {
@@ -136,7 +144,7 @@ router.get('editTeam', '/:id/edit', async (ctx) => {
   })
 })
 
-router.patch('updateTeam', '/:id', async (ctx) => {
+router.patch('updateTeam', '/:id', async ctx => {
   const team = await ctx.orm.team.findById(ctx.params.id)
   try {
     await team.update({
@@ -155,12 +163,14 @@ router.patch('updateTeam', '/:id', async (ctx) => {
   }
 })
 
-router.get('team', '/:id', async (ctx) => {
+router.get('team', '/:id', async ctx => {
   const team = await ctx.orm.team.findById(ctx.params.id, {
-    include: [{
-      model: ctx.orm.userTeam,
-      include: ctx.orm.users,
-    }],
+    include: [
+      {
+        model: ctx.orm.userTeam,
+        include: ctx.orm.users,
+      },
+    ],
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
