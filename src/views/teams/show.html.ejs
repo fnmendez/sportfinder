@@ -11,10 +11,12 @@
     <h2>Miembros</h2>
     <table class="index">
       <tr>
+        <th> </th>
         <th>Nombre</th>
       </tr>
       <% members.forEach((member) => { %>
         <tr>
+        <td> <img src="<%= member.user.photoId%>" alt="Foto"></td>
         <td><%= member.user.name + ' ' + member.user.surname %></td>
         <% if (isAdmin) { %>
         <td class="actions">
