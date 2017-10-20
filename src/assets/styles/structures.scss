@@ -57,6 +57,10 @@ table.index {
     @extend td;
     background-color: #CEF6CE
   }
+  td.memberPicture {
+    @extend td;
+    width: 120px;
+  }
 }
 
 td.actions {
@@ -79,6 +83,11 @@ img.profilePicture {
     object-fit: contain;
 }
 
+img.memberPicture {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
 div.googleMap {
   button {
     background-color: #084B8A;
