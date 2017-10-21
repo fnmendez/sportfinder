@@ -179,6 +179,7 @@ router.get('team', '/:id', async ctx => {
     sport,
     members,
     isAdmin: ctx.state.currentUser.isAdmin(),
+    isCaptain: checkCaptain(members, ctx.state.currentUser),
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
