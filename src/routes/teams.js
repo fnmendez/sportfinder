@@ -155,6 +155,18 @@ router.get('editTeam', '/:id/edit', async ctx => {
   })
 })
 
+router.patch('promoteMember', '/:id/:userid', async ctx => {
+  const joinTuple = await ctx.orm.userTeam.find({
+    where: {
+      teamId: ctx.params.id,
+      userId: ctx.params.userid,
+    },
+  })
+  await joinTuple.update({ captain: true })
+  ctx.flashMessage.notice = 'El usuario ha sido promovido.'
+  ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
+})
+
 router.patch('updateTeam', '/:id', async ctx => {
   const team = await ctx.orm.team.findById(ctx.params.id)
   try {
@@ -196,6 +208,7 @@ router.get('team', '/:id', async ctx => {
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
+    promoteMemberUrl: `/teams/${team.id}/`,
   })
 })
 

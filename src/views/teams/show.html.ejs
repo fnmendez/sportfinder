@@ -29,6 +29,15 @@
           </form>
         </td>
         <% } %>
+        <% if (isCaptain && !member.captain) { %>
+        <td class="actions">
+          <form action="<%= promoteMemberUrl + member.user.id %>" method="post">
+            <input type="hidden" name="userid" value="<%= member.user.id %>" />
+            <input type="hidden" name="_method" value="patch" />
+            <input type="submit" value="Promover"/>
+          </form>
+        </td>
+        <% } %>
         </tr>
       <% }) %>
     </table>
