@@ -1,5 +1,5 @@
 const KoaRouter = require('koa-router')
-
+const checkCaptain = require('../helpers/checkCaptain')
 const router = new KoaRouter()
 
 router.get('teams', '/', async ctx => {
