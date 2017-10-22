@@ -38,7 +38,7 @@ router.delete('removeMember', '/:id/memberDelete', async ctx => {
         })
         await team.destroy()
         ctx.flashMessage.notice =
-          'Se ha eliminado el equipo debido a que el capitán viró'
+          'Se ha eliminado el equipo debido a que el capitán lo abandonó'
         await ctx.redirect(ctx.router.url('teams'))
       }
     } catch (typeError) {
