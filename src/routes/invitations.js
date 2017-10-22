@@ -29,7 +29,7 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
   if (receiver) {
     try {
       const joinTuple = await ctx.orm.userTeam.find({
-        where: { userId: receiver.id },
+        where: { userId: receiver.id, teamId: ctx.params.id },
       })
       if (!joinTuple) {
         await ctx.orm.teamInvitation.create({
@@ -62,7 +62,7 @@ router.post('sendMatchInvitation', '/match/:id/', async ctx => {
   if (receiver) {
     try {
       const joinTuple = await ctx.orm.userMatch.find({
-        where: { userId: receiver.id },
+        where: { userId: receiver.id, matchId: ctx.params.id },
       })
       if (!joinTuple) {
         await ctx.orm.matchInvitation.create({
