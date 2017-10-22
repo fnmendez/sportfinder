@@ -122,7 +122,7 @@ router.post('addMember', '/:id', async ctx => {
   if (user) {
     // Si es que existe el usuario
     const invitation = await ctx.orm.teamInvitation.findOne({
-      where: { userId: user.id },
+      where: { userId: user.id, teamId: team.id },
     })
     if (invitation) {
       invitation.destroy()

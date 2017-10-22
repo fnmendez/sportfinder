@@ -21,7 +21,7 @@ module.exports = function definematchInvitation(sequelize, DataTypes) {
   })
   matchInvitation.associate = function associate(models) {
     matchInvitation.belongsTo(models.users)
-    matchInvitation.belongsTo(models.team)
+    matchInvitation.belongsTo(models.match)
   }
   return matchInvitation
 }
