@@ -6,11 +6,37 @@ router.get('matches', '/', async ctx => {
   const matches = await ctx.orm.match.findAll({
     include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
     order: [['date', 'ASC']],
+    where: { private: false },
   })
   const userMatches = await ctx.orm.userMatch.findAll({
     include: [ctx.orm.users, ctx.orm.match],
   })
   const user = { id: ctx.state.currentUser.id }
+  return ctx.render('matches/index', {
+    matches,
+    userMatches,
+    user,
+    matchUrl: match => ctx.router.url('match', { id: match.id }),
+    newMatchUrl: ctx.router.url('newMatch'),
+    profileUrl: '/profile',
+    joinMatchUrl: match => ctx.router.url('joinMatch', match.id),
+  })
+})
+
+router.get('myMatches', '/enrolled', async ctx => {
+  const user = { id: ctx.state.currentUser.id }
+  const userMatches = await ctx.orm.userMatch.findAll({
+    include: [
+      { model: ctx.orm.users },
+      {
+        model: ctx.orm.match,
+        include: [ctx.orm.sport, ctx.orm.club, ctx.orm.userMatch],
+        order: [['date', 'ASC']],
+      },
+    ],
+    where: { userId: user.id },
+  })
+  const matches = userMatches.map(player => player.match)
   return ctx.render('matches/index', {
     matches,
     userMatches,
@@ -151,6 +177,7 @@ router.patch('updateMatch', '/:id', async ctx => {
 })
 
 router.post('joinMatch', '/:id/players', async ctx => {
+  const currentUser = ctx.state.currentUser
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [
       {
@@ -162,13 +189,21 @@ router.post('joinMatch', '/:id/players', async ctx => {
       },
     ],
   })
-  if (match.isPlayer(ctx.state.currentUser.id)) {
+  if (match.isPlayer(currentUser.id)) {
     ctx.flashMessage.warning = 'Ya eres miembros de la partida.'
-    return ctx.router.redirect(ctx.router.url('match', match.id))
+    return ctx.redirect(ctx.router.url('match', match.id))
+  }
+  const canJoin = match.canJoin(currentUser)
+  if (!canJoin.success) {
+    ctx.flashMessage.warning =
+      canJoin.reason === 'requireId'
+        ? 'Debes tener tu foto actualizada para unirte.'
+        : 'Esta partida es privada.'
+    return ctx.redirect(ctx.router.url('matches'))
   }
   await ctx.orm.userMatch.create({
     matchId: match.id,
-    userId: ctx.state.currentUser.id,
+    userId: currentUser.id,
   })
   return ctx.redirect(ctx.router.url('match', match.id))
 })

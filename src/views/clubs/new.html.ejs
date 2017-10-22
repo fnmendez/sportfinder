@@ -4,12 +4,12 @@
   </div>
   <div>
     <form action="<%= createClubUrl %>" method="post">
+      <label for="name">Nombre</label>
       <div>
-        <label for="name">Nombre</label>
         <input type="text" name="name" value="<%= club.name %>" />
       </div>
+      <label for="address">Dirección</label>
       <div>
-        <label for="address">Dirección</label>
         <textarea type="text" name="address"><%= club.address %></textarea>
       </div>
       <div>

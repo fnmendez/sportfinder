@@ -1,6 +1,12 @@
 <div>
   <div>
     <h1>Partida: <%= match.id %> </h1>
+    <div>
+      <h3>Privada <%= match.private ? '✓' : '✗' %></h3>
+    </div>
+    <div>
+      <h3>Requiere foto <%= match.requireId ? '✓' : '✗' %></h3>
+    </div>
     <h2>Fecha: <%= match.displayDate %></h2>
     <% if (match.sport) { %>
       <h2>Deporte: <%= match.sport.name %></h2>
