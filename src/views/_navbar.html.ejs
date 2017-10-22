@@ -27,7 +27,7 @@
             <% notifications.forEach(notif => { %>
               <% n++ %>
               <div id="<%= 'form' + n %>" class="notification">
-                <a class="show-url" href="<%= notif.showUrl %>">
+                <a href="<%= notif.showUrl %>" class="show-url" href="<%= notif.showUrl %>">
                   <%= notif.message %>
                 </a>
                 <div class="hide-overflow">
