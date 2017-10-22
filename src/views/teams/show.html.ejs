@@ -13,17 +13,28 @@
       <tr>
         <th> </th>
         <th>Nombre</th>
+        <th>Rango</th>
       </tr>
       <% members.forEach((member) => { %>
         <tr>
         <td class="memberPicture"> <img class="memberPicture" src="<%= member.user.photoId%>" alt="Foto"></td>
         <td><%= member.user.name + ' ' + member.user.surname %></td>
+        <td><%= member.captain ? "Capitán" : "Miembro" %></td>
         <% if (isAdmin) { %>
         <td class="actions">
           <form action="<%= removeMemberUrl %> " method="post">
             <input type="hidden" name="userid" value="<%= member.user.id %>" />
             <input type="hidden" name="_method" value="delete" />
             <input type="submit" value="Borrar"/>
+          </form>
+        </td>
+        <% } %>
+        <% if (isCaptain && !member.captain) { %>
+        <td class="actions">
+          <form action="<%= promoteMemberUrl + member.user.id %>" method="post">
+            <input type="hidden" name="userid" value="<%= member.user.id %>" />
+            <input type="hidden" name="_method" value="patch" />
+            <input type="submit" value="Promover"/>
           </form>
         </td>
         <% } %>
@@ -45,12 +56,14 @@
     </div>
     <br />
     <br />
-    <div>
-      <form action="<%= deleteTeamUrl %>" method="post">
-        <input type="hidden" name="_method" value="delete" />
-        <input class="right" type="submit" name="delete" value="Eliminar" />
-      </form>
-    </div>
+    <% if (isCaptain || isAdmin) { %>
+      <div>
+        <form action="<%= deleteTeamUrl %>" method="post">
+          <input type="hidden" name="_method" value="delete" />
+          <input class="right" type="submit" name="delete" value="Eliminar" />
+        </form>
+      </div>
+    <% } %>
     <div>
       <form class="hide-overflow" action="<%= indexUrl %>" method="get">
         <input class="left" type="submit" value="Volver" />
