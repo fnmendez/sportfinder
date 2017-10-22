@@ -170,7 +170,16 @@ router.patch('promoteMember', '/:id/:userid', async ctx => {
       userId: ctx.params.userid,
     },
   })
+  const currentUserJoinTuple = await ctx.orm.userTeam.find({
+    where: {
+      teamId: ctx.params.id,
+      userId: ctx.state.currentUser.id,
+    },
+  })
+
   await joinTuple.update({ captain: true })
+  await currentUserJoinTuple.update({ captain: false })
+
   ctx.flashMessage.notice = 'El usuario ha sido promovido.'
   ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
 })

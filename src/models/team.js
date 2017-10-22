@@ -8,6 +8,9 @@ module.exports = function defineteam(sequelize, DataTypes) {
       },
     },
   })
+  team.prototype.getCaptainId = function getCaptainId() {
+    // Instances refered with this might have userTeam loaded
+  }
   team.associate = function associate(models) {
     team.hasMany(models.userTeam)
     team.belongsTo(models.sport)
