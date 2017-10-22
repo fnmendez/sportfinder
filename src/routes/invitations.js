@@ -28,13 +28,21 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
   })
   if (receiver) {
     try {
-      await ctx.orm.teamInvitation.create({
-        teamId: ctx.params.id,
-        userId: receiver.id,
-        author: ctx.state.currentUser.username,
+      const joinTuple = await ctx.orm.userTeam.find({
+        where: { userId: receiver.id },
       })
-      ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
-      ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
+      if (!joinTuple) {
+        await ctx.orm.teamInvitation.create({
+          teamId: ctx.params.id,
+          userId: receiver.id,
+          author: ctx.state.currentUser.username,
+        })
+        ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}.`
+        ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
+      } else {
+        ctx.flashMessage.notice = `${receiver.username} ya está en este equipo.`
+        ctx.redirect(ctx.router.url('teamInvitation', ctx.params.id))
+      }
     } catch (validationError) {
       await ctx.render('/invitations/teams/new', {
         currentUser: ctx.state.currentUser,
@@ -53,13 +61,21 @@ router.post('sendMatchInvitation', '/match/:id/', async ctx => {
   })
   if (receiver) {
     try {
-      await ctx.orm.matchInvitation.create({
-        matchId: ctx.params.id,
-        userId: receiver.id,
-        author: ctx.state.currentUser.username,
+      const joinTuple = await ctx.orm.userMatch.find({
+        where: { userId: receiver.id },
       })
-      ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
-      ctx.redirect(ctx.router.url('match', { id: ctx.params.id }))
+      if (!joinTuple) {
+        await ctx.orm.matchInvitation.create({
+          matchId: ctx.params.id,
+          userId: receiver.id,
+          author: ctx.state.currentUser.username,
+        })
+        ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
+        ctx.redirect(ctx.router.url('match', { id: ctx.params.id }))
+      } else {
+        ctx.flashMessage.notice = `${receiver.username} ya está en esta partida.`
+        ctx.redirect(ctx.router.url('matchInvitation', ctx.params.id))
+      }
     } catch (validationError) {
       await ctx.render('/invitations/matches/new', {
         currentUser: ctx.state.currentUser,
