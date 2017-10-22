@@ -78,8 +78,8 @@ module.exports = function definematch(sequelize, DataTypes) {
   match.prototype.isOver = function isOver() {
     const today = new Date()
     const thisDate = new Date(this.date)
-    const diffInDays = (today - thisDate) / (1000 * 60 * 60 * 24)
-    if (diffInDays >= 1) {
+    const diffInMinutes = (today - thisDate) / (1000 * 60)
+    if (diffInMinutes >= 5) {
       return true
     } else {
       return false
