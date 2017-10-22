@@ -206,9 +206,10 @@ router.get('team', '/:id', async ctx => {
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
-    addMemberUrl: ctx.router.url('addMember', team.id),
+    addMemberUrl: ctx.router.url('teamInvitation', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
     promoteMemberUrl: `/teams/${team.id}/`,
+    inviteMemberUrl: ctx.router.url('teamInvitation', team.id),
   })
 })
 
