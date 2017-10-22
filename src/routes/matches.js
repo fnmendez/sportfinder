@@ -332,6 +332,7 @@ router.get('match', '/:id', async ctx => {
     editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),
+    matchInvitationUrl: ctx.router.url('matchInvitation', match.id),
   })
 })
 
