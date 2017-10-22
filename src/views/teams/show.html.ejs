@@ -43,14 +43,7 @@
     </table>
   </div>
   <div>
-    <div>
-      <form action="<%= addMemberUrl %>" method="post">
-        <div>
-          <input type="text" name="name" placeholder="Nombre de usuario" />
-          <input type="submit" name="add" value="Agregar miembro" />
-        </div>
-      </form>
-    </div>
+    <% if (isCaptain || isAdmin) { %>
     <div>
       <form class="hide-overflow" action="<%= inviteMemberUrl %>" method="get">
         <input class="left" type="submit" value="Invitar un usuario" />
@@ -62,7 +55,6 @@
     </div>
     <br />
     <br />
-    <% if (isCaptain || isAdmin) { %>
       <div>
         <form action="<%= deleteTeamUrl %>" method="post">
           <input type="hidden" name="_method" value="delete" />
