@@ -118,8 +118,16 @@ router.post('addMember', '/:id', async ctx => {
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
+
   if (user) {
     // Si es que existe el usuario
+    const invitation = await ctx.orm.teamInvitation.findOne({
+      where: { userId: user.id, teamId: team.id },
+    })
+    if (invitation) {
+      invitation.destroy()
+    }
+
     try {
       // Intentamos crear la tupla en la tabla de userTeam
       await ctx.orm.userTeam.create({ teamId: team.id, userId: user.id })
@@ -209,6 +217,7 @@ router.get('team', '/:id', async ctx => {
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
     promoteMemberUrl: `/teams/${team.id}/`,
+    inviteMemberUrl: ctx.router.url('teamInvitation', team.id),
   })
 })
 

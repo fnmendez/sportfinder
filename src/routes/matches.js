@@ -189,6 +189,12 @@ router.post('joinMatch', '/:id/players', async ctx => {
       },
     ],
   })
+
+  const invitation = await ctx.orm.matchInvitation.findOne({})
+  if (invitation) {
+    invitation.destroy()
+  }
+
   if (match.isPlayer(currentUser.id)) {
     ctx.flashMessage.warning = 'Ya eres miembros de la partida.'
     return ctx.redirect(ctx.router.url('match', match.id))
@@ -205,6 +211,7 @@ router.post('joinMatch', '/:id/players', async ctx => {
     matchId: match.id,
     userId: currentUser.id,
   })
+
   return ctx.redirect(ctx.router.url('match', match.id))
 })
 
@@ -332,6 +339,7 @@ router.get('match', '/:id', async ctx => {
     editMatchUrl: ctx.router.url('editMatch', match.id),
     deleteMatchUrl: ctx.router.url('deleteMatch', match.id),
     indexUrl: ctx.router.url('matches'),
+    matchInvitationUrl: ctx.router.url('matchInvitation', match.id),
   })
 })
 
