@@ -54,10 +54,12 @@ router.post('createUser', 'signup', async ctx => {
     ctx.request.body.fields.confirmed = false
   }
   const token = uuid()
-  const user = ctx.orm.users.build({...ctx.request.body.fields,
-                                    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`,
-                                    token,
-                                   })
+  const user = ctx.orm.users.build({
+    ...ctx.request.body.fields,
+    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
+      .files.upload.name}`,
+    token,
+  })
 
   try {
     await fileStorage.upload(ctx.request.body.files.upload)
@@ -103,18 +105,19 @@ router.delete('deleteUser', 'profile', async ctx => {
   return ctx.redirect('/')
 })
 
-
-router.post('updateUser', 'profile', async (ctx) => {
+router.post('updateUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   try {
     await fileStorage.upload(ctx.request.body.files.upload)
-    await user.update({username: ctx.request.body.fields.username,
-                        mail: ctx.request.body.fields.mail,
-                        name: ctx.request.body.fields.name,
-                        surname: ctx.request.body.fields.surname,
-                        pid: ctx.request.body.fields.pid,
-                        photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body.files.upload.name}`
-                      })
+    await user.update({
+      username: ctx.request.body.fields.username,
+      mail: ctx.request.body.fields.mail,
+      name: ctx.request.body.fields.name,
+      surname: ctx.request.body.fields.surname,
+      pid: ctx.request.body.fields.pid,
+      photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
+        .files.upload.name}`,
+    })
     ctx.flashMessage.notice = 'Tu perfil ha sido actualizado.'
     return ctx.redirect('profile')
   } catch (validationError) {
@@ -173,7 +176,6 @@ router.get('sendEmail', 'sendConfirmationEmail', async ctx => {
 
 router.get('showUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
-  console.log(user.get());
   if (user) {
     ctx.state.currentUser = user
     await ctx.render('welcome/profile', {
@@ -189,13 +191,12 @@ router.get('showUser', 'profile', async ctx => {
   }
 })
 
+router.get('profile.file', '/file', ctx => {
+  ctx.body = fileStorage.download(ctx.query.file)
+  ctx.response.type = 'image/png'
+})
 
-router.get('profile.file', '/file', (ctx) => {
-  ctx.body = fileStorage.download(ctx.query.file);
-  ctx.response.type = 'image/png';
-});
-
-router.get('logout', 'logout', async (ctx) => {
+router.get('logout', 'logout', async ctx => {
   ctx.session = null
   ctx.redirect('/')
 })

@@ -36,4 +36,13 @@ router.post('sendInvitation', '/team/:id/', async ctx => {
   }
 })
 
+router.delete('deleteTeamInvitation', '/team/:id', async ctx => {
+  const invitation = await ctx.orm.teamInvitation.findOne({
+    where: { userId: ctx.state.currentUser.id, teamId: ctx.params.id },
+  })
+  if (invitation) {
+    invitation.destroy()
+  }
+})
+
 module.exports = router
