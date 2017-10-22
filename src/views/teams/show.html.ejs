@@ -29,7 +29,7 @@
           </form>
         </td>
         <% } %>
-        <% if (isCaptain && !member.captain) { %>
+        <% if ((isCaptain && !member.captain) || (isAdmin && !member.captain)) { %>
         <td class="actions">
           <form action="<%= promoteMemberUrl + member.user.id %>" method="post">
             <input type="hidden" name="userid" value="<%= member.user.id %>" />
