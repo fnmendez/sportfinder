@@ -2,6 +2,7 @@ const sendWelcomeEmail = require('../mailers/welcome')
 const KoaRouter = require('koa-router')
 const fileStorage = require('../services/file-storage')
 const uuid = require('uuid/v4')
+const loadNotifications = require('../helpers/loadNotifications')
 const pkg = require('../../package.json')
 
 const router = new KoaRouter()
@@ -178,8 +179,10 @@ router.get('showUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
     ctx.state.currentUser = user
+    const notifications = await loadNotifications(ctx)
     await ctx.render('welcome/profile', {
       user,
+      notifications,
       editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',

@@ -196,7 +196,7 @@ router.post('joinMatch', '/:id/players', async ctx => {
   }
 
   if (match.isPlayer(currentUser.id)) {
-    ctx.flashMessage.warning = 'Ya eres miembros de la partida.'
+    ctx.flashMessage.warning = 'Ya eres miembro de la partida.'
     return ctx.redirect(ctx.router.url('match', match.id))
   }
   const canJoin = match.canJoin(currentUser)

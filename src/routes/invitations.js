@@ -21,19 +21,19 @@ router.get('matchInvitation', '/match/:id/new', async ctx => {
 })
 
 router.post('sendTeamInvitation', '/team/:id/', async ctx => {
-  const reciever = await ctx.orm.users.findOne({
+  const receiver = await ctx.orm.users.findOne({
     where: {
       username: ctx.request.body.to,
     },
   })
-  if (reciever) {
+  if (receiver) {
     try {
       await ctx.orm.teamInvitation.create({
         teamId: ctx.params.id,
-        userId: reciever.id,
+        userId: receiver.id,
         author: ctx.state.currentUser.username,
       })
-      ctx.flashMessage.notice = `La invitación fue enviada a ${reciever.username}`
+      ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
       ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
     } catch (validationError) {
       await ctx.render('/invitations/teams/new', {
@@ -46,19 +46,19 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
 })
 
 router.post('sendMatchInvitation', '/match/:id/', async ctx => {
-  const reciever = await ctx.orm.users.findOne({
+  const receiver = await ctx.orm.users.findOne({
     where: {
       username: ctx.request.body.to,
     },
   })
-  if (reciever) {
+  if (receiver) {
     try {
       await ctx.orm.matchInvitation.create({
         matchId: ctx.params.id,
-        userId: reciever.id,
+        userId: receiver.id,
         author: ctx.state.currentUser.username,
       })
-      ctx.flashMessage.notice = `La invitación fue enviada a ${reciever.username}`
+      ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
       ctx.redirect(ctx.router.url('match', { id: ctx.params.id }))
     } catch (validationError) {
       await ctx.render('/invitations/matches/new', {
@@ -77,6 +77,7 @@ router.delete('deleteTeamInvitation', '/team/:id', async ctx => {
   if (invitation) {
     invitation.destroy()
   }
+  ctx.body = { message: 'OK' }
 })
 router.delete('deleteMatchInvitation', '/match/:id', async ctx => {
   const invitation = await ctx.orm.matchInvitation.findOne({
@@ -85,6 +86,7 @@ router.delete('deleteMatchInvitation', '/match/:id', async ctx => {
   if (invitation) {
     invitation.destroy()
   }
+  ctx.body = { message: 'OK' }
 })
 
 module.exports = router
