@@ -4,7 +4,7 @@ const router = new KoaRouter()
 
 router.get('teamInvitation', '/team/:id/new', async ctx => {
   const invitation = ctx.orm.teamInvitation.build()
-  await ctx.render('/invitations/newTeamInvitation', {
+  await ctx.render('/invitations/teams/new', {
     invitation,
     currentUser: ctx.state.currentUser,
     sendInvitationUrl: ctx.router.url('sendTeamInvitation', ctx.params.id),
@@ -13,7 +13,7 @@ router.get('teamInvitation', '/team/:id/new', async ctx => {
 
 router.get('matchInvitation', '/match/:id/new', async ctx => {
   const invitation = ctx.orm.matchInvitation.build()
-  await ctx.render('/invitations/newMatchInvitation', {
+  await ctx.render('/invitations/matches/new', {
     invitation,
     currentUser: ctx.state.currentUser,
     sendInvitationUrl: ctx.router.url('sendMatchInvitation', ctx.params.id),
@@ -36,7 +36,7 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
       ctx.flashMessage.notice = `La invitación fue enviada a ${reciever.username}`
       ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
     } catch (validationError) {
-      await ctx.render('/invitations/newTeamInvitation', {
+      await ctx.render('/invitations/teams/new', {
         currentUser: ctx.state.currentUser,
         errors: validationError.errors,
         sendInvitationUrl: ctx.router.url('sendTeamInvitation', ctx.params.id),
@@ -61,7 +61,7 @@ router.post('sendMatchInvitation', '/match/:id/', async ctx => {
       ctx.flashMessage.notice = `La invitación fue enviada a ${reciever.username}`
       ctx.redirect(ctx.router.url('match', { id: ctx.params.id }))
     } catch (validationError) {
-      await ctx.render('/invitations/newMatchInvitation', {
+      await ctx.render('/invitations/matches/new', {
         currentUser: ctx.state.currentUser,
         errors: validationError.errors,
         sendInvitationUrl: ctx.router.url('sendMatchInvitation', ctx.params.id),
