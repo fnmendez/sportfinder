@@ -29,6 +29,10 @@ module.exports = function definematch(sequelize, DataTypes) {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      sentEvaluations: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       private: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

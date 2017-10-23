@@ -176,6 +176,71 @@ router.patch('updateMatch', '/:id', async ctx => {
   }
 })
 
+router.post('sendEvaluations', '/:id/send', async ctx => {
+  const match = await ctx.orm.match.findById(ctx.params.id)
+  if (match.sentEvaluations) {
+    ctx.flashMessage.warning = 'Ya has enviado las evaluaciones.'
+    return ctx.redirect(ctx.router.url('match', ctx.params.id))
+  }
+  if (match.date.getTime() > new Date().getTime()) {
+    ctx.flashMessage.warning =
+      'No se pueden enviar las evaluaciones antes del término de la partida.'
+    return ctx.redirect(ctx.router.url('match', ctx.params.id))
+  }
+  await match.update({ sentEvaluations: true })
+  const players = await ctx.orm.userMatch.findAll({
+    where: { matchId: ctx.params.id },
+    include: [ctx.orm.users],
+  })
+  players.forEach(async author => {
+    await author.user.update({ hasPendingEvaluations: true })
+    players.forEach(async player => {
+      if (author.user.id !== player.user.id) {
+        await ctx.orm.evaluation.create({
+          playerId: player.id,
+          userId: author.user.id,
+        })
+      }
+    })
+  })
+  ctx.flashMessage.notice = 'Se han enviado las notificaciones.'
+  return ctx.redirect(ctx.router.url('match', ctx.params.id))
+})
+
+router.get('evaluations', '/evaluate', async ctx => {
+  const evaluations = await ctx.orm.evaluation.findAll({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  const players = await ctx.orm.userMatch.findAll({ include: [ctx.orm.users] })
+  const toEvaluate = evaluations.filter(ev => !ev.stars)
+  return ctx.render('matches/evaluate', {
+    evaluations: toEvaluate,
+    evalUrl: ev => ctx.router.url('evaluatePlayer', { id: ev.id }),
+    getPlayer: ev => players.filter(p => p.id === ev.playerId)[0],
+  })
+})
+
+router.post('evaluatePlayer', '/evaluate/:id/', async ctx => {
+  const evaluation = await ctx.orm.evaluation.findById(ctx.params.id)
+  await evaluation.update({ stars: ctx.request.body.stars })
+  const evaluations = await ctx.orm.evaluation.findAll({
+    where: { userId: ctx.state.currentUser.id },
+  })
+  let stillRemainingEvaluations = false
+  evaluations.forEach(ev => {
+    if (!ev.stars) {
+      stillRemainingEvaluations = true
+    }
+  })
+  if (!stillRemainingEvaluations) {
+    const user = await ctx.orm.users.findById(ctx.state.currentUser.id)
+    await user.update({ hasPendingEvaluations: false })
+  }
+  ctx.flashMessage.notice =
+    'Gracias por evaluar a los jugadores. En una próxima versión serás recompensado.'
+  ctx.redirect(ctx.router.url('evaluations'))
+})
+
 router.post('joinMatch', '/:id/players', async ctx => {
   const currentUser = ctx.state.currentUser
   const match = await ctx.orm.match.findById(ctx.params.id, {

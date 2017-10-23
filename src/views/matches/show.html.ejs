@@ -7,6 +7,13 @@
     <div>
       <h3>Requiere foto <%= match.requireId ? '✓' : '✗' %></h3>
     </div>
+    <% if (match.date.getTime() < new Date().getTime() && !visitMode && currentPlayer.isAdmin() && !match.sentEvaluations) { %>
+      <div>
+        <form action="<%= '/play/' +  match.id + '/send' %>" method="post">
+          <input type="submit" value="Enviar evaluaciones" />
+        </form>
+      </div>
+    <% } %>
     <h2>Fecha: <%= match.displayDate %></h2>
     <% if (match.sport) { %>
       <h2>Deporte: <%= match.sport.name %></h2>
