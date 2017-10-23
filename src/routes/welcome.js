@@ -1,7 +1,8 @@
 const sendWelcomeEmail = require('../mailers/welcome')
 const KoaRouter = require('koa-router')
+const fileStorage = require('../services/file-storage')
 const uuid = require('uuid/v4')
-
+const loadNotifications = require('../helpers/loadNotifications')
 const pkg = require('../../package.json')
 
 const router = new KoaRouter()
@@ -48,14 +49,21 @@ router.get('signup', 'signup', async ctx => {
 
 router.post('createUser', 'signup', async ctx => {
   const developmentMode = ctx.state.env === 'development'
-  // if (developmentMode) {
-  //   ctx.request.body.confirmed = true
-  // } else {
-  //   ctx.request.body.confirmed = false
-  // }
+  if (developmentMode) {
+    ctx.request.body.fields.confirmed = true
+  } else {
+    ctx.request.body.fields.confirmed = false
+  }
   const token = uuid()
-  const user = ctx.orm.users.build({ ...ctx.request.body, token })
+  const user = ctx.orm.users.build({
+    ...ctx.request.body.fields,
+    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
+      .files.upload.name}`,
+    token,
+  })
+
   try {
+    await fileStorage.upload(ctx.request.body.files.upload)
     await user.save({
       fields: [
         'username',
@@ -64,6 +72,7 @@ router.post('createUser', 'signup', async ctx => {
         'surname',
         'mail',
         'pid',
+        'photoId',
         'token',
         'confirmed',
       ],
@@ -82,7 +91,7 @@ router.post('createUser', 'signup', async ctx => {
   } catch (validationError) {
     await ctx.render('welcome/signup', {
       homeUrl: '/',
-      user: ctx.orm.users.build(ctx.request.body),
+      user: ctx.orm.users.build(ctx.request.body.fields),
       errors: validationError.errors,
     })
   }
@@ -97,10 +106,19 @@ router.delete('deleteUser', 'profile', async ctx => {
   return ctx.redirect('/')
 })
 
-router.patch('updateUser', 'profile', async ctx => {
+router.post('updateUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   try {
-    await user.update(ctx.request.body)
+    await fileStorage.upload(ctx.request.body.files.upload)
+    await user.update({
+      username: ctx.request.body.fields.username,
+      mail: ctx.request.body.fields.mail,
+      name: ctx.request.body.fields.name,
+      surname: ctx.request.body.fields.surname,
+      pid: ctx.request.body.fields.pid,
+      photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
+        .files.upload.name}`,
+    })
     ctx.flashMessage.notice = 'Tu perfil ha sido actualizado.'
     return ctx.redirect('profile')
   } catch (validationError) {
@@ -161,8 +179,10 @@ router.get('showUser', 'profile', async ctx => {
   const user = await ctx.orm.users.findById(ctx.session.user.id)
   if (user) {
     ctx.state.currentUser = user
+    const notifications = await loadNotifications(ctx)
     await ctx.render('welcome/profile', {
       user,
+      notifications,
       editUrl: ctx.router.url('editUser'),
       logoutUrl: ctx.router.url('logout'),
       startUrl: '/play',
@@ -172,6 +192,11 @@ router.get('showUser', 'profile', async ctx => {
     ctx.session = null
     ctx.redirect('/')
   }
+})
+
+router.get('profile.file', '/file', ctx => {
+  ctx.body = fileStorage.download(ctx.query.file)
+  ctx.response.type = 'image/png'
 })
 
 router.get('logout', 'logout', async ctx => {

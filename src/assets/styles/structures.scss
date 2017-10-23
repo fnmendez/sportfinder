@@ -23,6 +23,7 @@
 }
 
 button {
+  margin-top: 12px;
   background: white;
   font-size: 13px;
   padding: 8px 18px;
@@ -55,7 +56,11 @@ table.index {
   }
   tr.admin {
     @extend td;
-    background-color: #CEF6CE
+    background-color: #CEF6CE;
+  }
+  td.memberPicture {
+    @extend td;
+    width: 120px;
   }
 }
 
@@ -79,6 +84,11 @@ img.profilePicture {
     object-fit: contain;
 }
 
+img.memberPicture {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
 div.googleMap {
   button {
     background-color: #084B8A;

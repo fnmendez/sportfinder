@@ -8,9 +8,11 @@ const teams = require('./routes/teams')
 const matches = require('./routes/matches')
 const users = require('./routes/users')
 const admin = require('./routes/admin')
+const invitations = require('./routes/invitations')
 
-const checkAccountConfirmation = require('./helpers/checkAccountConfirmation')
 const checkLogin = require('./helpers/checkLogin')
+const checkAccountConfirmation = require('./helpers/checkAccountConfirmation')
+const notificationManager = require('./helpers/notificationManager')
 const checkRole = require('./helpers/checkRole')
 
 const router = new KoaRouter()
@@ -25,12 +27,16 @@ router.use(checkLogin)
 // check account confirmation
 router.use(checkAccountConfirmation)
 
+// load notifications
+router.use(notificationManager)
+
 // private
 router.use('/sports', sports.routes())
 router.use('/clubs', clubs.routes())
 router.use('/teams', teams.routes())
 router.use('/play', matches.routes())
 router.use('/users', users.routes())
+router.use('/invitations', invitations.routes())
 
 // check role
 router.use(checkRole)

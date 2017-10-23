@@ -1,5 +1,5 @@
 const KoaRouter = require('koa-router')
-
+const checkCaptain = require('../helpers/checkCaptain')
 const router = new KoaRouter()
 
 router.get('teams', '/', async ctx => {
@@ -25,12 +25,22 @@ router.delete('removeMember', '/:id/memberDelete', async ctx => {
   const members = team.userTeams
   if (user) {
     try {
-      const joinTuple = await ctx.orm.userTeam.findOne({
-        where: { userId: user.id, teamId: team.id },
-      })
-      await joinTuple.destroy()
-      ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.'
-      ctx.redirect(ctx.router.url('team', { id: team.id }))
+      if (!checkCaptain(members, user)) {
+        const joinTuple = await ctx.orm.userTeam.findOne({
+          where: { userId: user.id, teamId: team.id },
+        })
+        await joinTuple.destroy()
+        ctx.flashMessage.notice = 'El miembro ha sido eliminado del equipo.'
+        ctx.redirect(ctx.router.url('team', { id: team.id }))
+      } else {
+        members.forEach(member => {
+          member.destroy()
+        })
+        await team.destroy()
+        ctx.flashMessage.notice =
+          'Se ha eliminado el equipo debido a que el capitán lo abandonó'
+        await ctx.redirect(ctx.router.url('teams'))
+      }
     } catch (typeError) {
       await ctx.render('teams/show', {
         errors: typeError.errors,
@@ -80,6 +90,7 @@ router.post('createTeam', '/', async ctx => {
     await ctx.orm.userTeam.create({
       teamId: team.id,
       userId: ctx.state.currentUser.id,
+      captain: true,
     })
     ctx.redirect(ctx.router.url('team', { id: team.id }))
   } catch (validationError) {
@@ -107,8 +118,16 @@ router.post('addMember', '/:id', async ctx => {
   })
   const sport = await ctx.orm.sport.findById(team.sportId)
   const members = team.userTeams
+
   if (user) {
     // Si es que existe el usuario
+    const invitation = await ctx.orm.teamInvitation.findOne({
+      where: { userId: user.id, teamId: team.id },
+    })
+    if (invitation) {
+      invitation.destroy()
+    }
+
     try {
       // Intentamos crear la tupla en la tabla de userTeam
       await ctx.orm.userTeam.create({ teamId: team.id, userId: user.id })
@@ -142,6 +161,34 @@ router.get('editTeam', '/:id/edit', async ctx => {
     updateTeamUrl: ctx.router.url('updateTeam', team.id),
     showTeamUrl: ctx.router.url('team', team.id),
   })
+})
+
+router.patch('promoteMember', '/:id/:userid', async ctx => {
+  const team = await ctx.orm.team.findById(ctx.params.id, {
+    include: [
+      {
+        model: ctx.orm.userTeam,
+      },
+    ],
+  })
+  const joinTuple = await ctx.orm.userTeam.find({
+    where: {
+      teamId: ctx.params.id,
+      userId: ctx.params.userid,
+    },
+  })
+  const captainId = team.getCaptainId()
+  const captainJoinTuple = await ctx.orm.userTeam.find({
+    where: {
+      teamId: ctx.params.id,
+      userId: captainId,
+    },
+  })
+  await joinTuple.update({ captain: true })
+  await captainJoinTuple.update({ captain: false })
+
+  ctx.flashMessage.notice = 'El usuario ha sido promovido.'
+  ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
 })
 
 router.patch('updateTeam', '/:id', async ctx => {
@@ -179,11 +226,14 @@ router.get('team', '/:id', async ctx => {
     sport,
     members,
     isAdmin: ctx.state.currentUser.isAdmin(),
+    isCaptain: checkCaptain(members, ctx.state.currentUser),
     editTeamUrl: ctx.router.url('editTeam', team.id),
     deleteTeamUrl: ctx.router.url('deleteTeam', team.id),
     indexUrl: ctx.router.url('teams'),
     addMemberUrl: ctx.router.url('addMember', team.id),
     removeMemberUrl: ctx.router.url('removeMember', team.id),
+    promoteMemberUrl: `/teams/${team.id}/`,
+    inviteMemberUrl: ctx.router.url('teamInvitation', team.id),
   })
 })
 

@@ -3,8 +3,7 @@
     <h3>Modificar tu cuenta</h3>
   </div>
   <div>
-    <form action="<%= updateUrl %>" method="post">
-      <input type="hidden" name="_method" value="patch" />
+    <form action="<%= updateUrl %>" enctype=multipart/form-data method="post">
       <div>
         <label>Datos de usuario</label><br>
         <input type="text" name="username" value="<%= user.username %>" placeholder="Usuario">
@@ -17,8 +16,8 @@
         <input type="text" name="pid" value="<%= user.pid %>" placeholder="RUT"><br><br>
       </div>
       <div>
-        <label>Foto del carné de identidad</label><br>
-        <input type="text" name="photoId" placeholder="URL de la imágen" height="10" width="10"><br><br>
+        <label>Foto de perfil</label><br>
+        <input type="file" name="upload"><br><br>
       </div>
       <div>
         <input class="left" type="submit" value="Actualizar">

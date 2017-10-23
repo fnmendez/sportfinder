@@ -19,36 +19,49 @@ $sportfinder-blue: #466BBB;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-   font-size: 13.5px;
+  font-size: 13.5px;
 }
 
-input[type=text], input[type=password] {
-    padding: 8px 12px;
-    margin: 8px 4px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+select {
+  margin-top: 12px;
+  height: 30px;
+  width: 140px;
+  background-color: white;
+}
+
+input[type=checkbox], input[type=datetime-local] {
+  margin-top: 12px;
+}
+
+input[type=text], input[type=password], textarea {
+  margin-top: 12px;
+  padding: 8px 12px;
+  margin: 8px 4px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 input[type=submit] {
-    background: white;
-    padding: 8px 18px;
-    font-size: 80%;
-    border: 1px solid #ccc;
+  margin-top: 12px;
+  background: white;
+  padding: 8px 18px;
+  font-size: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  &.danger {
+    background-color: #DF0101;
+    border: #2e6da4;
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: normal;
     border-radius: 4px;
-    cursor: pointer;
-    &.danger {
-      background-color: #DF0101;
-      border: #2e6da4;
-      font-size: 15px;
-      color: #fff;
-      letter-spacing: 1px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: normal;
-      border-radius: 4px;
-      line-height: 1.5;
-      text-decoration: none;
-    }
+    line-height: 1.5;
+    text-decoration: none;
+  }
 }
 
 input:invalid + span {
@@ -59,6 +72,7 @@ input:invalid + span:after {
   content: '✖';
   position: absolute;
   right: -18px;
+  margin-top: 12px;
 }
 
 input:valid + span {
@@ -69,12 +83,7 @@ input:valid + span:after {
   content: '✓';
   position: absolute;
   right: -18px;
-}
-
-select {
-  height: 30px;
-  width: 140px;
-  background-color: white;
+  margin-top: 12px;
 }
 
 a.btn {

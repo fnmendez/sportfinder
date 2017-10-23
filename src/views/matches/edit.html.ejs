@@ -6,6 +6,12 @@
     <form action="<%= updateMatchUrl %>" method="post">
       <input type="hidden" name="_method" value="patch" />
       <div>
+        <input type="checkbox" name="private" <%= match.private ? 'checked' : '' %>> Privada
+      </div>
+      <div>
+        <input type="checkbox" name="requireId" <%= match.requireId ? 'checked' : '' %>> Requerir foto de carné
+      </div>
+      <div>
         <input name="date" type="datetime-local" value="<%= match.date %>" />
       </div>
       <div>

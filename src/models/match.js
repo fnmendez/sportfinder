@@ -20,10 +20,18 @@ module.exports = function definematch(sequelize, DataTypes) {
               value.getTime() >
                 new Date(Date.now() + 365 * 24 * 3600 * 1000).getTime()
             ) {
-              throw new Error('La fecha no puede exceder de un año')
+              throw new Error('La fecha no puede exceder de un año.')
             }
           },
         },
+      },
+      requireId: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      private: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
     },
     {
@@ -70,12 +78,22 @@ module.exports = function definematch(sequelize, DataTypes) {
   match.prototype.isOver = function isOver() {
     const today = new Date()
     const thisDate = new Date(this.date)
-    const diffInDays = (today - thisDate) / (1000 * 60 * 60 * 24)
-    if (diffInDays >= 1) {
+    const diffInMinutes = (today - thisDate) / (1000 * 60)
+    if (diffInMinutes >= 5) {
       return true
     } else {
       return false
     }
+  }
+
+  match.prototype.canJoin = function canJoin(user) {
+    if (!user.photoId && this.requireId) {
+      return { success: false, reason: 'requireId' }
+    }
+    // if (this.private && notInvited) {
+    //   return { success: false, reason: 'private' }
+    // }
+    return { success: true }
   }
 
   match.associate = function associate(models) {

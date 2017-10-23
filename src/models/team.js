@@ -8,6 +8,16 @@ module.exports = function defineteam(sequelize, DataTypes) {
       },
     },
   })
+  team.prototype.getCaptainId = function getCaptainId() {
+    // Instances refered with this might have userTeam loaded
+    let captainId = null
+    this.userTeams.forEach(tuple => {
+      if (tuple.captain) {
+        captainId = tuple.userId
+      }
+    })
+    return captainId
+  }
   team.associate = function associate(models) {
     team.hasMany(models.userTeam)
     team.belongsTo(models.sport)

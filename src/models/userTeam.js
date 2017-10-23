@@ -16,6 +16,10 @@ module.exports = function definesports(sequelize, DataTypes) {
         notEmpty: true,
       },
     },
+    captain: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   })
   userTeam.associate = function associate(models) {
     userTeam.belongsTo(models.users)
