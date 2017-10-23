@@ -45,6 +45,13 @@ nav {
       border: none;
     }
   }
+  a.evaluate {
+    color: rgb(67, 228, 89);
+    font-size: 18px;
+  }
+  a.evaluate:hover {
+    color: #2BBEFF;
+  }
 }
 
 #user-bar {

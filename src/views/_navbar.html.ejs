@@ -14,6 +14,9 @@
   </nav>
   <div id="user-bar">
     <% if (locals.currentUser) { %>
+      <% if (currentUser.hasPendingEvaluations) { %>
+        <a id="evaluateLink" class="logout evaluate" href="/play/evaluate">Evaluar</a>
+      <% } %>
       <div class="dropdown">
         <button class="dropbtn" id="myDropdownButton" onclick="toggle()">
           <%= currentUser.username %>
@@ -77,3 +80,14 @@
     <% } %>
   </div>
 </header>
+<script>
+blinkEval1()
+  function blinkEval1() {
+    document.getElementById('evaluateLink').style.color='rgb(5, 255, 0)'
+    setTimeout('blinkEval2()', 1000)
+  }
+  function blinkEval2() {
+    document.getElementById('evaluateLink').style.color='rgb(255, 0, 214)'
+    setTimeout('blinkEval1()', 1000)
+  }
+</script>
