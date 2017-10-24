@@ -1,9 +1,9 @@
-const fs = require('fs');
-const Promise = require('bluebird');
-const { storage } = require('pkgcloud');
+const fs = require('fs')
+const Promise = require('bluebird')
+const { storage } = require('pkgcloud')
 const googleConfig = require('../config/google')
 
-const CONTAINER_NAME = 'sportfinder';
+const CONTAINER_NAME = 'sportfinder'
 
 class FileStorage {
   constructor() {
@@ -11,24 +11,29 @@ class FileStorage {
       provider: 'google',
       credentials: googleConfig,
       projectId: 'sportfinder-181903',
-    });
+    })
   }
 
   upload(fileData) {
     return new Promise((resolve, reject) => {
-      const remote = fileData.name;
-      const writeStream = this.client.upload({ container: CONTAINER_NAME, remote });
-      writeStream.on('error', reject);
-      writeStream.on('success', resolve);
-      const fileStream = fs.createReadStream(fileData.path);
-      fileStream.pipe(writeStream);
-    });
+      const remote = fileData.name
+      const writeStream = this.client.upload({
+        container: CONTAINER_NAME,
+        remote,
+      })
+      writeStream.on('error', reject)
+      writeStream.on('success', resolve)
+      const fileStream = fs.createReadStream(fileData.path)
+      fileStream.pipe(writeStream)
+    })
   }
 
   download(remotePath) {
-    return this.client.download({ container: CONTAINER_NAME, remote: remotePath });
+    return this.client.download({
+      container: CONTAINER_NAME,
+      remote: remotePath,
+    })
   }
 }
 
-
-module.exports = new FileStorage();
+module.exports = new FileStorage()

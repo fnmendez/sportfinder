@@ -10,7 +10,7 @@ router.get('matches', '/', async ctx => {
   })
   const userMatches = await ctx.orm.userMatch.findAll({
     include: [ctx.orm.users, ctx.orm.match],
-  })
+  });
   const user = { id: ctx.state.currentUser.id }
   return ctx.render('matches/index', {
     matches,
