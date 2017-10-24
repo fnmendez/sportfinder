@@ -1,6 +1,6 @@
 test:
-  override:
-    - run: yarn lint
+  pre:
+    - yarn lint
 deployment:
   production:
     branch: master
