@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
+import AddSportForm from './AddSportForm';
 
-export default function App() {
-  return <div>Hello React World!</div>
+export default function App(props) {
+  return <AddSportForm {...props} />;
 }

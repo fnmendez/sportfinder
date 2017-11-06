@@ -29,24 +29,7 @@
     </table>
   </div>
   <% if (isAdmin) { %>
-  <div>
-    <form action="<%= addSportUrl %>" method="post">
-      <select name='sportId'>
-        <% sports.forEach((sport) => { %>
-          <option value="<%= sport.id %>"><%= sport.name %></option>
-        <% }) %>
-      </select>
-      <div class="inline">
-        <input type="text" name="price" placeholder="Precio" />
-      </div>
-      <div class="inline">
-        <input type="text" name="timeUnit" placeholder="Unidad de tiempo" />
-      </div>
-      <div class="inline">
-        <input type="submit" name="add" value="Agregar Deporte" />
-      </div>
-    </form>
-  </div>
+  <div id='react-club'> </div>
   <div class="buttons">
     <div>
       <a class="btn left" href="<%= editClubUrl %> ">Editar</a>
