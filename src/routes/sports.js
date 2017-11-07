@@ -2,14 +2,41 @@ const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
 
+// JSON error handling
+router.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (error) {
+    if (error.status) {
+      switch (ctx.accepts('html', 'json')) {
+        case 'html':
+          throw error
+        case 'json':
+          ctx.status = error.status
+          ctx.body = error
+          break
+        default:
+      }
+    }
+  }
+})
+
 router.get('sports', '/', async ctx => {
   const sports = await ctx.orm.sport.findAll()
-  await ctx.render('sports/index', {
-    sports,
-    isAdmin: ctx.state.currentUser.isAdmin(),
-    sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
-    newSportUrl: ctx.router.url('newSport'),
-  })
+  switch (ctx.accepts('html', 'json')) {
+    case 'html':
+      await ctx.render('sports/index', {
+        sports,
+        isAdmin: ctx.state.currentUser.isAdmin(),
+        sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
+        newSportUrl: ctx.router.url('newSport'),
+      })
+      break
+    case 'json':
+      ctx.body = { sports }
+      break
+    default:
+  }
 })
 
 router.delete('deleteSport', '/:id', async ctx => {
