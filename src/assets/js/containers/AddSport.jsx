@@ -6,7 +6,7 @@ import SportsService from '../services/sports'
 export default class AddSport extends Component {
   constructor(props) {
     super(props)
-    this.state = { loading: true }
+    this.state = { loading: true, success: false, error: undefined }
     this.onSubmit = this.onSubmit.bind(this)
   }
 
@@ -14,8 +14,17 @@ export default class AddSport extends Component {
     this.fetchSports()
   }
 
-  async onSubmit(e) {
-    e.preventDefault()
+  async onSubmit(data) {
+    this.setState({ loading: true, error: undefined, showThanks: false })
+    try {
+      const json = await SportsService.putSport(this.props.clubId, data)
+      this.setState({
+        loading: false,
+        success: true,
+      })
+    } catch (error) {
+      this.setState({ error: error.message, loading: false })
+    }
   }
 
   async fetchSports() {

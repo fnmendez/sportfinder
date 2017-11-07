@@ -82,13 +82,34 @@ router.post('addSport', '/:id', async ctx => {
         price: ctx.request.body.price,
         timeUnit: ctx.request.body.timeUnit,
       })
-      return ctx.redirect(ctx.router.url('club', clubId))
+      switch (ctx.accepts('html', 'json')) {
+        case 'html':
+          return ctx.redirect(ctx.router.url('club', clubId))
+        case 'json':
+          ctx.body = { success: true, error: '' }
+          break
+        default:
+      }
     } catch (validationError) {
-      return ctx.redirect(ctx.router.url('club', clubId))
+      switch (ctx.accepts('html', 'json')) {
+        case 'html':
+          return ctx.redirect(ctx.router.url('club', clubId))
+        case 'json':
+          ctx.body = { success: false, error: 'Error en la validación' }
+          break
+        default:
+      }
     }
   } else {
-    ctx.flashMessage.notice = 'El deporte ingresado no existe.'
-    return ctx.redirect(ctx.router.url('club', clubId))
+    switch (ctx.accepts('html', 'json')) {
+      case 'html':
+        ctx.flashMessage.notice = 'El deporte ingresado no existe.'
+        return ctx.redirect(ctx.router.url('club', clubId))
+      case 'json':
+        ctx.body = { success: false, error: 'El deporte ingresado no existe.' }
+        break
+      default:
+    }
   }
 })
 
