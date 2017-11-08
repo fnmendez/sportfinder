@@ -154,19 +154,27 @@ router.get('club', '/:id', async ctx => {
     ],
   })
   const clubSports = club.clubSports
-  return ctx.render('clubs/show', {
-    club,
-    sports,
-    clubSports,
-    isAdmin: ctx.state.currentUser.isAdmin(),
-    deleteClubUrl: ctx.router.url('deleteClub', club.id),
-    indexUrl: ctx.router.url('clubs'),
-    editClubUrl: ctx.router.url('editClub', club.id),
-    warning: ctx.flashMessage.warning,
-    notice: ctx.flashMessage.notice,
-    addSportUrl: ctx.router.url('addSport', club.id),
-    removeSportUrl: ctx.router.url('removeSport', club.id),
-  })
+  switch (ctx.accepts('html', 'json')) {
+    case 'html':
+      await ctx.render('clubs/show', {
+        club,
+        sports,
+        clubSports,
+        isAdmin: ctx.state.currentUser.isAdmin(),
+        deleteClubUrl: ctx.router.url('deleteClub', club.id),
+        indexUrl: ctx.router.url('clubs'),
+        editClubUrl: ctx.router.url('editClub', club.id),
+        warning: ctx.flashMessage.warning,
+        notice: ctx.flashMessage.notice,
+        addSportUrl: ctx.router.url('addSport', club.id),
+        removeSportUrl: ctx.router.url('removeSport', club.id),
+      })
+      break
+    case 'json':
+      ctx.body = { sports, clubSports }
+      break
+    default:
+  }
 })
 
 module.exports = router

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AddSportForm from '../components/AddSportForm'
+import ClubSportsTable from '../components/ClubSportsTable'
 import SportsService from '../services/sports'
 
 export default class AddSport extends Component {
@@ -28,8 +28,12 @@ export default class AddSport extends Component {
   }
 
   async fetchSports() {
-    const json = await SportsService.getSports()
-    this.setState({ sports: json.sports, loading: false })
+    const json = await SportsService.getSports(this.props.clubId)
+    this.setState({
+      sports: json.sports,
+      clubSports: json.clubSports,
+      loading: false,
+    })
   }
 
   render() {
@@ -38,7 +42,11 @@ export default class AddSport extends Component {
     }
     return (
       <div>
-        <AddSportForm onSubmit={this.onSubmit} sports={this.state.sports} />
+        <ClubSportsTable
+          onSubmit={this.onSubmit}
+          sports={this.state.sports}
+          clubSports={this.state.clubSports}
+        />
       </div>
     )
   }

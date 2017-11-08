@@ -23,20 +23,12 @@ router.use(async (ctx, next) => {
 
 router.get('sports', '/', async ctx => {
   const sports = await ctx.orm.sport.findAll()
-  switch (ctx.accepts('html', 'json')) {
-    case 'html':
-      await ctx.render('sports/index', {
-        sports,
-        isAdmin: ctx.state.currentUser.isAdmin(),
-        sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
-        newSportUrl: ctx.router.url('newSport'),
-      })
-      break
-    case 'json':
-      ctx.body = { sports }
-      break
-    default:
-  }
+  await ctx.render('sports/index', {
+    sports,
+    isAdmin: ctx.state.currentUser.isAdmin(),
+    sportUrl: sport => ctx.router.url('sport', { id: sport.id }),
+    newSportUrl: ctx.router.url('newSport'),
+  })
 })
 
 router.delete('deleteSport', '/:id', async ctx => {

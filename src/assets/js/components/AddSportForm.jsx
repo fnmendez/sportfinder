@@ -5,16 +5,15 @@ export default class AddSportForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      sportId: this.props.sports[0].id, // defaul select option.
-      price: '', // default price.
-      timeUnit: '', // default time unit.
+      sportId: this.props.sports[0].id, // defaul select option
+      price: '', // default price
+      timeUnit: '', // default time unit
     }
     this.onSubmit = this.onSubmit.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
   }
 
   onInputChange(event) {
-    console.log(event)
     this.setState({ [event.target.name]: event.target.value })
   }
 

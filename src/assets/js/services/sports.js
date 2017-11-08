@@ -15,14 +15,14 @@ async function jsonRequest(path, options = {}) {
 }
 
 export default {
-  async getSports() {
-    return jsonRequest('/sports')
+  async getSports(clubId) {
+    return jsonRequest(`/clubs/${clubId}`)
   },
-  async putSport(clubId, signData = {}) {
+  async putSport(clubId, sportData = {}) {
     return jsonRequest(`/clubs/${clubId}`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(signData),
+      body: JSON.stringify(sportData),
     })
   },
 }
