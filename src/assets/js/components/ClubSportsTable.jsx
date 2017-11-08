@@ -20,9 +20,11 @@ export default class ClubSportsTable extends Component {
     const rows = this.props.clubSports.map((tuple, i) => (
       <SportRow
         key={i}
+        onSubmitDelete={this.props.onSubmitDelete}
         sport={this.props.sports[i].name}
         price={priceDisplay(tuple.price)}
         timeunit={tuple.timeUnit}
+        isAdmin={isAdmin}
       />
     ))
     return (

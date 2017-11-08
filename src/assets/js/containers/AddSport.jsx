@@ -8,6 +8,7 @@ export default class AddSport extends Component {
     super(props)
     this.state = { loading: true, success: false, error: undefined }
     this.onSubmit = this.onSubmit.bind(this)
+    this.onSubmitDelete = this.onSubmitDelete.bind(this)
   }
 
   componentDidMount() {
@@ -31,6 +32,11 @@ export default class AddSport extends Component {
     }
   }
 
+  async onSubmitDelete(data) {
+    console.log(data)
+    console.log('Borrando')
+  }
+
   async fetchSports() {
     const json = await SportsService.getSports(this.props.clubId)
     this.setState({
@@ -48,6 +54,7 @@ export default class AddSport extends Component {
       <div>
         <ClubSportsTable
           onSubmit={this.onSubmit}
+          onSubmitDelete={this.onSubmitDelete}
           sports={this.state.sports}
           clubSports={this.state.clubSports}
           isAdmin={this.props.isAdmin}
