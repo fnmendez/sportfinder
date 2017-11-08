@@ -16,6 +16,7 @@ export default class ClubSportsTable extends Component {
   }
 
   render() {
+    const isAdmin = this.props.isAdmin === 'true'
     const rows = this.props.clubSports.map((tuple, i) => (
       <SportRow
         key={i}
@@ -36,10 +37,12 @@ export default class ClubSportsTable extends Component {
             {rows}
           </tbody>
         </table>
-        <AddSportForm
-          onSubmit={this.props.onSubmit}
-          sports={this.props.sports}
-        />
+        {isAdmin && (
+          <AddSportForm
+            onSubmit={this.props.onSubmit}
+            sports={this.props.sports}
+          />
+        )}
       </div>
     )
   }

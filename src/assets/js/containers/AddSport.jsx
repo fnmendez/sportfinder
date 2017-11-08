@@ -50,6 +50,7 @@ export default class AddSport extends Component {
           onSubmit={this.onSubmit}
           sports={this.state.sports}
           clubSports={this.state.clubSports}
+          isAdmin={this.props.isAdmin}
         />
       </div>
     )
