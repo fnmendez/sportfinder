@@ -18,6 +18,10 @@ export default class AddSport extends Component {
     this.setState({ loading: true, error: undefined, showThanks: false })
     try {
       const json = await SportsService.putSport(this.props.clubId, data)
+      if (json.sport) {
+        this.state.clubSports.push(json.clubSport)
+        this.state.sports.push(json.sport)
+      }
       this.setState({
         loading: false,
         success: true,

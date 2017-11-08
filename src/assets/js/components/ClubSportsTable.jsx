@@ -19,7 +19,7 @@ export default class ClubSportsTable extends Component {
     const rows = this.props.clubSports.map((tuple, i) => (
       <SportRow
         key={i}
-        sport={tuple.sport.name}
+        sport={this.props.sports[i].name}
         price={priceDisplay(tuple.price)}
         timeunit={tuple.timeUnit}
       />

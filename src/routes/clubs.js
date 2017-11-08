@@ -76,7 +76,7 @@ router.post('addSport', '/:id', async ctx => {
   const sport = await ctx.orm.sport.findById(ctx.request.body.sportId)
   if (sport) {
     try {
-      await ctx.orm.clubSport.create({
+      const clubSport = await ctx.orm.clubSport.create({
         clubId,
         sportId: sport.id,
         price: ctx.request.body.price,
@@ -86,7 +86,7 @@ router.post('addSport', '/:id', async ctx => {
         case 'html':
           return ctx.redirect(ctx.router.url('club', clubId))
         case 'json':
-          ctx.body = { success: true, error: '' }
+          ctx.body = { success: true, error: '', sport, clubSport }
           break
         default:
       }
