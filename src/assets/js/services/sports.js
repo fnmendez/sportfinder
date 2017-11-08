@@ -1,4 +1,5 @@
 async function jsonRequest(path, options = {}) {
+  console.log(`Requesting with: \n ${options.body}`)
   const result = await fetch(path, {
     ...options,
     headers: {
@@ -21,6 +22,13 @@ export default {
   async putSport(clubId, sportData = {}) {
     return jsonRequest(`/clubs/${clubId}`, {
       method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sportData),
+    })
+  },
+  async deleteSport(clubId, sportData = {}) {
+    return jsonRequest(`/clubs/${clubId}/removeSport`, {
+      method: 'delete',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sportData),
     })

@@ -25,16 +25,24 @@ router.delete('deleteClub', '/:id', async ctx => {
 })
 
 router.delete('removeSport', '/:id/removeSport', async ctx => {
+  console.log(ctx.request.body)
   const club = await ctx.orm.club.findById(ctx.params.id)
   const joinTuple = await ctx.orm.clubSport.findOne({
     where: {
-      sportId: ctx.request.body.sportid,
+      sportId: ctx.request.body.sportId,
       clubId: club.id,
     },
   })
   await joinTuple.destroy()
-  ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.'
-  return ctx.redirect(ctx.router.url('club', club.id))
+  switch (ctx.accepts('html', 'json')) {
+    case 'html':
+      ctx.flashMessage.notice = 'El deporte fue eliminado exitosamente.'
+      return ctx.redirect(ctx.router.url('club', club.id))
+    case 'json':
+      ctx.body = { success: true, error: '' }
+      break
+    default:
+  }
 })
 
 router.get('newClub', '/new', async ctx => {
