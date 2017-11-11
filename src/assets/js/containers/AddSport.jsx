@@ -6,7 +6,7 @@ import SportsService from '../services/sports'
 export default class AddSport extends Component {
   constructor(props) {
     super(props)
-    this.state = { loading: true, success: false, error: undefined }
+    this.state = { loading: true, success: true, error: undefined }
     this.onSubmit = this.onSubmit.bind(this)
     this.onSubmitDelete = this.onSubmitDelete.bind(this)
   }
@@ -26,7 +26,8 @@ export default class AddSport extends Component {
       }
       this.setState({
         loading: false,
-        success: true,
+        success: json.success,
+        error: json.error,
       })
     } catch (error) {
       this.setState({ error: error.message, loading: false, success: false })
@@ -58,11 +59,13 @@ export default class AddSport extends Component {
   }
 
   render() {
+    console.log(this.state.success)
     if (this.state.loading) {
       return <p>Loading...</p>
     }
     return (
       <div>
+        {!this.state.success && <div> {this.state.error} </div>}
         <ClubSportsTable
           onSubmit={this.onSubmit}
           onSubmitDelete={this.onSubmitDelete}

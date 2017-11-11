@@ -103,7 +103,7 @@ router.post('addSport', '/:id', async ctx => {
         case 'html':
           return ctx.redirect(ctx.router.url('club', clubId))
         case 'json':
-          ctx.body = { success: false, error: 'Error en la validación' }
+          ctx.body = { success: false, error: 'El deporte ya ha sido agregado' }
           break
         default:
       }
