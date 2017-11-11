@@ -12,6 +12,7 @@ export default class AddSport extends Component {
   }
 
   componentDidMount() {
+    console.log('Fetching')
     this.fetchSports()
   }
 
@@ -34,22 +35,25 @@ export default class AddSport extends Component {
 
   async onSubmitDelete(data) {
     console.log(data)
-    console.log(this.state.sports[0])
     this.setState({ loading: true, success: undefined })
     try {
-      // const json = await SportsService.deleteSport(this.props.clubId, data)
+      const json = await SportsService.deleteSport(
+        this.props.clubId,
+        data.sportId
+      )
+      this.setState({ error: error.message, loading: false, success: true })
       // Eliminar el deporte del state
-      const newSports = this.state.sports.filter(
-        item => item.id != data.sportId
-      )
-      const newClubSports = this.state.clubSports.filter(
-        item => item.sport.id != data.sportId
-      )
-      this.setState({
-        loading: false,
-        sports: newSports,
-        clubSports: newClubSports,
-      })
+      // const newSports = this.state.sports.filter(
+      //   item => item.id != data.sportId
+      // )
+      // const newClubSports = this.state.clubSports.filter(
+      //   item => item.sport.id != data.sportId
+      // )
+      // this.setState({
+      //   loading: false,
+      //   sports: newSports,
+      //   clubSports: newClubSports,
+      // })
     } catch (error) {
       this.setState({ error: error.message, loading: false, success: false })
     }

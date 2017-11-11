@@ -26,8 +26,8 @@ export default {
       body: JSON.stringify(sportData),
     })
   },
-  async deleteSport(clubId, sportData = {}) {
-    return jsonRequest(`/clubs/${clubId}/removeSport`, {
+  async deleteSport(clubId, sportId, sportData = {}) {
+    return jsonRequest(`/clubs/${clubId}/sports/${sportId}`, {
       method: 'delete',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(sportData),

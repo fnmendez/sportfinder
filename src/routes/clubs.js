@@ -24,12 +24,12 @@ router.delete('deleteClub', '/:id', async ctx => {
   return ctx.redirect(ctx.router.url('clubs'))
 })
 
-router.delete('removeSport', '/:id/removeSport', async ctx => {
+router.delete('removeSport', '/:id/sports/:sportid', async ctx => {
   console.log(ctx.request.body)
   const club = await ctx.orm.club.findById(ctx.params.id)
   const joinTuple = await ctx.orm.clubSport.findOne({
     where: {
-      sportId: ctx.request.body.sportId,
+      sportId: ctx.params.sportid,
       clubId: club.id,
     },
   })
@@ -76,6 +76,8 @@ router.post('createClub', '/', async ctx => {
 })
 
 router.post('addSport', '/:id', async ctx => {
+  console.log('Body recieved: ')
+  console.log(ctx.request.body)
   const clubId = ctx.params.id
   if (!ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
@@ -175,7 +177,6 @@ router.get('club', '/:id', async ctx => {
         warning: ctx.flashMessage.warning,
         notice: ctx.flashMessage.notice,
         addSportUrl: ctx.router.url('addSport', club.id),
-        removeSportUrl: ctx.router.url('removeSport', club.id),
       })
       break
     case 'json':

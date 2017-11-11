@@ -21,7 +21,7 @@ export default class ClubSportsTable extends Component {
       <SportRow
         key={i}
         onSubmitDelete={this.props.onSubmitDelete}
-        sport={tuple.sport}
+        sport={this.props.sports[i]}
         price={priceDisplay(tuple.price)}
         timeunit={tuple.timeUnit}
         isAdmin={isAdmin}
