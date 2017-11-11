@@ -84,6 +84,7 @@ app.use(
 
 // override method
 app.use((ctx, next) => {
+  console.log(ctx.request.body)
   ctx.request.method = override.call(ctx, ctx.request.body)
   return next()
 })

@@ -3,50 +3,8 @@
     <h1>Club: <%= club.name %> </h1>
     <h2>Dirección: <%= club.address %></h2>
   </div>
-  <div>
-    <table class="index">
-      <tr>
-        <th>Deporte</th>
-        <th>Precio</th>
-        <th>Unidad de tiempo</th>
-      </tr>
-      <% clubSports.forEach((clubSport) => { %>
-        <tr>
-        <td> <%= clubSport.sport.name %> </td>
-        <td> <%= clubSport.priceDisplay() %> </td>
-        <td> <%= clubSport.timeUnit %> </td>
-        <% if (isAdmin) { %>
-          <td class="actions">
-            <form action="<%= removeSportUrl %>" method="post">
-              <input type="hidden" name="_method" value="delete" />
-              <input type="hidden" name="sportid" value="<%= clubSport.sport.id %>" />
-              <input type="submit" value="Borrar"/>
-            </form>
-          </td>
-        <% } %>
-        </tr>
-      <% }) %>
-    </table>
-  </div>
+  <div id='react-club' data-club-id="<%= club.id %>" data-is-admin="<%= isAdmin %>"> </div>
   <% if (isAdmin) { %>
-  <div>
-    <form action="<%= addSportUrl %>" method="post">
-      <select name='sportId'>
-        <% sports.forEach((sport) => { %>
-          <option value="<%= sport.id %>"><%= sport.name %></option>
-        <% }) %>
-      </select>
-      <div class="inline">
-        <input type="text" name="price" placeholder="Precio" />
-      </div>
-      <div class="inline">
-        <input type="text" name="timeUnit" placeholder="Unidad de tiempo" />
-      </div>
-      <div class="inline">
-        <input type="submit" name="add" value="Agregar Deporte" />
-      </div>
-    </form>
-  </div>
   <div class="buttons">
     <div>
       <a class="btn left" href="<%= editClubUrl %> ">Editar</a>

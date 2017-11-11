@@ -20,7 +20,6 @@ const router = new KoaRouter()
 // public
 router.use('/', welcome.routes())
 router.use('/hello', hello.routes())
-
 // check login
 router.use(checkLogin)
 
@@ -31,6 +30,7 @@ router.use(checkAccountConfirmation)
 router.use(notificationManager)
 
 // private
+
 router.use('/sports', sports.routes())
 router.use('/clubs', clubs.routes())
 router.use('/teams', teams.routes())
