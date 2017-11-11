@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AddSportForm from '../components/AddSportForm'
-import SportRow from './SportRow'
+import AddSportForm from './Clubsport/AddSportForm'
+import SportRow from './Clubsport/SportRow'
 
 function priceDisplay(price) {
   if (price) {
