@@ -3,24 +3,21 @@ import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './components/App'
 
-const reactAppContainer = document.getElementById('react-club')
-
-if (reactAppContainer) {
-  const render = function render(Component) {
-    ReactDOM.render(
-      <AppContainer>
-        <Component {...reactAppContainer.dataset} />
-      </AppContainer>,
-      reactAppContainer
-    )
-  }
-
-  render(App)
-
-  // Webpack Hot Module Replacement API
+const render = function render(Component, reactAppContainer, componentName) {
+  ReactDOM.render(
+    <AppContainer>
+      <Component {...reactAppContainer.dataset} />
+    </AppContainer>,
+    reactAppContainer
+  )
   if (module.hot) {
-    module.hot.accept('./components/App', () => {
-      render(App)
+    module.hot.accept(`./components/${componentName}`, () => {
+      render(App, ClubSportContainer)
     })
   }
+}
+const ClubSportContainer = document.getElementById('react-club')
+
+if (ClubSportContainer) {
+  render(App, ClubSportContainer, 'App')
 }
