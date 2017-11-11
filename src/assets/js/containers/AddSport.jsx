@@ -20,7 +20,6 @@ export default class AddSport extends Component {
     this.setState({ loading: true, success: undefined })
     try {
       const json = await SportsService.putSport(this.props.clubId, data)
-      console.log(json)
       if (json.sport) {
         this.state.clubSports.push(json.clubSport)
       }
@@ -35,13 +34,9 @@ export default class AddSport extends Component {
   }
 
   async onSubmitDelete(data) {
-    console.log(data)
     this.setState({ loading: true, success: undefined })
     try {
-      const json = await SportsService.deleteSport(
-        this.props.clubId,
-        data.sportId
-      )
+      await SportsService.deleteSport(this.props.clubId, data.sportId)
       this.fetchSports()
       this.setState({ success: true })
     } catch (error) {
@@ -59,7 +54,6 @@ export default class AddSport extends Component {
   }
 
   render() {
-    console.log(this.state.success)
     if (this.state.loading) {
       return <p>Loading...</p>
     }
