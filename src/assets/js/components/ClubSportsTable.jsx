@@ -13,6 +13,12 @@ function priceDisplay(price) {
 export default class ClubSportsTable extends Component {
   constructor(props) {
     super(props)
+    this.getSport = this.getSport.bind(this)
+  }
+
+  getSport(sportid) {
+    const sport = this.props.sports.filter(elem => elem.id == sportid)
+    return sport[0]
   }
 
   render() {
@@ -21,7 +27,7 @@ export default class ClubSportsTable extends Component {
       <SportRow
         key={i}
         onSubmitDelete={this.props.onSubmitDelete}
-        sport={this.props.sports[i]}
+        sport={this.getSport(tuple.sportId)}
         price={priceDisplay(tuple.price)}
         timeunit={tuple.timeUnit}
         isAdmin={isAdmin}

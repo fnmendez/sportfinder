@@ -41,19 +41,10 @@ export default class AddSport extends Component {
         this.props.clubId,
         data.sportId
       )
-      this.setState({ error: error.message, loading: false, success: true })
-      // Eliminar el deporte del state
-      // const newSports = this.state.sports.filter(
-      //   item => item.id != data.sportId
-      // )
-      // const newClubSports = this.state.clubSports.filter(
-      //   item => item.sport.id != data.sportId
-      // )
-      // this.setState({
-      //   loading: false,
-      //   sports: newSports,
-      //   clubSports: newClubSports,
-      // })
+      this.fetchSports()
+      console.log(this.state.clubSports)
+      console.log(this.state.sports)
+      this.setState({ success: true })
     } catch (error) {
       this.setState({ error: error.message, loading: false, success: false })
     }
@@ -66,6 +57,8 @@ export default class AddSport extends Component {
       clubSports: json.clubSports,
       loading: false,
     })
+    console.log(this.state.sports)
+    console.log(this.state.clubSports)
   }
 
   render() {
