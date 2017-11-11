@@ -76,8 +76,6 @@ router.post('createClub', '/', async ctx => {
 })
 
 router.post('addSport', '/:id', async ctx => {
-  console.log('Body recieved: ')
-  console.log(ctx.request.body)
   const clubId = ctx.params.id
   if (!ctx.state.currentUser.isAdmin()) {
     ctx.flashMessage.warning = 'No tienes los permisos.'
