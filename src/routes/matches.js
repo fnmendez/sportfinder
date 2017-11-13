@@ -242,6 +242,7 @@ router.post('evaluatePlayer', '/evaluate/:id/', async ctx => {
 })
 
 router.post('joinMatch', '/:id/players', async ctx => {
+  let error = ''
   const currentUser = ctx.state.currentUser
   const match = await ctx.orm.match.findById(ctx.params.id, {
     include: [
@@ -256,16 +257,32 @@ router.post('joinMatch', '/:id/players', async ctx => {
   })
 
   if (match.isPlayer(currentUser.id)) {
-    ctx.flashMessage.warning = 'Ya eres miembro de la partida.'
-    return ctx.redirect(ctx.router.url('match', match.id))
+    error = 'Ya eres miembro de la partida.'
+    ctx.flashMessage.warning = error
+    switch (ctx.accepts('html', 'json')) {
+      case 'html':
+        return ctx.redirect(ctx.router.url('match', match.id))
+      case 'json':
+        ctx.body = { success: false, error }
+        break
+      default:
+    }
   }
   const canJoin = match.canJoin(currentUser)
   if (!canJoin.success) {
-    ctx.flashMessage.warning =
+    error =
       canJoin.reason === 'requireId'
         ? 'Debes tener tu foto actualizada para unirte.'
         : 'Esta partida es privada.'
-    return ctx.redirect(ctx.router.url('matches'))
+    ctx.flashMessage.warning = error
+    switch (ctx.accepts('html', 'json')) {
+      case 'html':
+        return ctx.redirect(ctx.router.url('matches'))
+      case 'json':
+        ctx.body = { success: false, error }
+        break
+      default:
+    }
   }
   await ctx.orm.userMatch.create({
     matchId: match.id,
@@ -277,7 +294,14 @@ router.post('joinMatch', '/:id/players', async ctx => {
   if (invitation) {
     invitation.destroy()
   }
-  return ctx.redirect(ctx.router.url('match', match.id))
+  switch (ctx.accepts('html', 'json')) {
+    case 'html':
+      return ctx.redirect(ctx.router.url('match', match.id))
+    case 'json':
+      ctx.body = { success: true, error: '' }
+      break
+    default:
+  }
 })
 
 router.post('promotePlayer', '/:matchId/players/:id', async ctx => {

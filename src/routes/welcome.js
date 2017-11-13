@@ -55,15 +55,21 @@ router.post('createUser', 'signup', async ctx => {
     ctx.request.body.fields.confirmed = false
   }
   const token = uuid()
+  const fileLink =
+    ctx.request.body.files.upload.name.length != 0
+      ? `https://storage.googleapis.com/sportfinder/${ctx.request.body.files
+          .upload.name}`
+      : ''
   const user = ctx.orm.users.build({
     ...ctx.request.body.fields,
-    photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
-      .files.upload.name}`,
+    photoId: fileLink,
     token,
   })
 
   try {
-    await fileStorage.upload(ctx.request.body.files.upload)
+    if (fileLink) {
+      await fileStorage.upload(ctx.request.body.files.upload)
+    }
     await user.save({
       fields: [
         'username',
@@ -180,14 +186,22 @@ router.get('showUser', 'profile', async ctx => {
   if (user) {
     ctx.state.currentUser = user
     const notifications = await loadNotifications(ctx)
-    await ctx.render('welcome/profile', {
-      user,
-      notifications,
-      editUrl: ctx.router.url('editUser'),
-      logoutUrl: ctx.router.url('logout'),
-      startUrl: '/play',
-      sendEmailUrl: ctx.router.url('sendEmail'),
-    })
+    switch (ctx.accepts('html', 'json')) {
+      case 'html':
+        await ctx.render('welcome/profile', {
+          user,
+          notifications,
+          editUrl: ctx.router.url('editUser'),
+          logoutUrl: ctx.router.url('logout'),
+          startUrl: '/play',
+          sendEmailUrl: ctx.router.url('sendEmail'),
+        })
+        break
+      case 'json':
+        ctx.body = { notifications, user }
+        break
+      default:
+    }
   } else {
     ctx.session = null
     ctx.redirect('/')

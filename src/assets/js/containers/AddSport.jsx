@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ClubSportsTable from '../components/ClubSportsTable'
-import SportsService from '../services/sports'
+import SportsService from '../services/requester'
 
 export default class AddSport extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ export default class AddSport extends Component {
     this.setState({ loading: true, success: undefined })
     try {
       await SportsService.deleteSport(this.props.clubId, data.sportId)
-      this.fetchSports()
+      await this.fetchSports()
       this.setState({ success: true })
     } catch (error) {
       this.setState({ error: error.message, loading: false, success: false })

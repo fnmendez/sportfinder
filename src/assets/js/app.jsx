@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './components/App'
+import NotificationsApp from './components/NotificationsApp'
 
 const render = function render(Component, reactAppContainer, componentName) {
   ReactDOM.render(
@@ -16,8 +17,13 @@ const render = function render(Component, reactAppContainer, componentName) {
     })
   }
 }
+
 const ClubSportContainer = document.getElementById('react-club')
+const NotificationsContainer = document.getElementById('react-notifications')
 
 if (ClubSportContainer) {
   render(App, ClubSportContainer, 'App')
+}
+if (NotificationsContainer) {
+  render(NotificationsApp, NotificationsContainer, 'NotificationsApp')
 }

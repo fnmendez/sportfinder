@@ -91,16 +91,17 @@ router.delete('deleteTeamInvitation', '/team/:id', async ctx => {
     where: { userId: ctx.state.currentUser.id, teamId: ctx.params.id },
   })
   if (invitation) {
-    invitation.destroy()
+    await invitation.destroy()
   }
   ctx.body = { message: 'OK' }
 })
+
 router.delete('deleteMatchInvitation', '/match/:id', async ctx => {
   const invitation = await ctx.orm.matchInvitation.findOne({
     where: { userId: ctx.state.currentUser.id, matchId: ctx.params.id },
   })
   if (invitation) {
-    invitation.destroy()
+    await invitation.destroy()
   }
   ctx.body = { message: 'OK' }
 })

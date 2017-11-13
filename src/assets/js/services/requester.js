@@ -33,4 +33,20 @@ export default {
       body: JSON.stringify(sportData),
     })
   },
+  async getNotifications() {
+    return jsonRequest(`/profile`)
+  },
+  async acceptNotification(acceptUrl, data) {
+    return jsonRequest(acceptUrl, {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json ' },
+      body: JSON.stringify(data),
+    })
+  },
+  async declineNotification(declineUrl) {
+    return jsonRequest(declineUrl, {
+      method: 'delete',
+      headers: { 'Content-Type': 'application/json ' },
+    })
+  },
 }

@@ -30,8 +30,3 @@ export default class SportRow extends Component {
     )
   }
 }
-// <input
-//   type="hidden"
-//   name="sportid"
-//   value="<%= clubSport.sport.id %>"
-// />
