@@ -1,8 +1,0 @@
-test:
-  override:
-    - "true"
-deployment:
-  production:
-    branch: master
-    heroku:
-      appname: sportfinder-app

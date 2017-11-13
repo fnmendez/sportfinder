@@ -66,7 +66,7 @@ module.exports = function defineusers(sequelize, DataTypes) {
     photoId: DataTypes.STRING,
     confirmed: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      // allowNull: false,
       defaultValue: false,
     },
     password: {

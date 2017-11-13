@@ -2,6 +2,25 @@ const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
 
+// JSON error handling
+router.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (error) {
+    if (error.status) {
+      switch (ctx.accepts('html', 'json')) {
+        case 'html':
+          throw error
+        case 'json':
+          ctx.status = error.status
+          ctx.body = error
+          break
+        default:
+      }
+    }
+  }
+})
+
 router.get('sports', '/', async ctx => {
   const sports = await ctx.orm.sport.findAll()
   await ctx.render('sports/index', {

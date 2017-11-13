@@ -2,25 +2,28 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import App from './components/App'
+import NotificationsApp from './components/NotificationsApp'
 
-const reactAppContainer = document.getElementById('react-app')
-
-if (reactAppContainer) {
-  const render = function render(Component) {
-    ReactDOM.render(
-      <AppContainer>
-        <Component />
-      </AppContainer>,
-      reactAppContainer
-    )
-  }
-
-  render(App)
-
-  // Webpack Hot Module Replacement API
+const render = function render(Component, reactAppContainer, componentName) {
+  ReactDOM.render(
+    <AppContainer>
+      <Component {...reactAppContainer.dataset} />
+    </AppContainer>,
+    reactAppContainer
+  )
   if (module.hot) {
-    module.hot.accept('./components/App', () => {
-      render(App)
+    module.hot.accept(`./components/${componentName}`, () => {
+      render(App, ClubSportContainer)
     })
   }
+}
+
+const ClubSportContainer = document.getElementById('react-club')
+const NotificationsContainer = document.getElementById('react-notifications')
+
+if (ClubSportContainer) {
+  render(App, ClubSportContainer, 'App')
+}
+if (NotificationsContainer) {
+  render(NotificationsApp, NotificationsContainer, 'NotificationsApp')
 }
