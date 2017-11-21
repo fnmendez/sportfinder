@@ -1,6 +1,6 @@
 # frandz
 
-[!(circleciB)](circleciL)
+[!circleciB][circleciL]
 [![styleB]][styleL]
 
 Watch [Sportfinder in Heroku](https://sportfinder-app.herokuapp.com/)!
