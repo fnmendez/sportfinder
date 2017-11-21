@@ -5,6 +5,8 @@ machine:
     version: 9.0.0
 
 dependencies:
+  pre:
+    - yarn upgrade
   cache_directories:
     - ~/.cache/yarn
   override:
