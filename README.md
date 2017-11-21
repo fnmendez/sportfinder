@@ -1,7 +1,5 @@
 # frandz
 
-[![CircleCI](https://circleci.com/gh/IIC2513-2017-2/frandz/tree/master.svg?style=svg)](https://circleci.com/gh/IIC2513-2017-2/frandz/tree/master)
-
 Watch [Sportfinder in Heroku](https://sportfinder-app.herokuapp.com/)!
 
 ## Members
