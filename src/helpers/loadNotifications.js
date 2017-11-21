@@ -10,7 +10,9 @@ module.exports = async ctx => {
       (cinv, invitation) => [
         ...cinv,
         {
-          message: `${invitation.author} te ha invitado a unirte a una partida.`,
+          message: `${
+            invitation.author
+          } te ha invitado a unirte a una partida.`,
           showUrl: `/play/${invitation.matchId}`,
           declineUrl: `/invitations/match/${invitation.matchId}`,
           acceptUrl: `/play/${invitation.matchId}/players`,
@@ -23,7 +25,9 @@ module.exports = async ctx => {
         (cinv, invitation) => [
           ...cinv,
           {
-            message: `${invitation.author} te ha invitado a unirte a un equipo.`,
+            message: `${
+              invitation.author
+            } te ha invitado a unirte a un equipo.`,
             showUrl: `/teams/${invitation.teamId}`,
             declineUrl: `/invitations/team/${invitation.teamId}`,
             acceptUrl: `/teams/${invitation.teamId}`,

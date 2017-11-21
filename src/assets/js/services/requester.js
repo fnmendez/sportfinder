@@ -1,5 +1,7 @@
+/* eslint-disable */
+
 async function jsonRequest(path, options = {}) {
-  console.log(`Requesting with: \n ${options.body}`)
+  console.log(`Requesting with: \n ${options.body}`) //eslint-disable-line no-console
   const result = await fetch(path, {
     ...options,
     headers: {
