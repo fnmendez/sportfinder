@@ -68,6 +68,7 @@ or, if you want automatic restart after any change in your files
 Now go to http://localhost:3000 and start browsing :)
 
 <!-- Badges -->
+
 [circleciL]:https://circleci.com/gh/IIC2513-2017-2/frandz
 [circleciB]:https://circleci.com/gh/IIC2513-2017-2/frandz.svg?style=svg
 
