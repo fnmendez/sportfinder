@@ -25,7 +25,6 @@ router.delete('deleteClub', '/:id', async ctx => {
 })
 
 router.delete('removeSport', '/:id/sports/:sportid', async ctx => {
-  console.log(ctx.request.body)
   const club = await ctx.orm.club.findById(ctx.params.id)
   const joinTuple = await ctx.orm.clubSport.findOne({
     where: {

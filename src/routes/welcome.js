@@ -57,8 +57,9 @@ router.post('createUser', 'signup', async ctx => {
   const token = uuid()
   const fileLink =
     ctx.request.body.files.upload.name.length != 0
-      ? `https://storage.googleapis.com/sportfinder/${ctx.request.body.files
-          .upload.name}`
+      ? `https://storage.googleapis.com/sportfinder/${
+          ctx.request.body.files.upload.name
+        }`
       : ''
   const user = ctx.orm.users.build({
     ...ctx.request.body.fields,
@@ -89,7 +90,9 @@ router.post('createUser', 'signup', async ctx => {
     if (!developmentMode) {
       sendWelcomeEmail(ctx, {
         user,
-        confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${id}/${key}`,
+        confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${
+          id
+        }/${key}`,
       })
       ctx.flashMessage.notice = 'Revisa tu mail para confirmar tu cuenta.'
     }
@@ -122,8 +125,9 @@ router.post('updateUser', 'profile', async ctx => {
       name: ctx.request.body.fields.name,
       surname: ctx.request.body.fields.surname,
       pid: ctx.request.body.fields.pid,
-      photoId: `https://storage.googleapis.com/sportfinder/${ctx.request.body
-        .files.upload.name}`,
+      photoId: `https://storage.googleapis.com/sportfinder/${
+        ctx.request.body.files.upload.name
+      }`,
     })
     ctx.flashMessage.notice = 'Tu perfil ha sido actualizado.'
     return ctx.redirect('profile')
@@ -175,9 +179,13 @@ router.get('sendEmail', 'sendConfirmationEmail', async ctx => {
   const key = user.token
   await sendWelcomeEmail(ctx, {
     user,
-    confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${id}/${key}`,
+    confirmateAccountUrl: `https://sportfinder-app.herokuapp.com/users/${id}/${
+      key
+    }`,
   })
-  ctx.flashMessage.notice = `Se ha enviado nuevamente el mail de confirmación a ${user.mail}.`
+  ctx.flashMessage.notice = `Se ha enviado nuevamente el mail de confirmación a ${
+    user.mail
+  }.`
   return ctx.redirect(ctx.router.url('profile'))
 })
 

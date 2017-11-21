@@ -37,7 +37,9 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
           userId: receiver.id,
           author: ctx.state.currentUser.username,
         })
-        ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}.`
+        ctx.flashMessage.notice = `La invitación fue enviada a ${
+          receiver.username
+        }.`
         ctx.redirect(ctx.router.url('team', { id: ctx.params.id }))
       } else {
         ctx.flashMessage.notice = `${receiver.username} ya está en este equipo.`
@@ -70,10 +72,14 @@ router.post('sendMatchInvitation', '/match/:id/', async ctx => {
           userId: receiver.id,
           author: ctx.state.currentUser.username,
         })
-        ctx.flashMessage.notice = `La invitación fue enviada a ${receiver.username}`
+        ctx.flashMessage.notice = `La invitación fue enviada a ${
+          receiver.username
+        }`
         ctx.redirect(ctx.router.url('match', { id: ctx.params.id }))
       } else {
-        ctx.flashMessage.notice = `${receiver.username} ya está en esta partida.`
+        ctx.flashMessage.notice = `${
+          receiver.username
+        } ya está en esta partida.`
         ctx.redirect(ctx.router.url('matchInvitation', ctx.params.id))
       }
     } catch (validationError) {
