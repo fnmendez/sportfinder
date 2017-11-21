@@ -1,0 +1,8 @@
+test:
+  pre:
+    - yarn lint
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: sportfinder-app
