@@ -6,12 +6,11 @@ machine:
 
 dependencies:
   pre:
-    - yarn upgrade
+    - curl -o- -L https://yarnpkg.com/install.sh | bash
   cache_directories:
     - ~/.cache/yarn
   override:
     - yarn
-
 
 test:
   pre:
