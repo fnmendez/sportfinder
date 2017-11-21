@@ -2,8 +2,8 @@
   "name": "sportfinder-app",
   "version": "2.0.0",
   "engines": {
-    "node": "^8.5.0",
-    "yarn": "^1.0.2"
+    "node": "^9.0.0",
+    "yarn": "^1.2.1"
   },
   "main": "index.js",
   "repository": "https://github.com/IIC2513-2017-2/template.git",
@@ -31,6 +31,7 @@
     "prettier": "^1.7.4"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-loader": "^7.1.2",
