@@ -1,6 +1,6 @@
 # frandz
 
-[![CircleCI](https://circleci.com/gh/IIC2513-2017-2/frandz/tree/master.svg?style=svg)](https://circleci.com/gh/IIC2513-2017-2/frandz/tree/master)
+[![circleciB]][circleciL]
 
 Watch [Sportfinder in Heroku](https://sportfinder-app.herokuapp.com/)!
 
@@ -10,8 +10,6 @@ Watch [Sportfinder in Heroku](https://sportfinder-app.herokuapp.com/)!
 | :-: | :-: | :-: |
 | Franco Méndez | 14636077 | fnmendez@uc.cl |
 | Andrés Mardones | 14632497 | agmardones@uc.cl |
-
-
 
 # Template
 
@@ -67,3 +65,7 @@ or, if you want automatic restart after any change in your files
 ```
 
 Now go to http://localhost:3000 and start browsing :)
+
+<!-- Badges -->
+[circleciL]:https://circleci.com/gh/IIC2513-2017-2/frandz
+[circleciB]:https://circleci.com/gh/IIC2513-2017-2/frandz.svg?style=svg
