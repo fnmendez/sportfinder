@@ -1,6 +1,7 @@
 # frandz
 
-[![circleciB]][circleciL]
+[!(circleciB)](circleciL)
+[![styleB]][styleL]
 
 Watch [Sportfinder in Heroku](https://sportfinder-app.herokuapp.com/)!
 
@@ -69,3 +70,6 @@ Now go to http://localhost:3000 and start browsing :)
 <!-- Badges -->
 [circleciL]:https://circleci.com/gh/IIC2513-2017-2/frandz
 [circleciB]:https://circleci.com/gh/IIC2513-2017-2/frandz.svg?style=svg
+
+[styleL]:https://github.com/prettier/prettier
+[styleB]:https://img.shields.io/badge/code%20style-prettier-brightgreen.svg?style=flat
