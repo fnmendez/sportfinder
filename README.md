@@ -1,7 +1,5 @@
 # frandz
 
-![alt text](https://circleci.com/gh/IIC2513-2017-2/frandz.svg?style=svg "CircleCI")
-
 [![CircleCI](https://circleci.com/gh/IIC2513-2017-2/frandz.svg?style=svg)](https://circleci.com/gh/IIC2513-2017-2/frandz)
 [![styleB]][styleL]
 
