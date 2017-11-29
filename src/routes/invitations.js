@@ -52,6 +52,12 @@ router.post('sendTeamInvitation', '/team/:id/', async ctx => {
         sendInvitationUrl: ctx.router.url('sendTeamInvitation', ctx.params.id),
       })
     }
+  } else {
+    ctx.flashMessage.notice = 'El usuario ingresado no existe'
+    await ctx.render('/invitations/teams/new', {
+      currentUser: ctx.state.currentUser,
+      sendInvitationUrl: ctx.router.url('sendTeamInvitation', ctx.params.id),
+    })
   }
 })
 
@@ -89,6 +95,12 @@ router.post('sendMatchInvitation', '/match/:id/', async ctx => {
         sendInvitationUrl: ctx.router.url('sendMatchInvitation', ctx.params.id),
       })
     }
+  } else {
+    ctx.flashMessage.notice = 'El usuario ingresado no existe'
+    await ctx.render('/invitations/teams/new', {
+      currentUser: ctx.state.currentUser,
+      sendInvitationUrl: ctx.router.url('sendTeamInvitation', ctx.params.id),
+    })
   }
 })
 
