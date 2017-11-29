@@ -12,7 +12,10 @@ module.exports = function defineusers(sequelize, DataTypes) {
     pid: {
       type: DataTypes.STRING,
       validate: {
-        is: /^(\d{1,3}(\.?\d{3}){2})\-?([\dkK])$/, // eslint-disable-line no-useless-escape
+        is: {
+          args: /^(\d{1,3}(\.?\d{3}){2})\-?([\dkK])$/,
+          msg: 'El RUT ingresado no es válido',
+        }, // eslint-disable-line no-useless-escape
       },
     },
     token: {
