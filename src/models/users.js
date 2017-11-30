@@ -21,6 +21,9 @@ module.exports = function defineusers(sequelize, DataTypes) {
     token: {
       type: DataTypes.STRING,
     },
+    apiUsername: {
+      type: DataTypes.STRING,
+    },
     hasPendingEvaluations: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

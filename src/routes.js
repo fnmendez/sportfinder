@@ -1,5 +1,6 @@
 const KoaRouter = require('koa-router')
 
+const api = require('./routes/api')
 const welcome = require('./routes/welcome')
 const hello = require('./routes/hello')
 const sports = require('./routes/sports')
@@ -17,6 +18,9 @@ const notificationManager = require('./helpers/notificationManager')
 const checkRole = require('./helpers/checkRole')
 
 const router = new KoaRouter()
+
+//api
+router.use('/api', api.routes())
 
 // public
 router.use('/', welcome.routes())
